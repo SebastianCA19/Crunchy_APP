@@ -3,4 +3,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="combo_1">Combo#1</string>
+    <string name="scroll_view">Scroll View</string>
+    <string name="comida">COMIDA</string>
+    <string name="hola">Hola</string>
+    <string name="combo_name">COMBO #1</string>
+    <string name="_1000">$1000</string>
+    <string name="boton_de_a_adir">Boton de añadir</string>
+    <string name="_1gr_de_chicharr_n_y_1_bollo">1gr de Chicharrón y 1 bollo</string>
 </resources>
