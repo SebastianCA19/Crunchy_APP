@@ -9,6 +9,8 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,8 +62,41 @@ public class OtrosFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_otros, container, false);
+        View view = inflater.inflate(R.layout.fragment_otros, container, false);
+        Button btnConvert = view.findViewById(R.id.btn_convert);
+        btnConvert.setOnClickListener(this::convertValues);
+        return view;
     }
+
+    public void convertValues(View view) {
+        // Obtener la vista raíz del fragmento
+        View rootView = getView();
+        if (rootView == null) return;
+
+        // Obtener los valores de los campos de entrada
+        EditText etGramos = rootView.findViewById(R.id.inGramos);
+        EditText etDinero = rootView.findViewById(R.id.inDinero);
+
+        String gramos = etGramos.getText().toString();
+        String dinero = etDinero.getText().toString();
+
+        if (gramos.isEmpty() && dinero.isEmpty()) {
+            return;
+        }
+
+        try {
+            if (!gramos.isEmpty() && dinero.isEmpty()) {
+                double gramosNum = Double.parseDouble(gramos);
+                etDinero.setText("$" + (gramosNum * 80));
+            } else if (!dinero.isEmpty() && gramos.isEmpty()) {
+                double dineroNum = Double.parseDouble(dinero);
+                etGramos.setText((dineroNum / 80) + "gr");
+            }
+        } catch (NumberFormatException e) {
+            // Manejar un posible error de conversión
+            e.printStackTrace();
+        }
+    }
+
 
 }

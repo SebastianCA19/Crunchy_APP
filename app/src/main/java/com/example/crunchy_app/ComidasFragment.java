@@ -1,64 +1,43 @@
 package com.example.crunchy_app;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ComidasFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.Arrays;
+import java.util.List;
+
+
 public class ComidasFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ComidasFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ComidasFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ComidasFragment newInstance(String param1, String param2) {
-        ComidasFragment fragment = new ComidasFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private ViewPager2 viewPager;
+    private MenuPagerAdapter adapter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_comidas, container, false);
+        viewPager = view.findViewById(R.id.viewPager);
+        viewPager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_comidas, container, false);
+        List<Food> foodList = Arrays.asList(
+                new Food("Combo 1", "250gr de chicharrón + 1 Bollo", 17000),
+                new Food("Combo 2", "Pollo + Papas fritas", 20000),
+                new Food("Combo 3", "Carne asada + Arepa", 22000),
+                new Food("Combo 4", "Pechuga + Ensalada", 18000),
+                new Food("Combo 5", "Pizza personal + Gaseosa", 25000),
+                new Food("Combo 6", "Sushi de salmón", 30000),
+                new Food("Combo 7", "Hamburguesa doble carne", 28000),
+                new Food("Combo 8", "Pasta Alfredo", 19000),
+                new Food("Combo 9", "Arepa rellena de queso", 15000),
+                new Food("Combo 10", "Bandeja paisa", 35000)
+        );
+
+        adapter = new MenuPagerAdapter(requireActivity(), foodList);
+        viewPager.setAdapter(adapter);
+
+        return view;
     }
 }
+

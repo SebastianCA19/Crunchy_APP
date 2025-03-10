@@ -3,15 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BebidasFragment">
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/titleBebidas"
+    tools:context=".BebidasFragment"
+    android:layout_marginTop="60dp">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hola desde bebidas"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:textSize="30dp"
-        android:textStyle="bold"/>
+        android:layout_height="match_parent"/>
 </FrameLayout>

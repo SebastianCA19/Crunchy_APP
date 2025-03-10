@@ -1,64 +1,43 @@
 package com.example.crunchy_app;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link BebidasFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
+
+import java.util.Arrays;
+import java.util.List;
+
 public class BebidasFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public BebidasFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BebidasFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BebidasFragment newInstance(String param1, String param2) {
-        BebidasFragment fragment = new BebidasFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private ViewPager2 viewPager;
+    private DrinksPagerAdapter adapter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_bebidas, container, false);
+        viewPager = view.findViewById(R.id.viewPager);
+        viewPager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
+        List<Drink> drinksList = Arrays.asList(
+                new Drink("Bebida 1", "Jugo de naranja natural", 5000),
+                new Drink("Bebida 2", "Limonada de coco", 7000),
+                new Drink("Bebida 3", "Té helado", 6000),
+                new Drink("Bebida 4", "Malteada de chocolate", 10000),
+                new Drink("Bebida 5", "Batido de fresa", 9000),
+                new Drink("Bebida 6", "Café americano", 4000),
+                new Drink("Bebida 7", "Chocolate caliente", 5500),
+                new Drink("Bebida 8", "Agua mineral", 3000),
+                new Drink("Bebida 9", "Gaseosa en lata", 4500),
+                new Drink("Bebida 10", "Michelada con limón", 12000)
+        );
+        
+        adapter = new DrinksPagerAdapter(requireActivity(), drinksList);
+        viewPager.setAdapter(adapter);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bebidas, container, false);
+        return view;
     }
 }
