@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Crunchy_APP"
         tools:targetApi="31">
+
+        <activity android:name=".HistoryActivity"/>
+
+
         <activity
             android:name=".Home"
             android:exported="false" />
