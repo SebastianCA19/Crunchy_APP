@@ -19,23 +19,8 @@ public class AdminFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflar la vista del fragmento
-        View view = inflater.inflate(R.layout.fragment_admin, container, false);
-
-        // Buscar el botón dentro de la vista inflada
-        Button btnHistorial = view.findViewById(R.id.btHistorial);
-        btnHistorial.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToHistory();
-            }
-        });
-
-        return view;
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_admin, container, false);
     }
 
-    public void goToHistory() {
-        Intent intent = new Intent(getActivity(), HistoryActivity.class);
-        startActivity(intent);
-    }
 }
