@@ -11,6 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.crunchy_app.bebidas.fragment.BebidasFragment;
+import com.example.crunchy_app.comidas.fragment.ComidasFragment;
+import com.example.crunchy_app.otros.fragment.OtrosFragment;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link OrdersFragment#newInstance} factory method to

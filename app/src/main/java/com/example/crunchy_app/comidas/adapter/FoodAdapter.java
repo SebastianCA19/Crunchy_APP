@@ -1,4 +1,4 @@
-package com.example.crunchy_app;
+package com.example.crunchy_app.comidas.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.crunchy_app.R;
+import com.example.crunchy_app.comidas.model.Food;
 
 import java.util.List;
 

@@ -1,6 +1,5 @@
-package com.example.crunchy_app;
+package com.example.crunchy_app.admin.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,7 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+
+import com.example.crunchy_app.R;
 
 public class AdminFragment extends Fragment {
 

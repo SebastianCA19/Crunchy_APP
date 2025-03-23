@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OtrosFragment"
+    tools:context=".otros.fragment.OtrosFragment"
     android:padding="16dp"
     android:layout_marginTop="60dp">
 

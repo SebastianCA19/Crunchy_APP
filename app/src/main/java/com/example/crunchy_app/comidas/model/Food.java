@@ -1,4 +1,4 @@
-package com.example.crunchy_app;
+package com.example.crunchy_app.comidas.model;
 
 public class Food {
     private String name;
