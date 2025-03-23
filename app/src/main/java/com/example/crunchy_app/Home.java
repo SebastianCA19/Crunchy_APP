@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.crunchy_app.admin.fragment.AdminFragment;
+
 import com.example.crunchy_app.databinding.ActivityHomeBinding;
 
 public class Home extends AppCompatActivity {
@@ -27,7 +27,7 @@ public class Home extends AppCompatActivity {
             if (itemId == R.id.order) {
                 replaceFragment(new OrdersFragment());
             } else if (itemId == R.id.admin) {
-                replaceFragment(new AdminFragment());
+                replaceFragment(new com.example.crunchy_app.AdminFragment());
             }
 
             return true;

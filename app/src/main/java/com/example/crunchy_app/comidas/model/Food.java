@@ -1,6 +1,8 @@
 package com.example.crunchy_app.comidas.model;
 
-public class Food {
+import java.io.Serializable;
+
+public class Food implements Serializable {
     private String name;
     private String info;
     private double price;
