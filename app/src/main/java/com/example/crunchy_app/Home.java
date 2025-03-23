@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import com.example.crunchy_app.databinding.ActivityHomeBinding;
+import com.example.crunchy_app.connection.*;
 
 public class Home extends AppCompatActivity {
 
@@ -20,6 +21,10 @@ public class Home extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         replaceFragment(new OrdersFragment());
+        DatabaseManager dbManager = new DatabaseManager(this);
+        dbManager.mostrarTiposDePedido();
+        dbManager.ingresarTipoDePedido("test");
+        dbManager.mostrarTiposDePedido();
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
@@ -40,4 +45,6 @@ public class Home extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
+
+
 }
