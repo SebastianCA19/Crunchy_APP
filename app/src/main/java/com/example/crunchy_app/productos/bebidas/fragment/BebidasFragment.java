@@ -12,6 +12,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.crunchy_app.productos.bebidas.adapter.DrinksPagerAdapter;
 import com.example.crunchy_app.R;
+import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,17 +26,9 @@ public class BebidasFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_bebidas, container, false);
         viewPager = view.findViewById(R.id.viewPager);
         viewPager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
-        List<Drink> drinksList = Arrays.asList(
-                new Drink("Bebida 1", "Jugo de naranja natural", 5000),
-                new Drink("Bebida 2", "Limonada de coco", 7000),
-                new Drink("Bebida 3", "Té helado", 6000),
-                new Drink("Bebida 4", "Malteada de chocolate", 10000),
-                new Drink("Bebida 5", "Batido de fresa", 9000),
-                new Drink("Bebida 6", "Café americano", 4000),
-                new Drink("Bebida 7", "Chocolate caliente", 5500),
-                new Drink("Bebida 8", "Agua mineral", 3000),
-                new Drink("Bebida 9", "Gaseosa en lata", 4500),
-                new Drink("Bebida 10", "Michelada con limón", 12000)
+        List<Producto> drinksList = Arrays.asList(
+                new Producto("Bebida 1",2 ,5000,1)
+
         );
         
         adapter = new DrinksPagerAdapter(requireActivity(), drinksList);

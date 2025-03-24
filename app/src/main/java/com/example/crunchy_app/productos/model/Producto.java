@@ -20,7 +20,7 @@ public class Producto {
         this.nombre_producto = nombre_producto;
         this.id_tipo_producto = id_tipo_producto;
         this.precio = precio;
-        this.id_info_producto = id_info_producto
+        this.id_info_producto = id_info_producto;
     }
 
     public int getId_producto() {

@@ -6,21 +6,22 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.crunchy_app.productos.bebidas.fragment.DrinkPageFragment;
+import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DrinksPagerAdapter extends FragmentStateAdapter {
-    private List<List<Drink>> drinkPages;
+    private List<List<Producto>> drinkPages;
 
-    public DrinksPagerAdapter(FragmentActivity fragmentActivity, List<Drink> drinkList) {
+    public DrinksPagerAdapter(FragmentActivity fragmentActivity, List<Producto> drinkList) {
         super(fragmentActivity);
         this.drinkPages = partitionList(drinkList, 5);
     }
 
 
-    private List<List<Drink>> partitionList(List<Drink> list, int size) {
-        List<List<Drink>> partitions = new ArrayList<>();
+    private List<List<Producto>> partitionList(List<Producto> list, int size) {
+        List<List<Producto>> partitions = new ArrayList<>();
         for (int i = 0; i < list.size(); i += size) {
             partitions.add(list.subList(i, Math.min(i + size, list.size())));
         }

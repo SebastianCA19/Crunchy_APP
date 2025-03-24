@@ -13,15 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.bebidas.adapter.DrinkAdapter;
+import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DrinkPageFragment extends Fragment {
     private static final String ARG_DRINK_LIST = "drink_list";
-    private List<Drink> drinkList;
+    private List<Producto> drinkList;
 
-    public static DrinkPageFragment newInstance(List<Drink> drinks) {
+    public static DrinkPageFragment newInstance(List<Producto> drinks) {
         DrinkPageFragment fragment = new DrinkPageFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_DRINK_LIST, new ArrayList<>(drinks));
@@ -33,7 +34,7 @@ public class DrinkPageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            drinkList = (List<Drink>) getArguments().getSerializable(ARG_DRINK_LIST);
+            drinkList = (List<Producto>) getArguments().getSerializable(ARG_DRINK_LIST);
         }
     }
 

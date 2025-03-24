@@ -26,16 +26,7 @@ public class ComidasFragment extends Fragment {
         viewPager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
 
         List<Producto> foodList = Arrays.asList(
-                new Producto("Combo 1", "250gr de chicharrón + 1 Bollo", 17000),
-                new Producto("Combo 2", "Pollo + Papas fritas", 20000),
-                new Producto("Combo 3", "Carne asada + Arepa", 22000),
-                new Producto("Combo 4", "Pechuga + Ensalada", 18000),
-                new Producto("Combo 5", "Pizza personal + Gaseosa", 25000),
-                new Producto("Combo 6", "Sushi de salmón", 30000),
-                new Producto("Combo 7", "Hamburguesa doble carne", 28000),
-                new Producto("Combo 8", "Pasta Alfredo", 19000),
-                new Producto("Combo 9", "Arepa rellena de queso", 15000),
-                new Producto("Combo 10", "Bandeja paisa", 35000)
+                new Producto("Combo 1",1, 7000,  2)
         );
 
         adapter = new MenuPagerAdapter(requireActivity(), foodList);

@@ -1,38 +1,49 @@
 package com.example.crunchy_app.productos.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "info_productos")
 public class InfoProducto {
 
-    private int id_info_producto;
+    @PrimaryKey(autoGenerate = true)
+    private int idInfoProducto;
 
-    private  int cantidad_chicharron;
-    private  int cantidad_chorizo;
+    @ColumnInfo(name = "cantidad_chicharron")
+    private  int cantidadChicharron;
 
+    @ColumnInfo(name = "cantidad_chorizo")
+    private  int cantidadChorizo;
 
     public InfoProducto() {
     }
 
-    public InfoProducto(int cantidad_chicharron, int cantidad_chorizo) {
+    public InfoProducto(int cantidadChicharron, int cantidadChorizo) {
 
-        this.cantidad_chicharron = cantidad_chicharron;
-        this.cantidad_chorizo = cantidad_chorizo;
-
-    }
-
-    public int getId_info_producto() {
-        return id_info_producto;
+        this.cantidadChicharron = cantidadChicharron;
+        this.cantidadChorizo = cantidadChorizo;
 
     }
-    public int getCantidad_chicharron() {
-        return cantidad_chicharron;
+
+    public int getIdInfoProducto() {
+        return idInfoProducto;
+
     }
-    public int getCantidad_chorizo() {
-        return cantidad_chorizo;
+    public int getCantidadChicharron() {
+        return cantidadChicharron;
+    }
+    public int getCantidadChorizo() {
+        return cantidadChorizo;
     }
 
-    public void setId_info_producto(int id_info_producto) {
-        this.id_info_producto = id_info_producto;
+    public void setIdInfoProducto(int idInfoProducto) {
+        this.idInfoProducto = idInfoProducto;
     }
-
-
-
+    public void setCantidadChicharron(int cantidadChicharron) {
+        this.cantidadChicharron = cantidadChicharron;
+    }
+    public void setCantidadChorizo(int cantidadChorizo) {
+        this.cantidadChorizo = cantidadChorizo;
+    }
 }

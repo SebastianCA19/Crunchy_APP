@@ -10,13 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.R;
+import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.List;
 
 public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHolder> {
-    private List<Drink> drinkList;
+    private List<Producto> drinkList;
 
-    public DrinkAdapter(List<Drink> drinkList){
+    public DrinkAdapter(List<Producto> drinkList){
         this.drinkList = drinkList;
     }
 
@@ -30,10 +31,10 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHol
 
     @Override
     public void onBindViewHolder(@NonNull DrinkAdapter.DrinkViewHolder holder, int position) {
-        Drink drink = drinkList.get(position);
-        holder.name.setText(drink.getName());
-        holder.info.setText(drink.getInfo());
-        holder.price.setText(String.format("$%.2f", drink.getPrice()));
+        Producto drink = drinkList.get(position);
+        holder.name.setText(drink.getNombre_producto());
+        holder.info.setText(drink.getId_info_producto());
+        holder.price.setText(String.format("$%.2f", drink.getPrecio()));
     }
 
     @Override
