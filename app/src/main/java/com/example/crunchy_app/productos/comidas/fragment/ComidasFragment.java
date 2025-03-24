@@ -26,7 +26,6 @@ public class ComidasFragment extends Fragment {
         viewPager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
 
         List<Producto> foodList = Arrays.asList(
-                new Producto("Combo 1", "250gr de chicharrón + 1 Bollo", 17000),
                 new Producto("Combo 2", "Pollo + Papas fritas", 20000),
                 new Producto("Combo 3", "Carne asada + Arepa", 22000),
                 new Producto("Combo 4", "Pechuga + Ensalada", 18000),

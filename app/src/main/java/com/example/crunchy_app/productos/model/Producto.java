@@ -3,44 +3,44 @@ package com.example.crunchy_app.productos.model;
 
 
 public class Producto {
-    private int id_producto;
-    private String nombre_producto;
+    private int idProducto;
+    private String nombreProducto;
 
-    private int id_tipo_producto;
+    private int idTipoProducto;
 
     private float precio;
 
-    private int id_info_producto;
+    private int idInfoProducto;
 
     public Producto() {
     }
 
 
-    public Producto(String nombre_producto, int id_tipo_producto, float precio, int id_info_producto) {
-        this.nombre_producto = nombre_producto;
-        this.id_tipo_producto = id_tipo_producto;
+    public Producto(String nombreProducto, int idTipoProducto, float precio, int idInfoProducto) {
+        this.nombreProducto = nombreProducto;
+        this.idTipoProducto = idTipoProducto;
         this.precio = precio;
-        this.id_info_producto = id_info_producto
+        this.idInfoProducto = idInfoProducto;
     }
 
-    public int getId_producto() {
-        return id_producto;
+    public int getIdProducto() {
+        return idProducto;
     }
 
-    public String getNombre_producto() {
-        return nombre_producto;
+    public String getNombreProducto() {
+        return nombreProducto;
     }
 
-    public int getId_tipo_producto() {
-        return id_tipo_producto;
+    public int getIdTipoProducto() {
+        return idTipoProducto;
     }
 
     public float getPrecio() {
         return precio;
     }
 
-    public int getId_info_producto() {
-        return id_info_producto;
+    public int getIdInfoProducto() {
+        return idInfoProducto;
     }
 
 
