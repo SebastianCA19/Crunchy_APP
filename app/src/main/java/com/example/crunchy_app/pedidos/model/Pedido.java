@@ -1,4 +1,4 @@
-package com.example.crunchy_app.productos.model;
+package com.example.crunchy_app.pedidos.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

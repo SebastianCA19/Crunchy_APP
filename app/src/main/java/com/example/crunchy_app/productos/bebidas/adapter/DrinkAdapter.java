@@ -10,13 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.R;
+import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.List;
 
 public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHolder> {
-    private List<Drink> drinkList;
+    private List<Producto> drinkList;
 
-    public DrinkAdapter(List<Drink> drinkList){
+    public DrinkAdapter(List<Producto> drinkList){
         this.drinkList = drinkList;
     }
 

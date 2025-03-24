@@ -1,4 +1,4 @@
-package com.example.crunchy_app;
+package com.example.crunchy_app.secciones.fragment;
 
 import android.os.Bundle;
 
@@ -11,9 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.bebidas.fragment.BebidasFragment;
 import com.example.crunchy_app.productos.comidas.fragment.ComidasFragment;
-import com.example.crunchy_app.otros.fragment.OtrosFragment;
 
 /**
  * A simple {@link Fragment} subclass.
