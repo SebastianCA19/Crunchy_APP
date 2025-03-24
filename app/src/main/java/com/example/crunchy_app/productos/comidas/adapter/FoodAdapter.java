@@ -1,4 +1,4 @@
-package com.example.crunchy_app.comidas.adapter;
+package com.example.crunchy_app.productos.comidas.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.R;
-import com.example.crunchy_app.comidas.model.Food;
+import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.List;
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder> {
-    private List<Food> foodList;
+    private List<Producto> foodList;
 
-    public FoodAdapter(List<Food> foodList) {
+    public FoodAdapter(List<Producto> foodList) {
         this.foodList = foodList;
     }
 
@@ -30,7 +30,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
-        Food food = foodList.get(position);
+        Producto food = foodList.get(position);
         holder.name.setText(food.getName());
         holder.info.setText(food.getInfo());
         holder.price.setText(String.format("$%.2f", food.getPrice()));

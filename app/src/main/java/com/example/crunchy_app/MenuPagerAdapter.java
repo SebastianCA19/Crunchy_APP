@@ -5,16 +5,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.crunchy_app.comidas.fragment.ComidasPageFragment;
-import com.example.crunchy_app.comidas.model.Food;
+import com.example.crunchy_app.productos.comidas.fragment.ComidasPageFragment;
+import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MenuPagerAdapter extends FragmentStateAdapter {
-    private List<List<Food>> foodPages;
+    private List<List<Producto>> foodPages;
 
-    public MenuPagerAdapter(@NonNull FragmentActivity fragmentActivity, List<Food> foodList) {
+    public MenuPagerAdapter(@NonNull FragmentActivity fragmentActivity, List<Producto> foodList) {
         super(fragmentActivity);
         this.foodPages = partitionList(foodList, 5);
     }
@@ -30,8 +30,8 @@ public class MenuPagerAdapter extends FragmentStateAdapter {
         return foodPages.size();
     }
 
-    private List<List<Food>> partitionList(List<Food> list, int size) {
-        List<List<Food>> partitions = new ArrayList<>();
+    private List<List<Producto>> partitionList(List<Producto> list, int size) {
+        List<List<Producto>> partitions = new ArrayList<>();
         for (int i = 0; i < list.size(); i += size) {
             partitions.add(list.subList(i, Math.min(i + size, list.size())));
         }

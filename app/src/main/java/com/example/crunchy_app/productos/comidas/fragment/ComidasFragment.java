@@ -1,4 +1,4 @@
-package com.example.crunchy_app.comidas.fragment;
+package com.example.crunchy_app.productos.comidas.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,7 +9,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.crunchy_app.MenuPagerAdapter;
 import com.example.crunchy_app.R;
-import com.example.crunchy_app.comidas.model.Food;
+import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,17 +25,17 @@ public class ComidasFragment extends Fragment {
         viewPager = view.findViewById(R.id.viewPager);
         viewPager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
 
-        List<Food> foodList = Arrays.asList(
-                new Food("Combo 1", "250gr de chicharrón + 1 Bollo", 17000),
-                new Food("Combo 2", "Pollo + Papas fritas", 20000),
-                new Food("Combo 3", "Carne asada + Arepa", 22000),
-                new Food("Combo 4", "Pechuga + Ensalada", 18000),
-                new Food("Combo 5", "Pizza personal + Gaseosa", 25000),
-                new Food("Combo 6", "Sushi de salmón", 30000),
-                new Food("Combo 7", "Hamburguesa doble carne", 28000),
-                new Food("Combo 8", "Pasta Alfredo", 19000),
-                new Food("Combo 9", "Arepa rellena de queso", 15000),
-                new Food("Combo 10", "Bandeja paisa", 35000)
+        List<Producto> foodList = Arrays.asList(
+                new Producto("Combo 1", "250gr de chicharrón + 1 Bollo", 17000),
+                new Producto("Combo 2", "Pollo + Papas fritas", 20000),
+                new Producto("Combo 3", "Carne asada + Arepa", 22000),
+                new Producto("Combo 4", "Pechuga + Ensalada", 18000),
+                new Producto("Combo 5", "Pizza personal + Gaseosa", 25000),
+                new Producto("Combo 6", "Sushi de salmón", 30000),
+                new Producto("Combo 7", "Hamburguesa doble carne", 28000),
+                new Producto("Combo 8", "Pasta Alfredo", 19000),
+                new Producto("Combo 9", "Arepa rellena de queso", 15000),
+                new Producto("Combo 10", "Bandeja paisa", 35000)
         );
 
         adapter = new MenuPagerAdapter(requireActivity(), foodList);
