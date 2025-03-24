@@ -3,6 +3,7 @@ package com.example.crunchy_app.comidas.model;
 import java.io.Serializable;
 
 public class Food implements Serializable {
+
     private String name;
     private String info;
     private double price;

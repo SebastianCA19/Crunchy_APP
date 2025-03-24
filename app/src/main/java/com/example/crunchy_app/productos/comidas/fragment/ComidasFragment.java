@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.crunchy_app.MenuPagerAdapter;
+import com.example.crunchy_app.otros.adapter.MenuPagerAdapter;
 import com.example.crunchy_app.R;
-import com.example.crunchy_app.comidas.model.Food;
+import com.example.crunchy_app.comidas.model.*;
 
 import java.util.Arrays;
 import java.util.List;
