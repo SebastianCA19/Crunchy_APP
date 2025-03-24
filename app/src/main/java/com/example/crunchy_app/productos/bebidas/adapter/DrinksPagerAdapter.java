@@ -1,12 +1,11 @@
-package com.example.crunchy_app.bebidas.adapter;
+package com.example.crunchy_app.productos.bebidas.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.crunchy_app.bebidas.fragment.DrinkPageFragment;
-import com.example.crunchy_app.bebidas.model.Drink;
+import com.example.crunchy_app.productos.bebidas.fragment.DrinkPageFragment;
 
 import java.util.ArrayList;
 import java.util.List;

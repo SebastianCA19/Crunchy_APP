@@ -1,4 +1,4 @@
-package com.example.crunchy_app.bebidas.adapter;
+package com.example.crunchy_app.productos.bebidas.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.R;
-import com.example.crunchy_app.bebidas.model.Drink;
 
 import java.util.List;
 

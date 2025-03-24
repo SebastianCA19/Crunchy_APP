@@ -1,4 +1,4 @@
-package com.example.crunchy_app.comidas.fragment;
+package com.example.crunchy_app.productos.comidas.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,17 +10,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.R;
-import com.example.crunchy_app.comidas.adapter.FoodAdapter;
-import com.example.crunchy_app.comidas.model.Food;
+import com.example.crunchy_app.productos.comidas.adapter.FoodAdapter;
+import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ComidasPageFragment extends Fragment {
     private static final String ARG_FOOD_LIST = "food_list";
-    private List<Food> foodList;
+    private List<Producto> foodList;
 
-    public static ComidasPageFragment newInstance(List<Food> foods) {
+    public static ComidasPageFragment newInstance(List<Producto> foods) {
         ComidasPageFragment fragment = new ComidasPageFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_FOOD_LIST, new ArrayList<>(foods));
@@ -32,7 +32,7 @@ public class ComidasPageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            foodList = (List<Food>) getArguments().getSerializable(ARG_FOOD_LIST);
+            foodList = (List<Producto>) getArguments().getSerializable(ARG_FOOD_LIST);
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.crunchy_app.bebidas.fragment;
+package com.example.crunchy_app.productos.bebidas.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,8 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.R;
-import com.example.crunchy_app.bebidas.adapter.DrinkAdapter;
-import com.example.crunchy_app.bebidas.model.Drink;
+import com.example.crunchy_app.productos.bebidas.adapter.DrinkAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
