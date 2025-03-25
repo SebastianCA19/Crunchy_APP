@@ -1,25 +1,53 @@
 package com.example.crunchy_app.pedidos.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Entity(tableName = "pedidos")
 public class Pedido {
+
+    @PrimaryKey(autoGenerate = true)
     private int idPedido;
+
+    @ColumnInfo(name = "nombre_cliente")
+    @NonNull
     private String nombreCliente;
+
+    @ColumnInfo(name = "apellido_cliente")
     private String apellidoCliente;
-    private int metodoDePago;
+
+    @ColumnInfo(name = "id_metodo_pago")
+    @NonNull
+    private int idMetodoDePago;
+
+    @ColumnInfo(name = "id_tipo_pedido")
+    @NonNull
     private int idTipoPedido;
+
+    @ColumnInfo(name = "es_personalizado")
+    @NonNull
     private int esPersonalizado;
+
+    @ColumnInfo(name = "fecha")
+    @NonNull
     private LocalDate fecha;
+
+    @ColumnInfo(name = "hora")
+    @NonNull
     private LocalTime hora;
 
     public Pedido() {
     }
 
-    public Pedido(String nombreCliente, String apellidoCliente, int metodoDePago, int idTipoPedido, int esPersonalizado, LocalDate fecha, LocalTime hora) {
+    public Pedido(String nombreCliente, String apellidoCliente, int idMetodoDePago, int idTipoPedido, int esPersonalizado, LocalDate fecha, LocalTime hora) {
         this.nombreCliente = nombreCliente;
         this.apellidoCliente = apellidoCliente;
-        this.metodoDePago = metodoDePago;
+        this.idMetodoDePago = idMetodoDePago;
         this.idTipoPedido = idTipoPedido;
         this.esPersonalizado = esPersonalizado;
         this.fecha = fecha;
@@ -50,12 +78,12 @@ public class Pedido {
         this.apellidoCliente = apellidoCliente;
     }
 
-    public int getMetodoDePago() {
-        return metodoDePago;
+    public int getIdMetodoDePago() {
+        return idMetodoDePago;
     }
 
-    public void setMetodoDePago(int metodoDePago) {
-        this.metodoDePago = metodoDePago;
+    public void setIdMetodoDePago(int idMetodoDePago) {
+        this.idMetodoDePago = idMetodoDePago;
     }
 
     public int getIdTipoPedido() {

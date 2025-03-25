@@ -1,9 +1,27 @@
 package com.example.crunchy_app.pedidos.model;
 
+
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "productos_del_pedido")
 public class ProductoDelPedido {
+
+    @PrimaryKey(autoGenerate = true)
     private int idProductosDePedido;
+
+    @ColumnInfo(name = "id_pedido")
+    @NonNull
     private int idPedido;
+
+    @ColumnInfo(name = "id_producto")
+    @NonNull
     private int idProducto;
+
+    @ColumnInfo(name = "cantidad")
+    @NonNull
     private int cantidad;
 
     public ProductoDelPedido() {

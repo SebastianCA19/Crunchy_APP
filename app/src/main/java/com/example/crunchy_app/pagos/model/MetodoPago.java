@@ -1,13 +1,22 @@
 package com.example.crunchy_app.pagos.model;
 
-public class MetodoDePago {
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "metodos_pago")
+public class MetodoPago {
+
+    @PrimaryKey(autoGenerate = true)
     private int idMetodoDePago;
+
+    @ColumnInfo(name = "nombre_metodo_pago")
     private String nombreMetodoDePago;
 
-    public MetodoDePago() {
+    public MetodoPago() {
     }
 
-    public MetodoDePago(String nombreMetodoDePago) {
+    public MetodoPago(String nombreMetodoDePago) {
         this.nombreMetodoDePago = nombreMetodoDePago;
     }
 
