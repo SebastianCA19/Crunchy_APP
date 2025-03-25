@@ -32,8 +32,8 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHol
     @Override
     public void onBindViewHolder(@NonNull DrinkAdapter.DrinkViewHolder holder, int position) {
         Producto drink = drinkList.get(position);
-        holder.name.setText(drink.getNombre_producto());
-        holder.info.setText(drink.getId_info_producto());
+        holder.name.setText(drink.getNombreProducto());
+        holder.info.setText(drink.getIdInfoProducto());
         holder.price.setText(String.format("$%.2f", drink.getPrecio()));
     }
 

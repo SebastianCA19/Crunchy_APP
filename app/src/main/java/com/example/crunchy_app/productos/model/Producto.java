@@ -1,15 +1,29 @@
 package com.example.crunchy_app.productos.model;
 
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+@Entity(tableName = "productos")
 public class Producto {
+    @PrimaryKey(autoGenerate = true)
     private int idProducto;
+
+    @ColumnInfo(name = "nombre_producto")
+    @NonNull
     private String nombreProducto;
 
+    @ColumnInfo(name = "id_tipo_producto")
+    @NonNull
     private int idTipoProducto;
 
+    @ColumnInfo(name = "precio")
+    @NonNull
     private float precio;
 
+    @ColumnInfo(name = "id_info_producto")
     private int idInfoProducto;
 
     public Producto() {
@@ -43,10 +57,25 @@ public class Producto {
         return idInfoProducto;
     }
 
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
+    }
 
+    public void setNombreProducto(@NonNull String nombreProducto) {
+        this.nombreProducto = nombreProducto;
+    }
 
+    public void setIdTipoProducto(int idTipoProducto) {
+        this.idTipoProducto = idTipoProducto;
+    }
 
+    public void setPrecio(float precio) {
+        this.precio = precio;
+    }
 
+    public void setIdInfoProducto(int idInfoProducto) {
+        this.idInfoProducto = idInfoProducto;
+    }
 }
 
 

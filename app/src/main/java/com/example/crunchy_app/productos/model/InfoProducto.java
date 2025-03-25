@@ -1,5 +1,6 @@
 package com.example.crunchy_app.productos.model;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -11,9 +12,11 @@ public class InfoProducto {
     private int idInfoProducto;
 
     @ColumnInfo(name = "cantidad_chicharron")
+    @NonNull
     private  int cantidadChicharron;
 
     @ColumnInfo(name = "cantidad_chorizo")
+    @NonNull
     private  int cantidadChorizo;
 
     public InfoProducto() {

@@ -1,8 +1,18 @@
 package com.example.crunchy_app.productos.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "tipos_producto")
 public class TipoProducto {
 
+    @PrimaryKey(autoGenerate = true)
     private int idTipoProdcuto;
+
+    @ColumnInfo(name = "nombre_tipo_producto")
+    @NonNull
     private String nombreTipoProducto;
 
     // Constructor

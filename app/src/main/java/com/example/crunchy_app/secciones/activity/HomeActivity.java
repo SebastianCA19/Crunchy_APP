@@ -13,7 +13,7 @@ import com.example.crunchy_app.databinding.ActivityHomeBinding;
 import com.example.crunchy_app.secciones.fragment.OrdersFragment;
 import com.example.crunchy_app.secciones.fragment.AdminFragment;
 
-public class Home extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
 
     ActivityHomeBinding binding;
 

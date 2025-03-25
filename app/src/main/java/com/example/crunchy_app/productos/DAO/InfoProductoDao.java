@@ -8,7 +8,6 @@ import com.example.crunchy_app.productos.model.InfoProducto;
 
 import java.util.List;
 
-/** @noinspection AndroidUnresolvedRoomSqlReference*/
 @Dao
 public interface InfoProductoDao {
 
@@ -16,6 +15,6 @@ public interface InfoProductoDao {
     List<InfoProducto> getAll();
 
     @Insert
-    void insert(InfoProducto infoProducto);
+    long insert(InfoProducto infoProducto);
 
 }
