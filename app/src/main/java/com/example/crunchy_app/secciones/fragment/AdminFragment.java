@@ -1,4 +1,4 @@
-package com.example.crunchy_app;
+package com.example.crunchy_app.secciones.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+
+import com.example.crunchy_app.R;
+import com.example.crunchy_app.pedidos.activity.HistoryActivity;
 
 public class AdminFragment extends Fragment {
 

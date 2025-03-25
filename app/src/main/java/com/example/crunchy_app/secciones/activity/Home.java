@@ -1,4 +1,4 @@
-package com.example.crunchy_app;
+package com.example.crunchy_app.secciones.activity;
 
 import android.os.Bundle;
 
@@ -8,7 +8,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
+import com.example.crunchy_app.R;
 import com.example.crunchy_app.databinding.ActivityHomeBinding;
+import com.example.crunchy_app.secciones.fragment.OrdersFragment;
+import com.example.crunchy_app.secciones.fragment.AdminFragment;
 
 public class Home extends AppCompatActivity {
 
@@ -27,7 +30,7 @@ public class Home extends AppCompatActivity {
             if (itemId == R.id.order) {
                 replaceFragment(new OrdersFragment());
             } else if (itemId == R.id.admin) {
-                replaceFragment(new com.example.crunchy_app.AdminFragment());
+                replaceFragment(new AdminFragment());
             }
 
             return true;

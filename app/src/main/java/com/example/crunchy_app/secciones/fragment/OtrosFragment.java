@@ -1,4 +1,4 @@
-package com.example.crunchy_app.otros.fragment;
+package com.example.crunchy_app.secciones.fragment;
 
 import android.os.Bundle;
 

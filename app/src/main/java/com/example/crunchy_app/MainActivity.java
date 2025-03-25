@@ -19,6 +19,8 @@ import com.example.crunchy_app.productos.model.InfoProducto;
 
 import java.util.List;
 
+import com.example.crunchy_app.secciones.activity.Home;
+
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void goToHome(View v){
-        Intent intent = new Intent(this, com.example.crunchy_app.Home.class);
+        Intent intent = new Intent(this, com.example.crunchy_app.secciones.activity.Home.class);
         startActivity(intent);
     }
 
