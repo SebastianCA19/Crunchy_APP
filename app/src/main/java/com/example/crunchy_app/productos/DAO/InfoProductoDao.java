@@ -11,10 +11,16 @@ import java.util.List;
 @Dao
 public interface InfoProductoDao {
 
-    @Query("SELECT * FROM info_productos")
-    List<InfoProducto> getAll();
+    @Query("SELECT * FROM InfoProducto")
+    public List<InfoProducto> getAll();
+
+    @Query("SELECT * FROM infos_producto WHERE id_info_producto = :idInfoProducto")
+    public InfoProducto getInfoProductoById(int idInfoProducto);
 
     @Insert
-    long insert(InfoProducto infoProducto);
+    public long insert(InfoProducto infoProducto);
+
+    @Query("DELETE FROM InfoProducto WHERE id_info_producto = :idInfoProducto")
+    public int deleteInfoProductoById(int idInfoProducto);
 
 }

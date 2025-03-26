@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             long idTipo1 = tipoProductoDao.insert(tipo1);
 
             // Insertar datos de prueba en InfoProducto
-            InfoProducto info1 = new InfoProducto(10, 2);
+            InfoProducto info1 = new InfoProducto(10, 2, 1);
             long idInfo1 = infoProductoDao.insert(info1);
 
             // Insertar datos de prueba en Producto
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             List<InfoProducto> infoProductos = infoProductoDao.getAll();
             for (InfoProducto info : infoProductos) {
                 Log.d("Pruebita", "InfoProducto - ID: " + info.getIdInfoProducto() +
-                        ", Chicharrón: " + info.getCantidadChicharron() +
+                        ", Chicharrón: " + info.getCantidadChicharronGramos() +
                         ", Chorizo: " + info.getCantidadChorizo());
             }
 

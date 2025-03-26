@@ -1,17 +1,19 @@
 package com.example.crunchy_app.pedidos.model;
 
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "tipos_de_pedido")
+@Entity(tableName = "tipos_pedido")
 public class TipoPedido {
 
     @PrimaryKey(autoGenerate = true)
     private int idTipoPedido;
 
     @ColumnInfo(name = "nombre_tipo_pedido")
+    @NonNull
     private String nombreTipoPedido;
 
     public TipoPedido(){

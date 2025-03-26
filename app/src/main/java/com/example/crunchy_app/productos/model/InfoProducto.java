@@ -1,52 +1,64 @@
 package com.example.crunchy_app.productos.model;
 
-import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "info_productos")
+@Entity(tableName = "infos_producto")
 public class InfoProducto {
 
     @PrimaryKey(autoGenerate = true)
     private int idInfoProducto;
 
-    @ColumnInfo(name = "cantidad_chicharron")
-    @NonNull
-    private  int cantidadChicharron;
+    @ColumnInfo(name = "cantidad_chicharron_gramos")
+    private  float cantidadChicharronGramos;
 
     @ColumnInfo(name = "cantidad_chorizo")
-    @NonNull
     private  int cantidadChorizo;
+
+    @ColumnInfo(name = "cantidad_bollo")
+    private  float cantidadBollo;
 
     public InfoProducto() {
     }
 
-    public InfoProducto(int cantidadChicharron, int cantidadChorizo) {
-
-        this.cantidadChicharron = cantidadChicharron;
+    public InfoProducto(float cantidadChicharronGramos, int cantidadChorizo, float cantidadBollo) {
+        this.cantidadChicharronGramos = cantidadChicharronGramos;
         this.cantidadChorizo = cantidadChorizo;
-
+        this.cantidadBollo = cantidadBollo;
     }
 
     public int getIdInfoProducto() {
         return idInfoProducto;
-
-    }
-    public int getCantidadChicharron() {
-        return cantidadChicharron;
-    }
-    public int getCantidadChorizo() {
-        return cantidadChorizo;
     }
 
     public void setIdInfoProducto(int idInfoProducto) {
         this.idInfoProducto = idInfoProducto;
     }
-    public void setCantidadChicharron(int cantidadChicharron) {
-        this.cantidadChicharron = cantidadChicharron;
+
+    public float getCantidadChicharronGramos() {
+        return cantidadChicharronGramos;
     }
+
+    public void setCantidadChicharronGramos(float cantidadChicharronGramos) {
+        this.cantidadChicharronGramos = cantidadChicharronGramos;
+    }
+
+    public int getCantidadChorizo() {
+        return cantidadChorizo;
+    }
+
     public void setCantidadChorizo(int cantidadChorizo) {
         this.cantidadChorizo = cantidadChorizo;
     }
+
+    public float getCantidadBollo() {
+        return cantidadBollo;
+    }
+
+    public void setCantidadBollo(float cantidadBollo) {
+        this.cantidadBollo = cantidadBollo;
+    }
 }
+
+

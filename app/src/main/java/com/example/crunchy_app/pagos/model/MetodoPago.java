@@ -1,5 +1,6 @@
 package com.example.crunchy_app.pagos.model;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -8,32 +9,33 @@ import androidx.room.PrimaryKey;
 public class MetodoPago {
 
     @PrimaryKey(autoGenerate = true)
-    private int idMetodoDePago;
+    private int idMetodoPago;
 
     @ColumnInfo(name = "nombre_metodo_pago")
-    private String nombreMetodoDePago;
+    @NonNull
+    private String nombreMetodoPago;
 
     public MetodoPago() {
     }
 
-    public MetodoPago(String nombreMetodoDePago) {
-        this.nombreMetodoDePago = nombreMetodoDePago;
+    public MetodoPago(String nombreMetodoPago) {
+        this.nombreMetodoPago = nombreMetodoPago;
     }
 
-    public int getIdMetodoDePago() {
-        return idMetodoDePago;
+    public int getIdMetodoPago() {
+        return idMetodoPago;
     }
 
-    public String getNombreMetodoDePago() {
-        return nombreMetodoDePago;
+    public String getNombreMetodoPago() {
+        return nombreMetodoPago;
     }
 
-    public void setIdMetodoDePago(int idMetodoDePago) {
-        this.idMetodoDePago = idMetodoDePago;
+    public void setIdMetodoPago(int idMetodoPago) {
+        this.idMetodoPago = idMetodoPago;
     }
 
-    public void setNombreMetodoDePago(String nombreMetodoDePago) {
-        this.nombreMetodoDePago = nombreMetodoDePago;
+    public void setNombreMetodoPago(String nombreMetodoPago) {
+        this.nombreMetodoPago = nombreMetodoPago;
     }
 
 }

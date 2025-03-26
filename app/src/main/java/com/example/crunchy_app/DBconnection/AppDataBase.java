@@ -5,9 +5,13 @@ import androidx.room.RoomDatabase;
 
 import com.example.crunchy_app.pagos.DAO.MetodoPagoDao;
 import com.example.crunchy_app.pagos.model.MetodoPago;
+import com.example.crunchy_app.pedidos.DAO.EstadoPedidoDao;
 import com.example.crunchy_app.pedidos.DAO.PedidoDao;
+import com.example.crunchy_app.pedidos.DAO.ProductoDelPedidoDao;
 import com.example.crunchy_app.pedidos.DAO.TipoPedidoDao;
+import com.example.crunchy_app.pedidos.model.EstadoPedido;
 import com.example.crunchy_app.pedidos.model.Pedido;
+import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
 import com.example.crunchy_app.pedidos.model.TipoPedido;
 import com.example.crunchy_app.productos.DAO.InfoProductoDao;
 import com.example.crunchy_app.productos.DAO.ProductoDao;
@@ -17,12 +21,16 @@ import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.TipoProducto;
 
 @Database(entities = {InfoProducto.class, Producto.class, TipoProducto.class,
-MetodoPago.class ,Pedido.class, TipoPedido.class}, version = 3)
+MetodoPago.class ,Pedido.class, EstadoPedido.class ,TipoPedido.class,
+ProductoDelPedido.class}, version = 3)
 public abstract class AppDataBase extends RoomDatabase {
     public abstract InfoProductoDao infoProductoDao();
     public abstract ProductoDao productoDao();
     public abstract TipoProductoDao tipoProductoDao();
-    public abstract MetodoPagoDao metodoPagoDao();
     public abstract PedidoDao pedidoDao();
+    public abstract MetodoPagoDao metodoPagoDao();
     public abstract TipoPedidoDao tipoPedidoDao();
+    public abstract EstadoPedidoDao estadoPedidoDao();
+    public abstract ProductoDelPedidoDao productoDelPedidoDao();
+
 }

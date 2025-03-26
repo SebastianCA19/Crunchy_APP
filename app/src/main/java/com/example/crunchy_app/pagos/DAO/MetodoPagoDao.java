@@ -12,8 +12,14 @@ import java.util.List;
 public interface MetodoPagoDao {
 
     @Query("SELECT * FROM metodos_pago")
-    List<MetodoPago> getAll();
+    public List<MetodoPago> getAll();
+
+    @Query("SELECT * FROM metodos_pago WHERE id_metodo_pago = :idMetodoPago")
+    public MetodoPago getMetodoPagoById(int idMetodoPago);
 
     @Insert
-    long insert(MetodoPago metodoPago);
+    public long insert(MetodoPago metodoPago);
+
+    @Query("DELETE FROM metodos_pago WHERE id_metodo_pago = :idMetodoPago")
+    public int deleteMetodoPagoById(int idMetodoPago);
 }

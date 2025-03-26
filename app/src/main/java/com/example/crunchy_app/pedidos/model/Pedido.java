@@ -23,15 +23,11 @@ public class Pedido {
 
     @ColumnInfo(name = "id_metodo_pago")
     @NonNull
-    private int idMetodoDePago;
+    private int idMetodoPago;
 
     @ColumnInfo(name = "id_tipo_pedido")
     @NonNull
     private int idTipoPedido;
-
-    @ColumnInfo(name = "es_personalizado")
-    @NonNull
-    private int esPersonalizado;
 
     @ColumnInfo(name = "fecha")
     @NonNull
@@ -44,12 +40,11 @@ public class Pedido {
     public Pedido() {
     }
 
-    public Pedido(String nombreCliente, String apellidoCliente, int idMetodoDePago, int idTipoPedido, int esPersonalizado, LocalDate fecha, LocalTime hora) {
+    public Pedido(String nombreCliente, String apellidoCliente, int idMetodoPago, int idTipoPedido, LocalDate fecha, LocalTime hora) {
         this.nombreCliente = nombreCliente;
         this.apellidoCliente = apellidoCliente;
-        this.idMetodoDePago = idMetodoDePago;
+        this.idMetodoPago = idMetodoPago;
         this.idTipoPedido = idTipoPedido;
-        this.esPersonalizado = esPersonalizado;
         this.fecha = fecha;
         this.hora = hora;
     }
@@ -78,12 +73,12 @@ public class Pedido {
         this.apellidoCliente = apellidoCliente;
     }
 
-    public int getIdMetodoDePago() {
-        return idMetodoDePago;
+    public int getIdMetodoPago() {
+        return idMetodoPago;
     }
 
-    public void setIdMetodoDePago(int idMetodoDePago) {
-        this.idMetodoDePago = idMetodoDePago;
+    public void setIdMetodoPago(int idMetodoPago) {
+        this.idMetodoPago = idMetodoPago;
     }
 
     public int getIdTipoPedido() {
@@ -92,14 +87,6 @@ public class Pedido {
 
     public void setIdTipoPedido(int idTipoPedido) {
         this.idTipoPedido = idTipoPedido;
-    }
-
-    public int getEsPersonalizado() {
-        return esPersonalizado;
-    }
-
-    public void setEsPersonalizado(int esPersonalizado) {
-        this.esPersonalizado = esPersonalizado;
     }
 
     public LocalDate getFecha() {

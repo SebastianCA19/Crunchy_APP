@@ -13,8 +13,14 @@ import java.util.List;
 public interface ProductoDao {
 
     @Query("SELECT * FROM productos")
-    List<Producto> getAll();
+    public List<Producto> getAll();
+
+    @Query("SELECT * FROM productos WHERE id_producto = :idProducto")
+    public Producto getProductoById(int idProducto);
 
     @Insert
-    long insert(Producto producto);
+    public long insert(Producto producto);
+
+    @Query("DELETE FROM productos WHERE id_producto = :idProducto")
+    public int deleteProductoById(int idProducto);
 }
