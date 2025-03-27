@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey;
 public class InfoProducto {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id_info_producto")
     private int idInfoProducto;
 
     @ColumnInfo(name = "cantidad_chicharron_gramos")

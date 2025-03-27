@@ -10,6 +10,7 @@ import androidx.room.PrimaryKey;
 public class ProductoDelPedido {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id_productos_de_pedido")
     private int idProductosDePedido;
 
     @ColumnInfo(name = "id_pedido")

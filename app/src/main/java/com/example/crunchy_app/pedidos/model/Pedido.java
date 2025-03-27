@@ -12,6 +12,7 @@ import java.time.LocalTime;
 public class Pedido {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id_pedido")
     private int idPedido;
 
     @ColumnInfo(name = "nombre_cliente")

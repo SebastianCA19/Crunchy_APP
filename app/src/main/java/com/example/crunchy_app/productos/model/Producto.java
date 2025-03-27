@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "productos")
 public class Producto {
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id_producto")
     private int idProducto;
 
     @ColumnInfo(name = "nombre_producto")

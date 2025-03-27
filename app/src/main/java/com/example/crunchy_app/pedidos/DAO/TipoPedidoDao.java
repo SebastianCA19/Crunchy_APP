@@ -11,15 +11,15 @@ import java.util.List;
 @Dao
 public interface TipoPedidoDao {
 
-    @Query("SELECT * FROM tipos_de_pedido")
+    @Query("SELECT * FROM tipos_pedido")
     public List<TipoPedido> getAll();
 
-    @Query("SELECT * FROM tipos_de_pedido WHERE id_tipo_pedido = :idTipoPedido")
+    @Query("SELECT * FROM tipos_pedido WHERE id_tipo_pedido = :idTipoPedido")
     public TipoPedido getTipoPedidoById(int idTipoPedido);
 
     @Insert
     public long insert(TipoPedido tipoPedido);
 
-    @Query("DELETE FROM tipos_de_pedido WHERE id_tipo_pedido = :idTipoPedido")
+    @Query("DELETE FROM tipos_pedido WHERE id_tipo_pedido = :idTipoPedido")
     public int deleteTipoPedidoById(int idTipoPedido);
 }

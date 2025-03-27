@@ -10,6 +10,7 @@ import androidx.room.PrimaryKey;
 public class TipoPedido {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id_tipo_pedido")
     private int idTipoPedido;
 
     @ColumnInfo(name = "nombre_tipo_pedido")

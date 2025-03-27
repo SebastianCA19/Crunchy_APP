@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey;
 public class MetodoPago {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id_metodo_pago")
     private int idMetodoPago;
 
     @ColumnInfo(name = "nombre_metodo_pago")

@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey;
 public class EstadoPedido {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id_estado_pedido")
     private int idEstadoPedido;
 
     @ColumnInfo(name = "nombre_estado_pedido")
