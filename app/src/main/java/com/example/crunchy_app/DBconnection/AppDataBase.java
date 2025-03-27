@@ -1,6 +1,9 @@
 package com.example.crunchy_app.DBconnection;
 
+import android.content.Context;
+
 import androidx.room.Database;
+import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
@@ -26,9 +29,25 @@ import com.example.crunchy_app.reportes.model.ResumenPorDia;
 
 @Database(entities = {InfoProducto.class, Producto.class, TipoProducto.class,
 MetodoPago.class ,Pedido.class, EstadoPedido.class , Locacion.class,
-ProductoDelPedido.class, ResumenPorDia.class}, version = 4)
+ProductoDelPedido.class, ResumenPorDia.class}, version = 5)
 @TypeConverters({Converters.class})
 public abstract class AppDataBase extends RoomDatabase {
+
+    private static volatile AppDataBase INSTANCE;
+
+    public static AppDataBase getInstance(Context context) {
+        if (INSTANCE == null) {
+            synchronized (AppDataBase.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                                    AppDataBase.class, "crunchy-DB")
+                            .fallbackToDestructiveMigration() // Borra y recrea si hay cambios en estructura
+                            .build();
+                }
+            }
+        }
+        return INSTANCE;
+    }
     public abstract InfoProductoDao infoProductoDao();
     public abstract ProductoDao productoDao();
     public abstract TipoProductoDao tipoProductoDao();

@@ -40,10 +40,15 @@ public class MainActivity extends AppCompatActivity {
 
         // Manejo de base de datos en un hilo separado
         new Thread(() -> {
-            AppDataBase db = Room.databaseBuilder(getApplicationContext(),
-                            AppDataBase.class, "crunchy-DB")
-                    .fallbackToDestructiveMigration() // Borra y recrea la BD si hay cambios en la estructura
-                    .build();
+            AppDataBase db = AppDataBase.getInstance(getApplicationContext());
+
+            // Verificar que la BD se creó con un log
+            Log.d("BASE DE DATOS WIII", "Base de datos creada correctamente: " + db);
+            Log.d("BASE DE DATOS", "Ruta de la base de datos: " + getDatabasePath("crunchy-DB").getAbsolutePath());
+
+            db.tipoProductoDao().insert(new TipoProducto("Picadas"));
+            Log.d("Pruebita", db.tipoProductoDao().getTipoProductoById(1).getNombreTipoProducto());
+
         }).start();
 
     }
