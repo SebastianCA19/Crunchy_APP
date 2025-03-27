@@ -19,7 +19,7 @@ public class MetodoPago {
     public MetodoPago() {
     }
 
-    public MetodoPago(String nombreMetodoPago) {
+    public MetodoPago(@NonNull String nombreMetodoPago) {
         this.nombreMetodoPago = nombreMetodoPago;
     }
 
@@ -27,16 +27,16 @@ public class MetodoPago {
         return idMetodoPago;
     }
 
-    public String getNombreMetodoPago() {
-        return nombreMetodoPago;
-    }
-
     public void setIdMetodoPago(int idMetodoPago) {
         this.idMetodoPago = idMetodoPago;
     }
 
-    public void setNombreMetodoPago(String nombreMetodoPago) {
-        this.nombreMetodoPago = nombreMetodoPago;
+    @NonNull
+    public String getNombreMetodoPago() {
+        return nombreMetodoPago;
     }
 
+    public void setNombreMetodoPago(@NonNull String nombreMetodoPago) {
+        this.nombreMetodoPago = nombreMetodoPago;
+    }
 }

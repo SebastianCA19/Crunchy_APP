@@ -4,9 +4,27 @@ package com.example.crunchy_app.productos.model;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "productos")
+import com.example.crunchy_app.pedidos.model.Pedido;
+
+@Entity(tableName = "productos", foreignKeys = {
+        @ForeignKey(
+                entity = TipoProducto.class,
+                parentColumns = "id_tipo_producto",
+                childColumns = "id_tipo_producto",
+                onDelete = ForeignKey.RESTRICT,
+                onUpdate = ForeignKey.CASCADE
+        ),
+        @ForeignKey(
+                entity = InfoProducto.class,
+                parentColumns = "id_info_producto",
+                childColumns = "id_info_producto",
+                onDelete = ForeignKey.RESTRICT,
+                onUpdate = ForeignKey.CASCADE
+        )
+})
 public class Producto {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_producto")
@@ -20,62 +38,63 @@ public class Producto {
     @NonNull
     private int idTipoProducto;
 
+    @ColumnInfo(name = "id_info_producto")
+    private int idInfoProducto;
+
     @ColumnInfo(name = "precio")
     @NonNull
     private float precio;
 
-    @ColumnInfo(name = "id_info_producto")
-    private int idInfoProducto;
 
     public Producto() {
     }
 
-
-    public Producto(String nombreProducto, int idTipoProducto, float precio, int idInfoProducto) {
+    public Producto(@NonNull String nombreProducto, int idTipoProducto, int idInfoProducto, float precio) {
         this.nombreProducto = nombreProducto;
         this.idTipoProducto = idTipoProducto;
-        this.precio = precio;
         this.idInfoProducto = idInfoProducto;
+        this.precio = precio;
     }
 
     public int getIdProducto() {
         return idProducto;
     }
 
-    public String getNombreProducto() {
-        return nombreProducto;
-    }
-
-    public int getIdTipoProducto() {
-        return idTipoProducto;
-    }
-
-    public float getPrecio() {
-        return precio;
-    }
-
-    public int getIdInfoProducto() {
-        return idInfoProducto;
-    }
-
     public void setIdProducto(int idProducto) {
         this.idProducto = idProducto;
+    }
+
+    @NonNull
+    public String getNombreProducto() {
+        return nombreProducto;
     }
 
     public void setNombreProducto(@NonNull String nombreProducto) {
         this.nombreProducto = nombreProducto;
     }
 
+    public int getIdTipoProducto() {
+        return idTipoProducto;
+    }
+
     public void setIdTipoProducto(int idTipoProducto) {
         this.idTipoProducto = idTipoProducto;
     }
 
-    public void setPrecio(float precio) {
-        this.precio = precio;
+    public int getIdInfoProducto() {
+        return idInfoProducto;
     }
 
     public void setIdInfoProducto(int idInfoProducto) {
         this.idInfoProducto = idInfoProducto;
+    }
+
+    public float getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(float precio) {
+        this.precio = precio;
     }
 }
 

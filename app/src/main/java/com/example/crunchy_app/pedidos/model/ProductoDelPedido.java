@@ -4,9 +4,27 @@ package com.example.crunchy_app.pedidos.model;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "productos_del_pedido")
+import com.example.crunchy_app.productos.model.Producto;
+
+@Entity(tableName = "productos_del_pedido", foreignKeys = {
+        @ForeignKey(
+                entity = Pedido.class,
+                parentColumns = "id_pedido",
+                childColumns = "id_pedido",
+                onDelete = ForeignKey.RESTRICT,
+                onUpdate = ForeignKey.CASCADE
+        ),
+        @ForeignKey(
+                entity = Producto.class,
+                parentColumns = "id_producto",
+                childColumns = "id_producto",
+                onDelete = ForeignKey.RESTRICT,
+                onUpdate = ForeignKey.CASCADE
+        )
+})
 public class ProductoDelPedido {
 
     @PrimaryKey(autoGenerate = true)
@@ -28,8 +46,7 @@ public class ProductoDelPedido {
     public ProductoDelPedido() {
     }
 
-    public ProductoDelPedido( int idPedido, int idProducto, int cantidad) {
-
+    public ProductoDelPedido(int idPedido, int idProducto, int cantidad) {
         this.idPedido = idPedido;
         this.idProducto = idProducto;
         this.cantidad = cantidad;
