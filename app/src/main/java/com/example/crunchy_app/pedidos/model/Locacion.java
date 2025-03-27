@@ -6,7 +6,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "locacion")
+@Entity(tableName = "locaciones")
 public class Locacion {
 
     @PrimaryKey(autoGenerate = true)

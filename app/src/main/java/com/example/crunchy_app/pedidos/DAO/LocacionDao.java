@@ -11,18 +11,18 @@ import java.util.List;
 @Dao
 public interface LocacionDao {
 
-    @Query("SELECT * FROM locacion")
+    @Query("SELECT * FROM locaciones")
     public List<Locacion> getAll();
 
-    @Query("SELECT * FROM locacion WHERE id_locacion = :idLocacion")
+    @Query("SELECT * FROM locaciones WHERE id_locacion = :idLocacion")
     public Locacion getLocacionById(int idLocacion);
 
-    @Query("SELECT * FROM locacion WHERE id_padre_locacion = :idPadreLocacion")
+    @Query("SELECT * FROM locaciones WHERE id_padre_locacion = :idPadreLocacion")
     public List<Locacion> getLocacionesByPadreLocacion(int idPadreLocacion);
 
     @Insert
     public long insert(Locacion locacion);
 
-    @Query("DELETE FROM locacion WHERE id_locacion = :idLocacion")
+    @Query("DELETE FROM locaciones WHERE id_locacion = :idLocacion")
     public int deleteLocacionById(int idLocacion);
 }
