@@ -12,6 +12,9 @@ import java.util.List;
 @Dao
 public interface EstadoPedidoDao {
 
+    @Query("SELECT count(*) FROM estados_pedido")
+    public int count();
+
     @Query("SELECT * FROM estados_pedido")
     public List<EstadoPedido> getAll();
 

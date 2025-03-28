@@ -11,6 +11,9 @@ import java.util.List;
 @Dao
 public interface LocacionDao {
 
+    @Query("SELECT count(*) FROM locaciones")
+    public int count();
+
     @Query("SELECT * FROM locaciones")
     public List<Locacion> getAll();
 

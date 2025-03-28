@@ -11,6 +11,9 @@ import java.util.List;
 @Dao
 public interface TipoProductoDao {
 
+    @Query("SELECT count(*) FROM tipos_producto")
+    public int count();
+
     @Query("SELECT * FROM tipos_producto")
     public List<TipoProducto> getAll();
 

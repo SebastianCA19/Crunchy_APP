@@ -11,6 +11,9 @@ import java.util.List;
 @Dao
 public interface MetodoPagoDao {
 
+    @Query("SELECT count(*) FROM metodos_pago")
+    public int count();
+
     @Query("SELECT * FROM metodos_pago")
     public List<MetodoPago> getAll();
 

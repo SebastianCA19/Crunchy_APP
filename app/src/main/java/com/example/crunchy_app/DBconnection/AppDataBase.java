@@ -48,6 +48,7 @@ public abstract class AppDataBase extends RoomDatabase {
         }
         return INSTANCE;
     }
+
     public abstract InfoProductoDao infoProductoDao();
     public abstract ProductoDao productoDao();
     public abstract TipoProductoDao tipoProductoDao();

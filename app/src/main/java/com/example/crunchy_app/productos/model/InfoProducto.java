@@ -23,7 +23,7 @@ public class InfoProducto {
     public InfoProducto() {
     }
 
-    public InfoProducto(float cantidadBollo, Integer cantidadChorizo, float cantidadChicharronGramos) {
+    public InfoProducto(float cantidadChicharronGramos,Integer cantidadChorizo, float cantidadBollo) {
         this.cantidadBollo = cantidadBollo;
         this.cantidadChorizo = cantidadChorizo;
         this.cantidadChicharronGramos = cantidadChicharronGramos;
