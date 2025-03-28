@@ -16,7 +16,7 @@ public class DrinksPagerAdapter extends FragmentStateAdapter {
 
     public DrinksPagerAdapter(FragmentActivity fragmentActivity, List<Producto> drinkList) {
         super(fragmentActivity);
-        this.drinkPages = partitionList(drinkList, 5);
+        this.drinkPages = partitionList(drinkList, 6);
     }
 
 

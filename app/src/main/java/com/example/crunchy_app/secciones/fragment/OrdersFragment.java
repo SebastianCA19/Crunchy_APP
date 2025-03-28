@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.bebidas.fragment.BebidasFragment;
@@ -31,6 +32,8 @@ public class OrdersFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private String input;
 
     public OrdersFragment() {
         // Required empty public constructor
@@ -71,12 +74,28 @@ public class OrdersFragment extends Fragment {
         Button btComidas = view.findViewById(R.id.btComidas);
         Button btBebidas = view.findViewById(R.id.btBebidas);
         Button btOtros = view.findViewById(R.id.btOtros);
+        Button btBuscar = view.findViewById(R.id.btBuscar);
+        EditText inputText = view.findViewById(R.id.inputText);
 
         replaceFragment(new ComidasFragment());
 
         btComidas.setOnClickListener(v -> replaceFragment(new ComidasFragment()));
         btBebidas.setOnClickListener(v -> replaceFragment(new BebidasFragment()));
         btOtros.setOnClickListener(v -> replaceFragment(new OtrosFragment()));
+        btBuscar.setOnClickListener(v -> {
+            input = inputText.getText().toString();
+            Fragment currentFragment = getChildFragmentManager().findFragmentById(R.id.frame_layout);
+
+            if (currentFragment instanceof ComidasFragment) {
+                ComidasFragment comidasFragment = new ComidasFragment();;
+                comidasFragment.setFilter(input);
+                replaceFragment(comidasFragment);
+            } else if (currentFragment instanceof BebidasFragment) {
+                BebidasFragment bebidasFragment = new BebidasFragment();
+                bebidasFragment.setFilter(input);
+                replaceFragment(bebidasFragment);
+            }
+        });
 
         return view;
     }

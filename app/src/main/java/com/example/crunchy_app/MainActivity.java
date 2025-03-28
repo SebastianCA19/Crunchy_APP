@@ -91,7 +91,9 @@ public class MainActivity extends AppCompatActivity {
         if (tipoProductoDao.count() == 0){
             tipoProductoDao.insert(new TipoProducto("combo"));
             tipoProductoDao.insert(new TipoProducto("picada"));
-            tipoProductoDao.insert(new TipoProducto("bebida"));
+            tipoProductoDao.insert(new TipoProducto("bebida-personal"));
+            tipoProductoDao.insert(new TipoProducto("bebida-familiar"));
+            tipoProductoDao.insert(new TipoProducto("bebida-alcoholica"));
             tipoProductoDao.insert(new TipoProducto("personalizado"));
         }
 
@@ -143,18 +145,18 @@ public class MainActivity extends AppCompatActivity {
             productoDao.insert(new Producto("bretaña 500ml", 3, null, 3000));
             productoDao.insert(new Producto("coca-cola-normal 400ml", 3, null, 3500));
             productoDao.insert(new Producto("coca-cola-zero 400ml", 3, null, 3500));
-            productoDao.insert(new Producto("pony-malta 1l", 3, null, 5000));
-            productoDao.insert(new Producto("coca-cola 1l", 3, null, 5000));
-            productoDao.insert(new Producto("coca-cola 1.5l", 3, null, 7500));
-            productoDao.insert(new Producto("coca-cola 2l", 3, null, 7500));
-            productoDao.insert(new Producto("costeñita", 3, null, 3000));
-            productoDao.insert(new Producto("miller-lite", 3, null, 3000));
-            productoDao.insert(new Producto("budweiser", 3, null, 3500));
-            productoDao.insert(new Producto("aguila-negra", 3, null, 3500));
-            productoDao.insert(new Producto("poker", 3, null, 3500));
-            productoDao.insert(new Producto("heineken", 3, null, 4000));
-            productoDao.insert(new Producto("coronita", 3, null, 4000));
-            productoDao.insert(new Producto("club-colombia", 3, null, 4000));
+            productoDao.insert(new Producto("pony-malta 1L", 4, null, 5000));
+            productoDao.insert(new Producto("coca-cola 1L", 4, null, 5000));
+            productoDao.insert(new Producto("coca-cola 1.5L", 4, null, 7500));
+            productoDao.insert(new Producto("coca-cola 2L", 4, null, 7500));
+            productoDao.insert(new Producto("costeñita", 5, null, 3000));
+            productoDao.insert(new Producto("miller-lite", 5, null, 3000));
+            productoDao.insert(new Producto("budweiser", 5, null, 3500));
+            productoDao.insert(new Producto("aguila-negra", 5, null, 3500));
+            productoDao.insert(new Producto("poker", 5, null, 3500));
+            productoDao.insert(new Producto("heineken", 5, null, 4000));
+            productoDao.insert(new Producto("coronita", 5, null, 4000));
+            productoDao.insert(new Producto("club-colombia", 5, null, 4000));
         }
 
     }

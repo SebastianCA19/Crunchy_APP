@@ -26,4 +26,16 @@ public interface ProductoDao {
 
     @Query("DELETE FROM productos WHERE id_producto = :idProducto")
     public int deleteProductoById(Integer idProducto);
+
+    @Query("SELECT * FROM productos WHERE id_tipo_producto = 1 OR id_tipo_producto = 2")
+    public List<Producto> getComidas();
+
+    @Query("SELECT * FROM productos WHERE id_tipo_producto IN (3, 4, 5)")
+    public List<Producto> getBebidas();
+
+    @Query("SELECT * FROM productos WHERE nombre_producto LIKE :query || '%' AND (id_tipo_producto = 1 OR id_tipo_producto = 2)")
+    public List<Producto> searchComidas(String query);
+
+    @Query("SELECT * FROM productos WHERE nombre_producto LIKE :query || '%' AND id_tipo_producto IN (3, 4, 5)")
+    public List<Producto> searchBebidas(String query);
 }

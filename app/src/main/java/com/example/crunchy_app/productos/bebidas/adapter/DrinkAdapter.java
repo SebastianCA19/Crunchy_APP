@@ -32,14 +32,43 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHol
     @Override
     public void onBindViewHolder(@NonNull DrinkAdapter.DrinkViewHolder holder, int position) {
         Producto drink = drinkList.get(position);
+        if(!drink.isFixed()){
+            divideName(drink);
+        }
+        fixName(drink);
         holder.name.setText(drink.getNombreProducto());
-        holder.info.setText(drink.getIdInfoProducto());
+        holder.info.setText(drink.getInfoString());
         holder.price.setText(String.format("$%.2f", drink.getPrecio()));
     }
 
     @Override
     public int getItemCount() {
         return drinkList.size();
+    }
+
+    private void divideName(Producto drink){
+        if(!drink.isFixed()){
+            String[] parts = drink.getNombreProducto().split(" ");
+
+            if (parts.length > 1) {
+                drink.setNombreProducto(parts[0]);
+                drink.setInfoString(parts[1]);
+            }else{
+                drink.setNombreProducto(parts[0]);
+                drink.setInfoString("");
+            }
+
+            drink.setFixed(true);
+        }
+    }
+
+    private void fixName(Producto drink){
+        String[] parts = drink.getNombreProducto().split("-");
+        String name = "";
+        for (String part : parts) {
+            name += part.toUpperCase() + " ";
+        }
+        drink.setNombreProducto(name);
     }
 
     public static class DrinkViewHolder extends RecyclerView.ViewHolder {

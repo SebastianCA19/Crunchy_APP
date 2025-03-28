@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.crunchy_app.productos.comidas.fragment.ComidasPageFragment;
+import com.example.crunchy_app.productos.model.InfoProducto;
 import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.ArrayList;
@@ -13,16 +14,18 @@ import java.util.List;
 
 public class MenuPagerAdapter extends FragmentStateAdapter {
     private List<List<Producto>> foodPages;
+    private List<InfoProducto> infoList;
 
-    public MenuPagerAdapter(@NonNull FragmentActivity fragmentActivity, List<Producto> foodList) {
+    public MenuPagerAdapter(@NonNull FragmentActivity fragmentActivity, List<Producto> foodList , List<InfoProducto> infoList) {
         super(fragmentActivity);
-        this.foodPages = partitionList(foodList, 5);
+        this.foodPages = partitionList(foodList, 6);
+        this.infoList = infoList;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return ComidasPageFragment.newInstance(foodPages.get(position));
+        return ComidasPageFragment.newInstance(foodPages.get(position), infoList);
     }
 
     @Override

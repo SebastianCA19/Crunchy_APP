@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.example.crunchy_app.pedidos.model.Pedido;
@@ -45,6 +46,12 @@ public class Producto {
     @NonNull
     private float precio;
 
+    @Ignore
+    private String infoString;
+
+    @Ignore
+    private boolean fixed;
+
 
     public Producto() {
     }
@@ -55,6 +62,22 @@ public class Producto {
         this.idTipoProducto = idTipoProducto;
         this.idInfoProducto = idInfoProducto;
         this.precio = precio;
+    }
+
+    public void setInfoString(String infoString){
+        this.infoString = infoString;
+    }
+
+    public String getInfoString(){
+        return infoString;
+    }
+
+    public void setFixed(boolean fixed){
+        this.fixed = fixed;
+    }
+
+    public boolean isFixed(){
+        return fixed;
     }
 
     public Integer getIdProducto() {

@@ -10,15 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.R;
+import com.example.crunchy_app.productos.model.InfoProducto;
 import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.List;
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder> {
     private List<Producto> foodList;
+    private List<InfoProducto> infoList;
 
-    public FoodAdapter(List<Producto> foodList) {
+    public FoodAdapter(List<Producto> foodList, List<InfoProducto> infoList) {
         this.foodList = foodList;
+        this.infoList = infoList;
     }
 
     @NonNull
@@ -31,14 +34,47 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     @Override
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
         Producto food = foodList.get(position);
-        holder.name.setText(food.getNombreProducto());
-        holder.info.setText(food.getNombreProducto());
+        InfoProducto info = getInfoById(food.getIdInfoProducto());
+        holder.name.setText(food.getNombreProducto().toUpperCase());
+        holder.info.setText(getInfoText(info));
         holder.price.setText(String.format("$%.2f", food.getPrecio()));
     }
 
     @Override
     public int getItemCount() {
         return foodList.size();
+    }
+
+    private InfoProducto getInfoById(Integer idInfoProducto) {
+        for (InfoProducto info : infoList) {
+            if (info.getIdInfoProducto().equals(idInfoProducto)) {
+                return info;
+            }
+        }
+        return null;
+    }
+
+    private String getInfoText(InfoProducto info) {
+        StringBuilder infoText = new StringBuilder();
+        int chorizo = info.getCantidadChorizo();
+        float chicharron = info.getCantidadChicharronGramos();
+        float bollo = info.getCantidadBollo();
+        if(chicharron > 0) {
+            infoText.append(String.format("%.2f gramos de chicharron", chicharron));
+        }
+        if(chorizo > 0) {
+            if(infoText.length() > 0) {
+                infoText.append(", ");
+            }
+            infoText.append(String.format("%d chorizos", chorizo));
+        }
+        if(bollo > 0) {
+            if(infoText.length() > 0) {
+                infoText.append(", ");
+            }
+            infoText.append(String.format("%.1f bollos", bollo));
+        }
+        return infoText.toString();
     }
 
     public static class FoodViewHolder extends RecyclerView.ViewHolder {

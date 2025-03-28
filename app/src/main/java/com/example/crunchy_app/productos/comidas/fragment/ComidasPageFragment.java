@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.comidas.adapter.FoodAdapter;
+import com.example.crunchy_app.productos.model.InfoProducto;
 import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.ArrayList;
@@ -19,9 +20,14 @@ import java.util.List;
 public class ComidasPageFragment extends Fragment {
     private static final String ARG_FOOD_LIST = "food_list";
     private List<Producto> foodList;
+    private List<InfoProducto> infoList;
 
-    public static ComidasPageFragment newInstance(List<Producto> foods) {
-        ComidasPageFragment fragment = new ComidasPageFragment();
+    public ComidasPageFragment(List<InfoProducto> infoList) {
+        this.infoList = infoList;
+    }
+
+    public static ComidasPageFragment newInstance(List<Producto> foods, List<InfoProducto> infoList) {
+        ComidasPageFragment fragment = new ComidasPageFragment(infoList);
         Bundle args = new Bundle();
         args.putSerializable(ARG_FOOD_LIST, new ArrayList<>(foods));
         fragment.setArguments(args);
@@ -41,7 +47,7 @@ public class ComidasPageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_comidas_page, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new FoodAdapter(foodList));
+        recyclerView.setAdapter(new FoodAdapter(foodList,infoList));
         return view;
     }
 }
