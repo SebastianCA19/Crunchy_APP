@@ -11,7 +11,7 @@ public class EstadoPedido {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_estado_pedido")
-    private int idEstadoPedido;
+    private Integer idEstadoPedido;
 
     @ColumnInfo(name = "nombre_estado_pedido")
     @NonNull
@@ -25,11 +25,11 @@ public class EstadoPedido {
         this.nombreEstadoPedido = nombreEstadoPedido;
     }
 
-    public int getIdEstadoPedido() {
+    public Integer getIdEstadoPedido() {
         return idEstadoPedido;
     }
 
-    public void setIdEstadoPedido(int idEstadoPedido) {
+    public void setIdEstadoPedido(Integer idEstadoPedido) {
         this.idEstadoPedido = idEstadoPedido;
     }
 

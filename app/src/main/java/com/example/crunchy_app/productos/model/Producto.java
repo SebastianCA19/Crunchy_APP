@@ -28,7 +28,7 @@ import com.example.crunchy_app.pedidos.model.Pedido;
 public class Producto {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_producto")
-    private int idProducto;
+    private Integer idProducto;
 
     @ColumnInfo(name = "nombre_producto")
     @NonNull
@@ -36,10 +36,10 @@ public class Producto {
 
     @ColumnInfo(name = "id_tipo_producto")
     @NonNull
-    private int idTipoProducto;
+    private Integer idTipoProducto;
 
     @ColumnInfo(name = "id_info_producto")
-    private int idInfoProducto;
+    private Integer idInfoProducto;
 
     @ColumnInfo(name = "precio")
     @NonNull
@@ -49,18 +49,19 @@ public class Producto {
     public Producto() {
     }
 
-    public Producto(@NonNull String nombreProducto, int idTipoProducto, int idInfoProducto, float precio) {
+
+    public Producto(@NonNull String nombreProducto, @NonNull Integer idTipoProducto, Integer idInfoProducto, float precio) {
         this.nombreProducto = nombreProducto;
         this.idTipoProducto = idTipoProducto;
         this.idInfoProducto = idInfoProducto;
         this.precio = precio;
     }
 
-    public int getIdProducto() {
+    public Integer getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(int idProducto) {
+    public void setIdProducto(Integer idProducto) {
         this.idProducto = idProducto;
     }
 
@@ -73,19 +74,20 @@ public class Producto {
         this.nombreProducto = nombreProducto;
     }
 
-    public int getIdTipoProducto() {
+    @NonNull
+    public Integer getIdTipoProducto() {
         return idTipoProducto;
     }
 
-    public void setIdTipoProducto(int idTipoProducto) {
+    public void setIdTipoProducto(@NonNull Integer idTipoProducto) {
         this.idTipoProducto = idTipoProducto;
     }
 
-    public int getIdInfoProducto() {
+    public Integer getIdInfoProducto() {
         return idInfoProducto;
     }
 
-    public void setIdInfoProducto(int idInfoProducto) {
+    public void setIdInfoProducto(Integer idInfoProducto) {
         this.idInfoProducto = idInfoProducto;
     }
 

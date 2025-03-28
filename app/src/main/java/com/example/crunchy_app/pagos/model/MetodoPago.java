@@ -10,7 +10,7 @@ public class MetodoPago {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_metodo_pago")
-    private int idMetodoPago;
+    private Integer idMetodoPago;
 
     @ColumnInfo(name = "nombre_metodo_pago")
     @NonNull
@@ -23,11 +23,11 @@ public class MetodoPago {
         this.nombreMetodoPago = nombreMetodoPago;
     }
 
-    public int getIdMetodoPago() {
+    public Integer getIdMetodoPago() {
         return idMetodoPago;
     }
 
-    public void setIdMetodoPago(int idMetodoPago) {
+    public void setIdMetodoPago(Integer idMetodoPago) {
         this.idMetodoPago = idMetodoPago;
     }
 

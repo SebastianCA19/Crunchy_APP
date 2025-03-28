@@ -10,7 +10,7 @@ public class TipoProducto {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_tipo_producto")
-    private int idTipoProdcuto;
+    private Integer idTipoProdcuto;
 
     @ColumnInfo(name = "nombre_tipo_producto")
     @NonNull
@@ -24,11 +24,11 @@ public class TipoProducto {
         this.nombreTipoProducto = nombreTipoProducto;
     }
 
-    public int getIdTipoProdcuto() {
+    public Integer getIdTipoProdcuto() {
         return idTipoProdcuto;
     }
 
-    public void setIdTipoProdcuto(int idTipoProdcuto) {
+    public void setIdTipoProdcuto(Integer idTipoProdcuto) {
         this.idTipoProdcuto = idTipoProdcuto;
     }
 

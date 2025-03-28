@@ -15,11 +15,11 @@ public interface MetodoPagoDao {
     public List<MetodoPago> getAll();
 
     @Query("SELECT * FROM metodos_pago WHERE id_metodo_pago = :idMetodoPago")
-    public MetodoPago getMetodoPagoById(int idMetodoPago);
+    public MetodoPago getMetodoPagoById(Integer idMetodoPago);
 
     @Insert
     public long insert(MetodoPago metodoPago);
 
     @Query("DELETE FROM metodos_pago WHERE id_metodo_pago = :idMetodoPago")
-    public int deleteMetodoPagoById(int idMetodoPago);
+    public int deleteMetodoPagoById(Integer idMetodoPago);
 }

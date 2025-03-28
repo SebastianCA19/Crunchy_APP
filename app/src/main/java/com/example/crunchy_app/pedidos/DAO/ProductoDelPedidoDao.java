@@ -15,14 +15,14 @@ public interface ProductoDelPedidoDao {
     public List<ProductoDelPedido> getAll();
 
     @Query("SELECT * FROM productos_del_pedido WHERE id_pedido = :idPedido")
-    public List<ProductoDelPedido> getProductosByPedido(int idPedido);
+    public List<ProductoDelPedido> getProductosByPedido(Integer idPedido);
 
     @Insert
     public long insert(ProductoDelPedido productoDelPedido);
 
     @Query("DELETE FROM productos_del_pedido WHERE id_pedido = :idPedido")
-    public int deleteProductosByPedido(int idPedido);
+    public int deleteProductosByPedido(Integer idPedido);
 
     @Query("DELETE FROM productos_del_pedido WHERE id_pedido = :idPedido AND id_producto = :idProducto")
-    public int deleteProductosByProducto(int idPedido, int idProducto);
+    public int deleteProductosByProducto(Integer idPedido, Integer idProducto);
 }

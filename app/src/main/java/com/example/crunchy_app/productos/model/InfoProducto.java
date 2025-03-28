@@ -9,13 +9,13 @@ public class InfoProducto {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_info_producto")
-    private int idInfoProducto;
+    private Integer idInfoProducto;
 
     @ColumnInfo(name = "cantidad_chicharron_gramos")
     private  float cantidadChicharronGramos;
 
     @ColumnInfo(name = "cantidad_chorizo")
-    private  int cantidadChorizo;
+    private  Integer cantidadChorizo;
 
     @ColumnInfo(name = "cantidad_bollo")
     private  float cantidadBollo;
@@ -23,17 +23,17 @@ public class InfoProducto {
     public InfoProducto() {
     }
 
-    public InfoProducto(float cantidadChicharronGramos, int cantidadChorizo, float cantidadBollo) {
-        this.cantidadChicharronGramos = cantidadChicharronGramos;
-        this.cantidadChorizo = cantidadChorizo;
+    public InfoProducto(float cantidadBollo, Integer cantidadChorizo, float cantidadChicharronGramos) {
         this.cantidadBollo = cantidadBollo;
+        this.cantidadChorizo = cantidadChorizo;
+        this.cantidadChicharronGramos = cantidadChicharronGramos;
     }
 
-    public int getIdInfoProducto() {
+    public Integer getIdInfoProducto() {
         return idInfoProducto;
     }
 
-    public void setIdInfoProducto(int idInfoProducto) {
+    public void setIdInfoProducto(Integer idInfoProducto) {
         this.idInfoProducto = idInfoProducto;
     }
 
@@ -45,11 +45,11 @@ public class InfoProducto {
         this.cantidadChicharronGramos = cantidadChicharronGramos;
     }
 
-    public int getCantidadChorizo() {
+    public Integer getCantidadChorizo() {
         return cantidadChorizo;
     }
 
-    public void setCantidadChorizo(int cantidadChorizo) {
+    public void setCantidadChorizo(Integer cantidadChorizo) {
         this.cantidadChorizo = cantidadChorizo;
     }
 

@@ -46,9 +46,6 @@ public class MainActivity extends AppCompatActivity {
             Log.d("BASE DE DATOS WIII", "Base de datos creada correctamente: " + db);
             Log.d("BASE DE DATOS", "Ruta de la base de datos: " + getDatabasePath("crunchy-DB").getAbsolutePath());
 
-            db.tipoProductoDao().insert(new TipoProducto("Picadas"));
-            Log.d("Pruebita", db.tipoProductoDao().getTipoProductoById(1).getNombreTipoProducto());
-
         }).start();
 
     }

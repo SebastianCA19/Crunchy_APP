@@ -16,12 +16,12 @@ public interface EstadoPedidoDao {
     public List<EstadoPedido> getAll();
 
     @Query("SELECT * FROM estados_pedido WHERE id_estado_pedido = :idEstadoPedido")
-    public EstadoPedido getEstadoPedidoById(int idEstadoPedido);
+    public EstadoPedido getEstadoPedidoById(Integer idEstadoPedido);
 
     @Insert
     public long insert(EstadoPedido estadoPedido);
 
     @Query("DELETE FROM estados_pedido WHERE id_estado_pedido = :idEstadoPedido")
-    public int deleteEstadoPedidoById(int idEstadoPedido);
+    public int deleteEstadoPedidoById(Integer idEstadoPedido);
 
 }

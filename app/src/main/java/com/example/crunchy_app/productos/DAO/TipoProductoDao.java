@@ -15,11 +15,11 @@ public interface TipoProductoDao {
     public List<TipoProducto> getAll();
 
     @Query("SELECT * FROM tipos_producto WHERE id_tipo_producto = :idTipoProducto")
-    public TipoProducto getTipoProductoById(int idTipoProducto);
+    public TipoProducto getTipoProductoById(Integer idTipoProducto);
 
     @Insert
     public long insert(TipoProducto tipoProducto);
 
     @Query("DELETE FROM tipos_producto WHERE id_tipo_producto = :idTipoProducto")
-    public int deleteTipoProductoById(int idTipoProducto);
+    public int deleteTipoProductoById(Integer idTipoProducto);
 }

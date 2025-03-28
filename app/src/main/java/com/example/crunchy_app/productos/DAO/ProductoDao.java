@@ -16,11 +16,11 @@ public interface ProductoDao {
     public List<Producto> getAll();
 
     @Query("SELECT * FROM productos WHERE id_producto = :idProducto")
-    public Producto getProductoById(int idProducto);
+    public Producto getProductoById(Integer idProducto);
 
     @Insert
     public long insert(Producto producto);
 
     @Query("DELETE FROM productos WHERE id_producto = :idProducto")
-    public int deleteProductoById(int idProducto);
+    public int deleteProductoById(Integer idProducto);
 }

@@ -14,7 +14,7 @@ public class ResumenPorDia {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_dia")
-    private int idDia;
+    private Integer idDia;
 
     @ColumnInfo(name = "fecha")
     @NonNull
@@ -27,10 +27,10 @@ public class ResumenPorDia {
     private float cantidadVendidaChicharron;
 
     @ColumnInfo(name = "cantidad_chorizo")
-    private int cantidadChorizo;
+    private Integer cantidadChorizo;
 
     @ColumnInfo(name = "cantidad_vendida_chorizo")
-    private int cantidadVendidaChorizo;
+    private Integer cantidadVendidaChorizo;
 
     @ColumnInfo(name = "cantidad_bollo")
     private float cantidadBollo;
@@ -60,7 +60,7 @@ public class ResumenPorDia {
 
     }
 
-    public ResumenPorDia(@NonNull LocalDate fecha, float cantidadChicharron, float cantidadVendidaChicharron, int cantidadChorizo, int cantidadVendidaChorizo, float cantidadBollo, float cantidadVendidaBollo, float dineroBebidas, float dineroChicharron, float dineroChorizo, float dineroBollo, float dineroCombos, float dineroPicadas) {
+    public ResumenPorDia(@NonNull LocalDate fecha, float cantidadChicharron, float cantidadVendidaChicharron, Integer cantidadChorizo, Integer cantidadVendidaChorizo, float cantidadBollo, float cantidadVendidaBollo, float dineroBebidas, float dineroChicharron, float dineroChorizo, float dineroBollo, float dineroPicadas, float dineroCombos) {
         this.fecha = fecha;
         this.cantidadChicharron = cantidadChicharron;
         this.cantidadVendidaChicharron = cantidadVendidaChicharron;
@@ -72,15 +72,15 @@ public class ResumenPorDia {
         this.dineroChicharron = dineroChicharron;
         this.dineroChorizo = dineroChorizo;
         this.dineroBollo = dineroBollo;
-        this.dineroCombos = dineroCombos;
         this.dineroPicadas = dineroPicadas;
+        this.dineroCombos = dineroCombos;
     }
 
-    public int getIdDia() {
+    public Integer getIdDia() {
         return idDia;
     }
 
-    public void setIdDia(int idDia) {
+    public void setIdDia(Integer idDia) {
         this.idDia = idDia;
     }
 
@@ -109,19 +109,19 @@ public class ResumenPorDia {
         this.cantidadVendidaChicharron = cantidadVendidaChicharron;
     }
 
-    public int getCantidadChorizo() {
+    public Integer getCantidadChorizo() {
         return cantidadChorizo;
     }
 
-    public void setCantidadChorizo(int cantidadChorizo) {
+    public void setCantidadChorizo(Integer cantidadChorizo) {
         this.cantidadChorizo = cantidadChorizo;
     }
 
-    public int getCantidadVendidaChorizo() {
+    public Integer getCantidadVendidaChorizo() {
         return cantidadVendidaChorizo;
     }
 
-    public void setCantidadVendidaChorizo(int cantidadVendidaChorizo) {
+    public void setCantidadVendidaChorizo(Integer cantidadVendidaChorizo) {
         this.cantidadVendidaChorizo = cantidadVendidaChorizo;
     }
 

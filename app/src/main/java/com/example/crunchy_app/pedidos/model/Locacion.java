@@ -11,14 +11,14 @@ public class Locacion {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_locacion")
-    private int idLocacion;
+    private Integer idLocacion;
 
     @ColumnInfo(name = "nombre_locacion")
     @NonNull
     private String nombreLocacion;
 
     @ColumnInfo(name = "id_padre_locacion")
-    private int idPadreLocacion;
+    private Integer idPadreLocacion;
 
     @ColumnInfo(name = "valor_domicilio")
     private float valorDomicilio;
@@ -27,17 +27,17 @@ public class Locacion {
 
     }
 
-    public Locacion(@NonNull String nombreLocacion, int idPadreLocacion, float valorDomicilio) {
+    public Locacion(@NonNull String nombreLocacion, Integer idPadreLocacion, float valorDomicilio) {
         this.nombreLocacion = nombreLocacion;
         this.idPadreLocacion = idPadreLocacion;
         this.valorDomicilio = valorDomicilio;
     }
 
-    public int getIdLocacion() {
+    public Integer getIdLocacion() {
         return idLocacion;
     }
 
-    public void setIdLocacion(int idLocacion) {
+    public void setIdLocacion(Integer idLocacion) {
         this.idLocacion = idLocacion;
     }
 
@@ -50,11 +50,11 @@ public class Locacion {
         this.nombreLocacion = nombreLocacion;
     }
 
-    public int getIdPadreLocacion() {
+    public Integer getIdPadreLocacion() {
         return idPadreLocacion;
     }
 
-    public void setIdPadreLocacion(int idPadreLocacion) {
+    public void setIdPadreLocacion(Integer idPadreLocacion) {
         this.idPadreLocacion = idPadreLocacion;
     }
 

@@ -39,7 +39,7 @@ public class Pedido {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_pedido")
-    private int idPedido;
+    private Integer idPedido;
 
     @ColumnInfo(name = "nombre_cliente")
     @NonNull
@@ -50,15 +50,15 @@ public class Pedido {
 
     @ColumnInfo(name = "id_metodo_pago")
     @NonNull
-    private int idMetodoPago;
+    private Integer idMetodoPago;
 
     @ColumnInfo(name = "id_locacion")
     @NonNull
-    private int idLocacion;
+    private Integer idLocacion;
 
     @ColumnInfo(name = "id_estado_pedido")
     @NonNull
-    private int idEstadoPedido;
+    private Integer idEstadoPedido;
 
     @ColumnInfo(name = "fecha")
     @NonNull
@@ -71,7 +71,7 @@ public class Pedido {
     public Pedido() {
     }
 
-    public Pedido(@NonNull String nombreCliente, String apellidoCliente, int idMetodoPago, int idLocacion, int idEstadoPedido, @NonNull LocalDate fecha, @NonNull LocalTime hora) {
+    public Pedido(@NonNull String nombreCliente, String apellidoCliente, @NonNull Integer idMetodoPago, @NonNull Integer idLocacion, @NonNull Integer idEstadoPedido, @NonNull LocalDate fecha, @NonNull LocalTime hora) {
         this.nombreCliente = nombreCliente;
         this.apellidoCliente = apellidoCliente;
         this.idMetodoPago = idMetodoPago;
@@ -81,11 +81,11 @@ public class Pedido {
         this.hora = hora;
     }
 
-    public int getIdPedido() {
+    public Integer getIdPedido() {
         return idPedido;
     }
 
-    public void setIdPedido(int idPedido) {
+    public void setIdPedido(Integer idPedido) {
         this.idPedido = idPedido;
     }
 
@@ -106,27 +106,30 @@ public class Pedido {
         this.apellidoCliente = apellidoCliente;
     }
 
-    public int getIdMetodoPago() {
+    @NonNull
+    public Integer getIdMetodoPago() {
         return idMetodoPago;
     }
 
-    public void setIdMetodoPago(int idMetodoPago) {
+    public void setIdMetodoPago(@NonNull Integer idMetodoPago) {
         this.idMetodoPago = idMetodoPago;
     }
 
-    public int getIdLocacion() {
+    @NonNull
+    public Integer getIdLocacion() {
         return idLocacion;
     }
 
-    public void setIdLocacion(int idLocacion) {
+    public void setIdLocacion(@NonNull Integer idLocacion) {
         this.idLocacion = idLocacion;
     }
 
-    public int getIdEstadoPedido() {
+    @NonNull
+    public Integer getIdEstadoPedido() {
         return idEstadoPedido;
     }
 
-    public void setIdEstadoPedido(int idEstadoPedido) {
+    public void setIdEstadoPedido(@NonNull Integer idEstadoPedido) {
         this.idEstadoPedido = idEstadoPedido;
     }
 

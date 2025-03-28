@@ -15,14 +15,14 @@ public interface LocacionDao {
     public List<Locacion> getAll();
 
     @Query("SELECT * FROM locaciones WHERE id_locacion = :idLocacion")
-    public Locacion getLocacionById(int idLocacion);
+    public Locacion getLocacionById(Integer idLocacion);
 
     @Query("SELECT * FROM locaciones WHERE id_padre_locacion = :idPadreLocacion")
-    public List<Locacion> getLocacionesByPadreLocacion(int idPadreLocacion);
+    public List<Locacion> getLocacionesByPadreLocacion(Integer idPadreLocacion);
 
     @Insert
     public long insert(Locacion locacion);
 
     @Query("DELETE FROM locaciones WHERE id_locacion = :idLocacion")
-    public int deleteLocacionById(int idLocacion);
+    public int deleteLocacionById(Integer idLocacion);
 }

@@ -16,11 +16,11 @@ public interface PedidoDao {
     public List<Pedido> getAll();
 
     @Query("SELECT * FROM pedidos WHERE id_pedido = :idPedido")
-    public Pedido getPedidoById(int idPedido);
+    public Pedido getPedidoById(Integer idPedido);
 
     @Insert
     public long insert(Pedido pedido);
 
     @Query("DELETE FROM pedidos WHERE id_pedido = :idPedido")
-    public int deletePedidoById(int idPedido);
+    public int deletePedidoById(Integer idPedido);
 }

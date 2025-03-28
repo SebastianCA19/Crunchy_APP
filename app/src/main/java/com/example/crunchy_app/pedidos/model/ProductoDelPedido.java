@@ -29,58 +29,61 @@ public class ProductoDelPedido {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_productos_de_pedido")
-    private int idProductosDePedido;
+    private Integer idProductosDePedido;
 
     @ColumnInfo(name = "id_pedido")
     @NonNull
-    private int idPedido;
+    private Integer idPedido;
 
     @ColumnInfo(name = "id_producto")
     @NonNull
-    private int idProducto;
+    private Integer idProducto;
 
     @ColumnInfo(name = "cantidad")
     @NonNull
-    private int cantidad;
+    private Integer cantidad;
 
     public ProductoDelPedido() {
     }
 
-    public ProductoDelPedido(int idPedido, int idProducto, int cantidad) {
+    public ProductoDelPedido(@NonNull Integer idPedido, @NonNull Integer idProducto, @NonNull Integer cantidad) {
         this.idPedido = idPedido;
         this.idProducto = idProducto;
         this.cantidad = cantidad;
     }
 
-    public int getIdProductosDePedido() {
+    public Integer getIdProductosDePedido() {
         return idProductosDePedido;
     }
 
-    public void setIdProductosDePedido(int idProductosDePedido) {
+    public void setIdProductosDePedido(Integer idProductosDePedido) {
         this.idProductosDePedido = idProductosDePedido;
     }
 
-    public int getIdPedido() {
+    @NonNull
+    public Integer getIdPedido() {
         return idPedido;
     }
 
-    public void setIdPedido(int idPedido) {
+    public void setIdPedido(@NonNull Integer idPedido) {
         this.idPedido = idPedido;
     }
 
-    public int getIdProducto() {
+    @NonNull
+    public Integer getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(int idProducto) {
+    public void setIdProducto(@NonNull Integer idProducto) {
         this.idProducto = idProducto;
     }
 
-    public int getCantidad() {
+    @NonNull
+    public Integer getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(@NonNull Integer cantidad) {
         this.cantidad = cantidad;
     }
 }
