@@ -116,17 +116,17 @@ public class MainActivity extends AppCompatActivity {
         if (productoDao.count() == 0){
             // Insertar Productos
             productoDao.insert(new Producto("chorizo artesanal", 1, 1, 7000));
-            productoDao.insert(new Producto("combo #1", 1, 2, 22000));
-            productoDao.insert(new Producto("combo #2", 1, 3, 34000));
-            productoDao.insert(new Producto("combo #3", 1, 4, 48000));
-            productoDao.insert(new Producto("combo #4", 1, 5, 65000));
-            productoDao.insert(new Producto("combo #5", 1, 6, 80000));
+            productoDao.insert(new Producto("combo #1(17+1)", 1, 2, 22000));
+            productoDao.insert(new Producto("combo #2(29+1)", 1, 3, 34000));
+            productoDao.insert(new Producto("combo #3(38+2)", 1, 4, 48000));
+            productoDao.insert(new Producto("combo #4(55+2)", 1, 5, 65000));
+            productoDao.insert(new Producto("combo #5(65+3)", 1, 6, 80000));
             productoDao.insert(new Producto("chicharron personal", 2, 7, 17000));
-            productoDao.insert(new Producto("picada #1", 2, 8, 23000));
-            productoDao.insert(new Producto("picada #2", 2, 9, 34000));
-            productoDao.insert(new Producto("picada #3", 2, 10, 48000));
-            productoDao.insert(new Producto("picada #4", 2, 11, 65000));
-            productoDao.insert(new Producto("kilo", 2, 12, 80000));
+            productoDao.insert(new Producto("picada #1(23)", 2, 8, 23000));
+            productoDao.insert(new Producto("picada #2(34)", 2, 9, 34000));
+            productoDao.insert(new Producto("picada #3(48)", 2, 10, 48000));
+            productoDao.insert(new Producto("picada #4(65)", 2, 11, 65000));
+            productoDao.insert(new Producto("kilo(80)", 2, 12, 80000));
 
             // Insertar Bebidas
             productoDao.insert(new Producto("coca-cola 237ml", 3, null, 2000));

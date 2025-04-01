@@ -12,7 +12,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.crunchy_app.DBconnection.AppDataBase;
 import com.example.crunchy_app.productos.comidas.adapter.OnFoodSelectedListener;
 import com.example.crunchy_app.productos.model.InfoProducto;
-import com.example.crunchy_app.secciones.adapter.MenuPagerAdapter;
+import com.example.crunchy_app.productos.comidas.adapter.FoodPagerAdapter;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.model.Producto;
 
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class ComidasFragment extends Fragment implements OnFoodSelectedListener {
     private ViewPager2 viewPager;
-    private MenuPagerAdapter adapter;
+    private FoodPagerAdapter adapter;
 
     private List<Producto> foodList;
     private List<InfoProducto> infoList;
@@ -50,7 +50,7 @@ public class ComidasFragment extends Fragment implements OnFoodSelectedListener 
                 foodList = db.productoDao().searchComidas(filter);
             }
             requireActivity().runOnUiThread(() -> {
-                adapter = new MenuPagerAdapter(requireActivity(), foodList, infoList, this);
+                adapter = new FoodPagerAdapter(requireActivity(), foodList, infoList, this);
                 viewPager.setAdapter(adapter);
             });
         }).start();

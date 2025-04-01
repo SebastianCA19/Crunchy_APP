@@ -14,9 +14,7 @@ import com.example.crunchy_app.DBconnection.AppDataBase;
 import com.example.crunchy_app.productos.bebidas.adapter.DrinksPagerAdapter;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.model.Producto;
-import com.example.crunchy_app.secciones.adapter.MenuPagerAdapter;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class BebidasFragment extends Fragment {

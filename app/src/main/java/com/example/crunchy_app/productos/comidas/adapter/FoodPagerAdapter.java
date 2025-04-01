@@ -1,11 +1,10 @@
-package com.example.crunchy_app.secciones.adapter;
+package com.example.crunchy_app.productos.comidas.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.crunchy_app.productos.comidas.adapter.OnFoodSelectedListener;
 import com.example.crunchy_app.productos.comidas.fragment.ComidasPageFragment;
 import com.example.crunchy_app.productos.model.InfoProducto;
 import com.example.crunchy_app.productos.model.Producto;
@@ -13,13 +12,13 @@ import com.example.crunchy_app.productos.model.Producto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuPagerAdapter extends FragmentStateAdapter {
+public class FoodPagerAdapter extends FragmentStateAdapter {
     private List<List<Producto>> foodPages;
     private List<InfoProducto> infoList;
 
     private OnFoodSelectedListener listener;
 
-    public MenuPagerAdapter(@NonNull FragmentActivity fragmentActivity, List<Producto> foodList , List<InfoProducto> infoList, OnFoodSelectedListener listener) {
+    public FoodPagerAdapter(@NonNull FragmentActivity fragmentActivity, List<Producto> foodList , List<InfoProducto> infoList, OnFoodSelectedListener listener) {
         super(fragmentActivity);
         this.foodPages = partitionList(foodList, 5);
         this.infoList = infoList;
