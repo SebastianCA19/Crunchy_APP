@@ -38,25 +38,20 @@ public class OrdersFragment extends Fragment {
     private Map<Producto, Integer> carrito = new HashMap<>();
     private FloatingActionButton fabCart;
 
-    private  ComidasFragment comidasFragment;
-    private BebidasFragment bebidasFragment;
-    private OtrosFragment otrosFragment;
-
-    private int indexFood;
-    private int indexDrink;
+    private final ComidasFragment comidasFragment;
+    private final BebidasFragment bebidasFragment;
+    private final OtrosFragment otrosFragment;
 
     public OrdersFragment() {
-        // Constructor vacío requerido
+        comidasFragment = new ComidasFragment();
+        bebidasFragment = new BebidasFragment();
+        otrosFragment = new OtrosFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
-        comidasFragment = new ComidasFragment();
-        bebidasFragment = new BebidasFragment();
-        otrosFragment = new OtrosFragment();
-        indexFood = 0;
-        indexDrink = 0;
+
 
         // Inicialización de botones
         Button btComidas = view.findViewById(R.id.btComidas);

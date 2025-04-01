@@ -16,21 +16,28 @@ import com.example.crunchy_app.secciones.fragment.AdminFragment;
 public class HomeActivity extends AppCompatActivity {
 
     ActivityHomeBinding binding;
+    private OrdersFragment ordersFragment;
+    private AdminFragment adminFragment;
+
+    public HomeActivity() {
+        ordersFragment = new OrdersFragment();
+        adminFragment = new AdminFragment();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replaceFragment(new OrdersFragment());
+        replaceFragment(ordersFragment);
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
             int itemId = item.getItemId();
             if (itemId == R.id.order) {
-                replaceFragment(new OrdersFragment());
+                replaceFragment(ordersFragment);
             } else if (itemId == R.id.admin) {
-                replaceFragment(new AdminFragment());
+                replaceFragment(adminFragment);
             }
 
             return true;

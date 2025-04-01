@@ -1,5 +1,6 @@
 package com.example.crunchy_app.productos.comidas.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.OnProductsSelectedListener;
 import com.example.crunchy_app.productos.model.InfoProducto;
 import com.example.crunchy_app.productos.model.Producto;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -47,6 +49,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
             if (listener != null) {
                 listener.onFoodSelected(food.getIdProducto());
             }
+            listener.showInfoDialog(food.getNombreProducto());
         });
     }
 

@@ -15,6 +15,7 @@ import com.example.crunchy_app.productos.model.InfoProducto;
 import com.example.crunchy_app.productos.comidas.adapter.FoodPagerAdapter;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.model.Producto;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,13 +34,15 @@ public class ComidasFragment extends Fragment implements OnProductsSelectedListe
     private int selectedFood;
     private String filter;
 
+    public ComidasFragment() {
+        selectedFoods = new HashMap<>();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_comidas, container, false);
         viewPager = view.findViewById(R.id.viewPager);
         viewPager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
-
-        selectedFoods = new HashMap<>();
 
         AppDataBase db = AppDataBase.getInstance(requireContext());
 
@@ -80,12 +83,18 @@ public class ComidasFragment extends Fragment implements OnProductsSelectedListe
         Log.d("ComidasFragment", "Producto seleccionado: " + selectedFood);
     }
 
+    @Override
+    public void showInfoDialog(String productName) {
+        Snackbar.make(getView(), "Has agregado " + productName.toUpperCase() + " a tu carrito", Snackbar.LENGTH_SHORT)
+                .show();
+    }
+
     private Producto findProductById(int foodId) {
         for (Producto producto : foodList) {
             if (producto.getIdProducto() == foodId) {
                 return producto;
             }
-            }
+        }
         return null;
     }
 

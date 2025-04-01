@@ -8,4 +8,6 @@ public interface OnProductsSelectedListener {
     default void onDrinkSelected(int dinkId){
 
     }
+
+    void showInfoDialog(String productName);
 }

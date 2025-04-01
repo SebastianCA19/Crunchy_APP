@@ -16,6 +16,7 @@ import com.example.crunchy_app.productos.OnProductsSelectedListener;
 import com.example.crunchy_app.productos.bebidas.adapter.DrinksPagerAdapter;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.model.Producto;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,13 +34,15 @@ public class BebidasFragment extends Fragment implements OnProductsSelectedListe
 
     private String filter;
 
+    public BebidasFragment() {
+        selectedDrinks = new HashMap<>();
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bebidas, container, false);
         viewPager = view.findViewById(R.id.viewPager);
         viewPager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
-
-        selectedDrinks = new HashMap<>();
 
         AppDataBase db = AppDataBase.getInstance(requireContext());
 
@@ -74,6 +77,12 @@ public class BebidasFragment extends Fragment implements OnProductsSelectedListe
             }
         }
         Log.d("BebidasFragment", "Producto seleccionado: " + selectedDrink);
+    }
+
+    @Override
+    public void showInfoDialog(String productName) {
+        Snackbar.make(getView(), "Has agregado " + productName.toUpperCase() + " a tu carrito", Snackbar.LENGTH_SHORT)
+                .show();
     }
 
     private Producto findProductById(int drinkId) {

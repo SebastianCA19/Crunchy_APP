@@ -121,6 +121,19 @@ public class Producto {
     public void setPrecio(float precio) {
         this.precio = precio;
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Producto producto = (Producto) obj;
+        return idProducto == producto.idProducto;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(idProducto);
+    }
+
 }
 
 
