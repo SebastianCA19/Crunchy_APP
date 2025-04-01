@@ -132,9 +132,9 @@ public class MainActivity extends AppCompatActivity {
             productoDao.insert(new Producto("coca-cola 237ml", 3, null, 2000));
             productoDao.insert(new Producto("quatro 237ml", 3, null, 2000));
             productoDao.insert(new Producto("sprite 237ml", 3, null, 2000));
-            productoDao.insert(new Producto("manzana-postobon 250ml", 3, null, 2000));
-            productoDao.insert(new Producto("naranja-postobon 250ml", 3, null, 2000));
-            productoDao.insert(new Producto("cola-postobon 250ml", 3, null, 2000));
+            productoDao.insert(new Producto("postobon-manzana 250ml", 3, null, 2000));
+            productoDao.insert(new Producto("postobon-naranja 250ml", 3, null, 2000));
+            productoDao.insert(new Producto("postobon-kola 250ml", 3, null, 2000));
             productoDao.insert(new Producto("colombiana 250ml", 3, null, 2000));
             productoDao.insert(new Producto("agua-manzana 280ml", 3, null, 2000));
             productoDao.insert(new Producto("agua 600ml", 3, null, 2000));
