@@ -16,6 +16,7 @@ import com.example.crunchy_app.secciones.adapter.MenuPagerAdapter;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.model.Producto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,6 +36,8 @@ public class ComidasFragment extends Fragment implements OnFoodSelectedListener 
         View view = inflater.inflate(R.layout.fragment_comidas, container, false);
         viewPager = view.findViewById(R.id.viewPager);
         viewPager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
+
+        selectedFoods = new ArrayList<>();
 
         AppDataBase db = AppDataBase.getInstance(requireContext());
 
@@ -62,13 +65,26 @@ public class ComidasFragment extends Fragment implements OnFoodSelectedListener 
     @Override
     public void onFoodSelected(int foodId) {
         selectedFood = foodId;
-        /**
+
         Producto selected = findProductById(foodId);
         if (selected != null && !selectedFoods.contains(selected)) {
             selectedFoods.add(selected);
         }
-         */
+
         Log.d("ComidasFragment", "Producto seleccionado: " + selectedFood);
+    }
+
+    private Producto findProductById(int foodId) {
+        for (Producto producto : foodList) {
+            if (producto.getIdProducto() == foodId) {
+                return producto;
+            }
+            }
+        return null;
+    }
+
+    public List<Producto> getSelectedFoods() {
+        return selectedFoods;
     }
 }
 

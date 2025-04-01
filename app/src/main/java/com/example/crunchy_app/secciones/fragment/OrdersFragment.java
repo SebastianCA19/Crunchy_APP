@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.bebidas.fragment.BebidasFragment;
 import com.example.crunchy_app.productos.comidas.fragment.ComidasFragment;
+import com.example.crunchy_app.productos.model.Producto;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +26,15 @@ import java.util.List;
 public class OrdersFragment extends Fragment {
 
     private String input;
-    private List<String> carrito = new ArrayList<>();
+    private List<Producto> carrito = new ArrayList<>();
     private FloatingActionButton fabCart;
+
+    private  ComidasFragment comidasFragment;
+    private BebidasFragment bebidasFragment;
+    private OtrosFragment otrosFragment;
+
+    private int indexFood;
+    private int indexDrink;
 
     public OrdersFragment() {
         // Constructor vacío requerido
@@ -35,6 +43,11 @@ public class OrdersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
+        comidasFragment = new ComidasFragment();
+        bebidasFragment = new BebidasFragment();
+        otrosFragment = new OtrosFragment();
+        indexFood = 0;
+        indexDrink = 0;
 
         // Inicialización de botones
         Button btComidas = view.findViewById(R.id.btComidas);
@@ -45,12 +58,12 @@ public class OrdersFragment extends Fragment {
         fabCart = view.findViewById(R.id.fabCart); // Botón flotante del carrito
 
         // Cargar fragmento por defecto (ComidasFragment)
-        replaceFragment(new ComidasFragment());
+        replaceFragment(comidasFragment);
 
         // Eventos de botones
-        btComidas.setOnClickListener(v -> replaceFragment(new ComidasFragment()));
-        btBebidas.setOnClickListener(v -> replaceFragment(new BebidasFragment()));
-        btOtros.setOnClickListener(v -> replaceFragment(new OtrosFragment()));
+        btComidas.setOnClickListener(v -> replaceFragment(comidasFragment));
+        btBebidas.setOnClickListener(v -> replaceFragment(bebidasFragment));
+        btOtros.setOnClickListener(v -> replaceFragment(otrosFragment));
 
         // Botón de búsqueda
         btBuscar.setOnClickListener(v -> {
@@ -58,11 +71,9 @@ public class OrdersFragment extends Fragment {
             Fragment currentFragment = getChildFragmentManager().findFragmentById(R.id.frame_layout);
 
             if (currentFragment instanceof ComidasFragment) {
-                ComidasFragment comidasFragment = new ComidasFragment();
                 comidasFragment.setFilter(input);
                 replaceFragment(comidasFragment);
             } else if (currentFragment instanceof BebidasFragment) {
-                BebidasFragment bebidasFragment = new BebidasFragment();
                 bebidasFragment.setFilter(input);
                 replaceFragment(bebidasFragment);
             }
@@ -83,22 +94,34 @@ public class OrdersFragment extends Fragment {
     }
 
     // Método para agregar productos al carrito
-    public void agregarAlCarrito(String producto) {
-        carrito.add(producto);
-        Toast.makeText(getContext(), producto + " añadido al carrito", Toast.LENGTH_SHORT).show();
+    public void actualizarCarrito() {
+        List<Producto> selectedFoods = comidasFragment.getSelectedFoods();
+        List<Producto> selectedDrinks = bebidasFragment.getSelectedDrinks();
+
+        if (selectedFoods != null && !selectedFoods.isEmpty() ) {
+            carrito.addAll(selectedFoods);
+        }
+        /*
+        for (Producto drink : selectedDrinks) {
+            carrito.add(drink.getNombreProducto());
+        }
+        */
+
     }
 
     // Método para mostrar el carrito en un AlertDialog
     private void mostrarCarrito() {
+        actualizarCarrito();
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Carrito de Compras");
 
         if (carrito.isEmpty()) {
             builder.setMessage("No hay productos en el carrito.");
         } else {
+
             StringBuilder carritoTexto = new StringBuilder();
-            for (String item : carrito) {
-                carritoTexto.append("- ").append(item).append("\n");
+            for (Producto item : carrito) {
+                carritoTexto.append("- ").append(item.getNombreProducto()).append("...... $").append(item.getPrecio()).append("\n");
             }
             builder.setMessage(carritoTexto.toString());
         }
