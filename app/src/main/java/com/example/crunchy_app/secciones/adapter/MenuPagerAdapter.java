@@ -18,7 +18,7 @@ public class MenuPagerAdapter extends FragmentStateAdapter {
 
     public MenuPagerAdapter(@NonNull FragmentActivity fragmentActivity, List<Producto> foodList , List<InfoProducto> infoList) {
         super(fragmentActivity);
-        this.foodPages = partitionList(foodList, 6);
+        this.foodPages = partitionList(foodList, 5);
         this.infoList = infoList;
     }
 
