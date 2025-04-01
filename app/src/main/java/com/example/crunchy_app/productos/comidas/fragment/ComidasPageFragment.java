@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.comidas.adapter.FoodAdapter;
-import com.example.crunchy_app.productos.comidas.adapter.OnFoodSelectedListener;
+import com.example.crunchy_app.productos.OnProductsSelectedListener;
 import com.example.crunchy_app.productos.model.InfoProducto;
 import com.example.crunchy_app.productos.model.Producto;
 
@@ -23,14 +23,14 @@ public class ComidasPageFragment extends Fragment {
     private List<Producto> foodList;
     private List<InfoProducto> infoList;
 
-    private OnFoodSelectedListener listener;
+    private OnProductsSelectedListener listener;
 
-    public ComidasPageFragment(List<InfoProducto> infoList, OnFoodSelectedListener listener) {
+    public ComidasPageFragment(List<InfoProducto> infoList, OnProductsSelectedListener listener) {
         this.infoList = infoList;
         this.listener = listener;
     }
 
-    public static ComidasPageFragment newInstance(List<Producto> foods, List<InfoProducto> infoList, OnFoodSelectedListener listener) {
+    public static ComidasPageFragment newInstance(List<Producto> foods, List<InfoProducto> infoList, OnProductsSelectedListener listener) {
         ComidasPageFragment fragment = new ComidasPageFragment(infoList, listener);
         Bundle args = new Bundle();
         args.putSerializable(ARG_FOOD_LIST, new ArrayList<>(foods));

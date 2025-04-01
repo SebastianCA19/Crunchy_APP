@@ -10,24 +10,26 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.crunchy_app.DBconnection.AppDataBase;
-import com.example.crunchy_app.productos.comidas.adapter.OnFoodSelectedListener;
+import com.example.crunchy_app.productos.OnProductsSelectedListener;
 import com.example.crunchy_app.productos.model.InfoProducto;
 import com.example.crunchy_app.productos.comidas.adapter.FoodPagerAdapter;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
-public class ComidasFragment extends Fragment implements OnFoodSelectedListener {
+public class ComidasFragment extends Fragment implements OnProductsSelectedListener {
     private ViewPager2 viewPager;
     private FoodPagerAdapter adapter;
 
     private List<Producto> foodList;
     private List<InfoProducto> infoList;
 
-    private List<Producto> selectedFoods;
+    private Map<Producto, Integer> selectedFoods;
     private int selectedFood;
     private String filter;
 
@@ -37,7 +39,7 @@ public class ComidasFragment extends Fragment implements OnFoodSelectedListener 
         viewPager = view.findViewById(R.id.viewPager);
         viewPager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
 
-        selectedFoods = new ArrayList<>();
+        selectedFoods = new HashMap<>();
 
         AppDataBase db = AppDataBase.getInstance(requireContext());
 
@@ -67,8 +69,12 @@ public class ComidasFragment extends Fragment implements OnFoodSelectedListener 
         selectedFood = foodId;
 
         Producto selected = findProductById(foodId);
-        if (selected != null && !selectedFoods.contains(selected)) {
-            selectedFoods.add(selected);
+        if (selected != null) {
+            if (selectedFoods.containsKey(selected)) {
+                selectedFoods.put(selected, selectedFoods.get(selected) + 1);
+            } else {
+                selectedFoods.put(selected, 1);
+            }
         }
 
         Log.d("ComidasFragment", "Producto seleccionado: " + selectedFood);
@@ -83,7 +89,7 @@ public class ComidasFragment extends Fragment implements OnFoodSelectedListener 
         return null;
     }
 
-    public List<Producto> getSelectedFoods() {
+    public Map<Producto, Integer> getSelectedFoods() {
         return selectedFoods;
     }
 }

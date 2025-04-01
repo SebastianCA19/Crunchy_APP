@@ -1,6 +1,5 @@
 package com.example.crunchy_app.productos.comidas.adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.R;
+import com.example.crunchy_app.productos.OnProductsSelectedListener;
 import com.example.crunchy_app.productos.model.InfoProducto;
 import com.example.crunchy_app.productos.model.Producto;
 
@@ -20,9 +20,9 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     private List<Producto> foodList;
     private List<InfoProducto> infoList;
 
-    private OnFoodSelectedListener listener;
+    private OnProductsSelectedListener listener;
 
-    public FoodAdapter(List<Producto> foodList, List<InfoProducto> infoList, OnFoodSelectedListener listener) {
+    public FoodAdapter(List<Producto> foodList, List<InfoProducto> infoList, OnProductsSelectedListener listener) {
         this.foodList = foodList;
         this.infoList = infoList;
         this.listener = listener;

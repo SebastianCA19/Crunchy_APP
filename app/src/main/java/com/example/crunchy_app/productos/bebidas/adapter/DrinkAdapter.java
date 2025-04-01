@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.R;
+import com.example.crunchy_app.productos.OnProductsSelectedListener;
 import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.List;
@@ -17,8 +18,11 @@ import java.util.List;
 public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHolder> {
     private List<Producto> drinkList;
 
-    public DrinkAdapter(List<Producto> drinkList){
+    private OnProductsSelectedListener listener;
+
+    public DrinkAdapter(List<Producto> drinkList, OnProductsSelectedListener listener){
         this.drinkList = drinkList;
+        this.listener = listener;
     }
 
 
@@ -39,6 +43,12 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHol
         holder.name.setText(drink.getNombreProducto());
         holder.info.setText(drink.getInfoString());
         holder.price.setText(String.format("$%.2f", drink.getPrecio()));
+        holder.addButton.setTag(drink.getIdProducto());
+        holder.addButton.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onDrinkSelected(drink.getIdProducto());
+            }
+        });
     }
 
     @Override

@@ -72,7 +72,8 @@
             android:text="Comidas"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:padding="8dp"/>
+            android:padding="8dp"
+            android:layout_marginEnd="10dp"/>
 
         <Button
             android:id="@+id/btBebidas"
@@ -82,7 +83,8 @@
             android:text="Bebidas"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:padding="8dp"/>
+            android:padding="8dp"
+            android:layout_marginEnd="10dp"/>
 
         <Button
             android:id="@+id/btOtros"
@@ -92,7 +94,8 @@
             android:text="Otros"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:padding="8dp"/>
+            android:padding="8dp"
+            />
     </LinearLayout>
 
     <!-- Contenedor de contenido -->

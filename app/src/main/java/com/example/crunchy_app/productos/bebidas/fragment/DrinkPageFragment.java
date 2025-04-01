@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.R;
+import com.example.crunchy_app.productos.OnProductsSelectedListener;
 import com.example.crunchy_app.productos.bebidas.adapter.DrinkAdapter;
 import com.example.crunchy_app.productos.model.Producto;
 
@@ -22,8 +23,14 @@ public class DrinkPageFragment extends Fragment {
     private static final String ARG_DRINK_LIST = "drink_list";
     private List<Producto> drinkList;
 
-    public static DrinkPageFragment newInstance(List<Producto> drinks) {
-        DrinkPageFragment fragment = new DrinkPageFragment();
+    private OnProductsSelectedListener listener;
+
+    public DrinkPageFragment(OnProductsSelectedListener listener) {
+        this.listener = listener;
+    }
+
+    public static DrinkPageFragment newInstance(List<Producto> drinks, OnProductsSelectedListener listener) {
+        DrinkPageFragment fragment = new DrinkPageFragment(listener);
         Bundle args = new Bundle();
         args.putSerializable(ARG_DRINK_LIST, new ArrayList<>(drinks));
         fragment.setArguments(args);
@@ -43,7 +50,7 @@ public class DrinkPageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_bebidas_page, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new DrinkAdapter(drinkList));
+        recyclerView.setAdapter(new DrinkAdapter(drinkList, listener));
         return view;
     }
 }

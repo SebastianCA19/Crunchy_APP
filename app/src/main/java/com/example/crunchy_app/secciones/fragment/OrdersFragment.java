@@ -1,6 +1,9 @@
 package com.example.crunchy_app.secciones.fragment;
 
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -17,7 +20,13 @@ import com.example.crunchy_app.productos.comidas.fragment.ComidasFragment;
 import com.example.crunchy_app.productos.model.Producto;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the  factory method to
@@ -26,7 +35,7 @@ import java.util.List;
 public class OrdersFragment extends Fragment {
 
     private String input;
-    private List<Producto> carrito = new ArrayList<>();
+    private Map<Producto, Integer> carrito = new HashMap<>();
     private FloatingActionButton fabCart;
 
     private  ComidasFragment comidasFragment;
@@ -95,19 +104,19 @@ public class OrdersFragment extends Fragment {
 
     // Método para agregar productos al carrito
     public void actualizarCarrito() {
-        List<Producto> selectedFoods = comidasFragment.getSelectedFoods();
-        List<Producto> selectedDrinks = bebidasFragment.getSelectedDrinks();
+        Map<Producto, Integer> selectedFoods = comidasFragment.getSelectedFoods();
+        Map<Producto, Integer> selectedDrinks = bebidasFragment.getSelectedDrinks();
 
-        if (selectedFoods != null && !selectedFoods.isEmpty() ) {
-            carrito.addAll(selectedFoods);
+        if (selectedFoods != null) {
+            carrito.putAll(selectedFoods);
         }
-        /*
-        for (Producto drink : selectedDrinks) {
-            carrito.add(drink.getNombreProducto());
-        }
-        */
 
+        if (selectedDrinks != null) {
+            carrito.putAll(selectedDrinks);
+        }
     }
+
+
 
     // Método para mostrar el carrito en un AlertDialog
     private void mostrarCarrito() {
@@ -118,15 +127,20 @@ public class OrdersFragment extends Fragment {
         if (carrito.isEmpty()) {
             builder.setMessage("No hay productos en el carrito.");
         } else {
-
-            StringBuilder carritoTexto = new StringBuilder();
-            for (Producto item : carrito) {
-                carritoTexto.append("- ").append(item.getNombreProducto()).append("...... $").append(item.getPrecio()).append("\n");
+            StringBuilder carritoText = new StringBuilder();
+            for (Map.Entry<Producto, Integer> entry : carrito.entrySet()) {
+                Producto producto = entry.getKey();
+                int cantidad = entry.getValue();
+                carritoText.append(producto.getNombreProducto().toUpperCase())
+                        .append(" x")
+                        .append(cantidad)
+                        .append("\n"); // Agregamos un salto de línea para mejorar la lectura
             }
-            builder.setMessage(carritoTexto.toString());
+            builder.setMessage(carritoText.toString()); // Ahora sí se asigna el mensaje con el contenido del carrito
         }
 
         builder.setPositiveButton("Cerrar", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
+
 }
