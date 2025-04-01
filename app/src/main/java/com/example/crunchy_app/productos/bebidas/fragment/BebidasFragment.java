@@ -34,6 +34,11 @@ public class BebidasFragment extends Fragment implements OnProductsSelectedListe
 
     private String filter;
 
+    public BebidasFragment(String filter) {
+        this.filter = filter;
+        selectedDrinks = new HashMap<>();
+    }
+
     public BebidasFragment() {
         selectedDrinks = new HashMap<>();
     }
@@ -97,4 +102,9 @@ public class BebidasFragment extends Fragment implements OnProductsSelectedListe
     public Map<Producto, Integer> getSelectedDrinks() {
         return selectedDrinks;
     }
+
+    public void setSelectedDrinks(Map<Producto, Integer> selectedDrinks) {
+        this.selectedDrinks = selectedDrinks;
+    }
+
 }

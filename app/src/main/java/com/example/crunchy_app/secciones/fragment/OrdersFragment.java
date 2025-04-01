@@ -38,9 +38,9 @@ public class OrdersFragment extends Fragment {
     private Map<Producto, Integer> carrito = new HashMap<>();
     private FloatingActionButton fabCart;
 
-    private final ComidasFragment comidasFragment;
-    private final BebidasFragment bebidasFragment;
-    private final OtrosFragment otrosFragment;
+    private ComidasFragment comidasFragment;
+    private BebidasFragment bebidasFragment;
+    private OtrosFragment otrosFragment;
 
     public OrdersFragment() {
         comidasFragment = new ComidasFragment();
@@ -73,12 +73,16 @@ public class OrdersFragment extends Fragment {
         btBuscar.setOnClickListener(v -> {
             input = inputText.getText().toString();
             Fragment currentFragment = getChildFragmentManager().findFragmentById(R.id.frame_layout);
-
+            Map<Producto, Integer> selectedItems;
             if (currentFragment instanceof ComidasFragment) {
-                comidasFragment.setFilter(input);
+                selectedItems = comidasFragment.getSelectedFoods();
+                comidasFragment = new ComidasFragment(input);
+                comidasFragment.setSelectedFoods(selectedItems);
                 replaceFragment(comidasFragment);
             } else if (currentFragment instanceof BebidasFragment) {
-                bebidasFragment.setFilter(input);
+                selectedItems = bebidasFragment.getSelectedDrinks();
+                bebidasFragment = new BebidasFragment(input);
+                bebidasFragment.setSelectedDrinks(selectedItems);
                 replaceFragment(bebidasFragment);
             }
         });

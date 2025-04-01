@@ -34,6 +34,11 @@ public class ComidasFragment extends Fragment implements OnProductsSelectedListe
     private int selectedFood;
     private String filter;
 
+    public ComidasFragment(String filter) {
+        this.filter = filter;
+        selectedFoods = new HashMap<>();
+    }
+
     public ComidasFragment() {
         selectedFoods = new HashMap<>();
     }
@@ -100,6 +105,10 @@ public class ComidasFragment extends Fragment implements OnProductsSelectedListe
 
     public Map<Producto, Integer> getSelectedFoods() {
         return selectedFoods;
+    }
+
+    public void setSelectedFoods(Map<Producto, Integer> selectedFoods) {
+        this.selectedFoods = selectedFoods;
     }
 }
 
