@@ -1,29 +1,33 @@
 package com.example.crunchy_app.productos.comidas.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.crunchy_app.DBconnection.AppDataBase;
+import com.example.crunchy_app.productos.comidas.adapter.OnFoodSelectedListener;
 import com.example.crunchy_app.productos.model.InfoProducto;
 import com.example.crunchy_app.secciones.adapter.MenuPagerAdapter;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.model.Producto;
 
-import java.util.Arrays;
 import java.util.List;
 
 
-public class ComidasFragment extends Fragment {
+public class ComidasFragment extends Fragment implements OnFoodSelectedListener {
     private ViewPager2 viewPager;
     private MenuPagerAdapter adapter;
 
     private List<Producto> foodList;
     private List<InfoProducto> infoList;
 
+    private List<Producto> selectedFoods;
+    private int selectedFood;
     private String filter;
 
     @Override
@@ -43,17 +47,28 @@ public class ComidasFragment extends Fragment {
                 foodList = db.productoDao().searchComidas(filter);
             }
             requireActivity().runOnUiThread(() -> {
-                adapter = new MenuPagerAdapter(requireActivity(), foodList, infoList);
+                adapter = new MenuPagerAdapter(requireActivity(), foodList, infoList, this);
                 viewPager.setAdapter(adapter);
             });
         }).start();
-
 
         return view;
     }
 
     public void setFilter(String filter) {
         this.filter = filter;
+    }
+
+    @Override
+    public void onFoodSelected(int foodId) {
+        selectedFood = foodId;
+        /**
+        Producto selected = findProductById(foodId);
+        if (selected != null && !selectedFoods.contains(selected)) {
+            selectedFoods.add(selected);
+        }
+         */
+        Log.d("ComidasFragment", "Producto seleccionado: " + selectedFood);
     }
 }
 

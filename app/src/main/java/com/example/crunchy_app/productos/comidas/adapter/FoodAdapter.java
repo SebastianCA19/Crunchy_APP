@@ -1,5 +1,6 @@
 package com.example.crunchy_app.productos.comidas.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +20,12 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     private List<Producto> foodList;
     private List<InfoProducto> infoList;
 
-    public FoodAdapter(List<Producto> foodList, List<InfoProducto> infoList) {
+    private OnFoodSelectedListener listener;
+
+    public FoodAdapter(List<Producto> foodList, List<InfoProducto> infoList, OnFoodSelectedListener listener) {
         this.foodList = foodList;
         this.infoList = infoList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -38,6 +42,12 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         holder.name.setText(food.getNombreProducto().toUpperCase());
         holder.info.setText(getInfoText(info));
         holder.price.setText(String.format("$%.2f", food.getPrecio()));
+        holder.addButton.setTag(food.getIdProducto());
+        holder.addButton.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onFoodSelected(food.getIdProducto());
+            }
+        });
     }
 
     @Override
@@ -78,6 +88,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     }
 
     public static class FoodViewHolder extends RecyclerView.ViewHolder {
+
         TextView name, info, price;
         Button addButton;
 
