@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import com.example.crunchy_app.R;
+import com.example.crunchy_app.carrito.fragment.CartDialogFragment;
 import com.example.crunchy_app.productos.bebidas.fragment.BebidasFragment;
 import com.example.crunchy_app.productos.comidas.fragment.ComidasFragment;
 import com.example.crunchy_app.productos.model.Producto;
@@ -115,31 +117,11 @@ public class OrdersFragment extends Fragment {
         }
     }
 
-
-
-    // Método para mostrar el carrito en un AlertDialog
+    // Método para mostrar el carrito
     private void mostrarCarrito() {
         actualizarCarrito();
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Carrito de Compras");
-
-        if (carrito.isEmpty()) {
-            builder.setMessage("No hay productos en el carrito.");
-        } else {
-            StringBuilder carritoText = new StringBuilder();
-            for (Map.Entry<Producto, Integer> entry : carrito.entrySet()) {
-                Producto producto = entry.getKey();
-                int cantidad = entry.getValue();
-                carritoText.append(producto.getNombreProducto().toUpperCase())
-                        .append(" x")
-                        .append(cantidad)
-                        .append("\n"); // Agregamos un salto de línea para mejorar la lectura
-            }
-            builder.setMessage(carritoText.toString()); // Ahora sí se asigna el mensaje con el contenido del carrito
-        }
-
-        builder.setPositiveButton("Cerrar", (dialog, which) -> dialog.dismiss());
-        builder.show();
+        CartDialogFragment cart = new CartDialogFragment(carrito);
+        cart.setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Material_Light_Dialog_Alert);
+        cart.show(getChildFragmentManager(), "cart");
     }
-
 }
