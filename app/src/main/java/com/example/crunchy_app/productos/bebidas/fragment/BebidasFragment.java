@@ -28,19 +28,22 @@ public class BebidasFragment extends Fragment implements OnProductsSelectedListe
     private DrinksPagerAdapter adapter;
 
     private List<Producto> drinksList;
-
-    private Map<Producto, Integer> selectedDrinks;
     private int selectedDrink;
+
+    private OnProductsSelectedListener listener;
 
     private String filter;
 
-    public BebidasFragment(String filter) {
+    public BebidasFragment(OnProductsSelectedListener listener) {
+        this.listener = listener;
+    }
+
+    public BebidasFragment(String filter, OnProductsSelectedListener listener) {
         this.filter = filter;
-        selectedDrinks = new HashMap<>();
+        this.listener = listener;
     }
 
     public BebidasFragment() {
-        selectedDrinks = new HashMap<>();
     }
 
     @Override
@@ -55,6 +58,8 @@ public class BebidasFragment extends Fragment implements OnProductsSelectedListe
             if(filter == null) {
                 drinksList = db.productoDao().getBebidas();
             }else{
+                filter = formatFilter(filter);
+                Log.d("BebidasFragment", "Filter: " + filter);
                 drinksList = db.productoDao().searchBebidas(filter);
             }
             requireActivity().runOnUiThread(() -> {
@@ -74,13 +79,7 @@ public class BebidasFragment extends Fragment implements OnProductsSelectedListe
     public void onDrinkSelected(int dinkId) {
         selectedDrink = dinkId;
         Producto selected = findProductById(dinkId);
-        if (selected != null) {
-            if (selectedDrinks.containsKey(selected)) {
-                selectedDrinks.put(selected, selectedDrinks.get(selected) + 1);
-            } else {
-                selectedDrinks.put(selected, 1);
-            }
-        }
+        listener.sendToCart(selected);
         Log.d("BebidasFragment", "Producto seleccionado: " + selectedDrink);
     }
 
@@ -99,12 +98,8 @@ public class BebidasFragment extends Fragment implements OnProductsSelectedListe
         return null;
     }
 
-    public Map<Producto, Integer> getSelectedDrinks() {
-        return selectedDrinks;
+    private String formatFilter(String filter) {
+        filter = filter.replace(" ", "-");
+        return filter;
     }
-
-    public void setSelectedDrinks(Map<Producto, Integer> selectedDrinks) {
-        this.selectedDrinks = selectedDrinks;
-    }
-
 }

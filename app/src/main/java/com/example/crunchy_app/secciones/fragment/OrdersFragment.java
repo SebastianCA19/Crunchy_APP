@@ -8,6 +8,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.carrito.fragment.CartDialogFragment;
+import com.example.crunchy_app.productos.OnProductsSelectedListener;
 import com.example.crunchy_app.productos.bebidas.fragment.BebidasFragment;
 import com.example.crunchy_app.productos.comidas.fragment.ComidasFragment;
 import com.example.crunchy_app.productos.model.Producto;
@@ -34,7 +37,7 @@ import java.util.Set;
  * Use the  factory method to
  * create an instance of this fragment.
  */
-public class OrdersFragment extends Fragment {
+public class OrdersFragment extends Fragment implements OnProductsSelectedListener{
 
     private String input;
     private Map<Producto, Integer> carrito = new HashMap<>();
@@ -44,9 +47,10 @@ public class OrdersFragment extends Fragment {
     private BebidasFragment bebidasFragment;
     private OtrosFragment otrosFragment;
 
+
     public OrdersFragment() {
-        comidasFragment = new ComidasFragment();
-        bebidasFragment = new BebidasFragment();
+        comidasFragment = new ComidasFragment(this);
+        bebidasFragment = new BebidasFragment(this);
         otrosFragment = new OtrosFragment();
     }
 
@@ -75,16 +79,11 @@ public class OrdersFragment extends Fragment {
         btBuscar.setOnClickListener(v -> {
             input = inputText.getText().toString();
             Fragment currentFragment = getChildFragmentManager().findFragmentById(R.id.frame_layout);
-            Map<Producto, Integer> selectedItems;
             if (currentFragment instanceof ComidasFragment) {
-                selectedItems = comidasFragment.getSelectedFoods();
-                comidasFragment = new ComidasFragment(input);
-                comidasFragment.setSelectedFoods(selectedItems);
+                comidasFragment = new ComidasFragment(input, this);
                 replaceFragment(comidasFragment);
             } else if (currentFragment instanceof BebidasFragment) {
-                selectedItems = bebidasFragment.getSelectedDrinks();
-                bebidasFragment = new BebidasFragment(input);
-                bebidasFragment.setSelectedDrinks(selectedItems);
+                bebidasFragment = new BebidasFragment(input, this);
                 replaceFragment(bebidasFragment);
             }
         });
@@ -103,25 +102,26 @@ public class OrdersFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
-    // Método para agregar productos al carrito
-    public void actualizarCarrito() {
-        Map<Producto, Integer> selectedFoods = comidasFragment.getSelectedFoods();
-        Map<Producto, Integer> selectedDrinks = bebidasFragment.getSelectedDrinks();
-
-        if (selectedFoods != null) {
-            carrito.putAll(selectedFoods);
-        }
-
-        if (selectedDrinks != null) {
-            carrito.putAll(selectedDrinks);
-        }
-    }
-
     // Método para mostrar el carrito
     private void mostrarCarrito() {
-        actualizarCarrito();
         CartDialogFragment cart = new CartDialogFragment(carrito);
         cart.setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Material_Light_Dialog_Alert);
         cart.show(getChildFragmentManager(), "cart");
+    }
+
+    @Override
+    public void sendToCart(Producto producto) {
+        Log.d("OrdersFragment", "Producto Enviado");
+        if (carrito.containsKey(producto)) {
+            int cantidadActual = carrito.get(producto);
+            carrito.put(producto, cantidadActual + 1);
+        } else {
+            carrito.put(producto, 1);
+        }
+    }
+
+    @Override
+    public void showInfoDialog(String productName) {
+
     }
 }

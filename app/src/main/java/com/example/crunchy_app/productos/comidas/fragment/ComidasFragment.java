@@ -30,17 +30,20 @@ public class ComidasFragment extends Fragment implements OnProductsSelectedListe
     private List<Producto> foodList;
     private List<InfoProducto> infoList;
 
-    private Map<Producto, Integer> selectedFoods;
     private int selectedFood;
     private String filter;
 
-    public ComidasFragment(String filter) {
+    public OnProductsSelectedListener listener;
+    public ComidasFragment(OnProductsSelectedListener listener) {
+        this.listener = listener;
+    }
+
+    public ComidasFragment(String filter, OnProductsSelectedListener listener) {
         this.filter = filter;
-        selectedFoods = new HashMap<>();
+        this.listener = listener;
     }
 
     public ComidasFragment() {
-        selectedFoods = new HashMap<>();
     }
 
     @Override
@@ -57,6 +60,7 @@ public class ComidasFragment extends Fragment implements OnProductsSelectedListe
                 foodList = db.productoDao().getComidas();
             }else{
                 infoList = db.infoProductoDao().getAll();
+                filter = formatFilter(filter);
                 foodList = db.productoDao().searchComidas(filter);
             }
             requireActivity().runOnUiThread(() -> {
@@ -75,15 +79,8 @@ public class ComidasFragment extends Fragment implements OnProductsSelectedListe
     @Override
     public void onFoodSelected(int foodId) {
         selectedFood = foodId;
-
         Producto selected = findProductById(foodId);
-        if (selected != null) {
-            if (selectedFoods.containsKey(selected)) {
-                selectedFoods.put(selected, selectedFoods.get(selected) + 1);
-            } else {
-                selectedFoods.put(selected, 1);
-            }
-        }
+        listener.sendToCart(selected);
 
         Log.d("ComidasFragment", "Producto seleccionado: " + selectedFood);
     }
@@ -103,12 +100,10 @@ public class ComidasFragment extends Fragment implements OnProductsSelectedListe
         return null;
     }
 
-    public Map<Producto, Integer> getSelectedFoods() {
-        return selectedFoods;
+    private String formatFilter(String filter) {
+        filter = filter.replace(" ", "-");
+        return filter;
     }
 
-    public void setSelectedFoods(Map<Producto, Integer> selectedFoods) {
-        this.selectedFoods = selectedFoods;
-    }
 }
 
