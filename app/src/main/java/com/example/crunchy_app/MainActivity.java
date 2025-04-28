@@ -17,7 +17,9 @@ import com.example.crunchy_app.DBconnection.AppDataBase;
 import com.example.crunchy_app.pagos.DAO.MetodoPagoDao;
 import com.example.crunchy_app.pagos.model.MetodoPago;
 import com.example.crunchy_app.pedidos.DAO.EstadoPedidoDao;
+import com.example.crunchy_app.pedidos.DAO.LocacionDao;
 import com.example.crunchy_app.pedidos.model.EstadoPedido;
+import com.example.crunchy_app.pedidos.model.Locacion;
 import com.example.crunchy_app.productos.DAO.InfoProductoDao;
 import com.example.crunchy_app.productos.DAO.ProductoDao;
 import com.example.crunchy_app.productos.DAO.TipoProductoDao;
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(db.estadoPedidoDao().count() == 0 || db.metodoPagoDao().count() == 0 ||
                     db.tipoProductoDao().count() == 0 || db.infoProductoDao().count() == 0 ||
-                    db.productoDao().count() == 0){
+                    db.productoDao().count() == 0 || db.locacionDao().count() == 0){
                 insertarDatosIniciales(db);
             }
 
@@ -68,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
     private static void insertarDatosIniciales(AppDataBase db) {
         EstadoPedidoDao estadoPedidoDao = db.estadoPedidoDao();
         MetodoPagoDao metodoPagoDao = db.metodoPagoDao();
+        LocacionDao locacionDao = db.locacionDao();
+
         TipoProductoDao tipoProductoDao = db.tipoProductoDao();
         InfoProductoDao infoProductoDao = db.infoProductoDao();
         ProductoDao productoDao = db.productoDao();
@@ -78,6 +82,12 @@ public class MainActivity extends AppCompatActivity {
             estadoPedidoDao.insert(new EstadoPedido("preparando"));
             estadoPedidoDao.insert(new EstadoPedido("pagado"));
             estadoPedidoDao.insert(new EstadoPedido("en camino"));
+        }
+        //Insertar Locaciones
+        if(locacionDao.count() == 0){
+            locacionDao.insert(new Locacion("libano", null, 4000));
+            locacionDao.insert(new Locacion("pando", null, 8000));
+            locacionDao.insert(new Locacion("santa cruz", null, 0));
         }
 
         // Insertar Métodos de Pago

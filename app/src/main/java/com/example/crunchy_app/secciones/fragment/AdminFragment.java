@@ -25,7 +25,6 @@ public class AdminFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_admin, container, false);
 
         // Buscar el botón en la vista inflada
-        /*
         Button btnHistorial = view.findViewById(R.id.btHistorial);
 
         // Configurar el clic del botón
@@ -36,7 +35,6 @@ public class AdminFragment extends Fragment {
                 startActivity(intent);
             }
         });
-         */
 
         return view;
     }

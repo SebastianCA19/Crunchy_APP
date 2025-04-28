@@ -54,9 +54,10 @@ public abstract class AppDataBase extends RoomDatabase {
     public abstract TipoProductoDao tipoProductoDao();
     public abstract PedidoDao pedidoDao();
     public abstract MetodoPagoDao metodoPagoDao();
-    public abstract LocacionDao tipoPedidoDao();
+
     public abstract EstadoPedidoDao estadoPedidoDao();
     public abstract ProductoDelPedidoDao productoDelPedidoDao();
     public abstract ResumenPorDiaDao resumenPorDiaDao();
+    public abstract LocacionDao locacionDao();
 
 }
