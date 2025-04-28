@@ -52,7 +52,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         Log.d("CartAdapter", "onBindViewHolder -> " + producto.getNombreProducto() + " x" + cantidad);
 
         holder.txtNombre.setText(producto.getNombreProducto().toUpperCase());
-        holder.txtPrecio.setText("$" + String.format("%.2f", producto.getPrecio()));
+        holder.txtPrecio.setText("$" + String.format("%.2f", producto.getValorProducto()));
         holder.txtCantidad.setText(String.valueOf(cantidad));
 
         holder.btnSumar.setOnClickListener(v -> {

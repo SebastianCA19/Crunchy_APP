@@ -8,20 +8,11 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.example.crunchy_app.pedidos.model.Pedido;
-
 @Entity(tableName = "productos", foreignKeys = {
         @ForeignKey(
                 entity = TipoProducto.class,
                 parentColumns = "id_tipo_producto",
                 childColumns = "id_tipo_producto",
-                onDelete = ForeignKey.RESTRICT,
-                onUpdate = ForeignKey.CASCADE
-        ),
-        @ForeignKey(
-                entity = InfoProducto.class,
-                parentColumns = "id_info_producto",
-                childColumns = "id_info_producto",
                 onDelete = ForeignKey.RESTRICT,
                 onUpdate = ForeignKey.CASCADE
         )
@@ -39,12 +30,10 @@ public class Producto {
     @NonNull
     private Integer idTipoProducto;
 
-    @ColumnInfo(name = "id_info_producto")
-    private Integer idInfoProducto;
 
     @ColumnInfo(name = "precio")
     @NonNull
-    private float precio;
+    private float valorProducto;
 
     @Ignore
     private String infoString;
@@ -57,11 +46,11 @@ public class Producto {
     }
 
 
-    public Producto(@NonNull String nombreProducto, @NonNull Integer idTipoProducto, Integer idInfoProducto, float precio) {
+    public Producto(@NonNull String nombreProducto, @NonNull Integer idTipoProducto, float valorProducto) {
         this.nombreProducto = nombreProducto;
         this.idTipoProducto = idTipoProducto;
-        this.idInfoProducto = idInfoProducto;
-        this.precio = precio;
+
+        this.valorProducto = valorProducto;
     }
 
     public void setInfoString(String infoString){
@@ -106,20 +95,13 @@ public class Producto {
         this.idTipoProducto = idTipoProducto;
     }
 
-    public Integer getIdInfoProducto() {
-        return idInfoProducto;
+
+    public float getValorProducto() {
+        return valorProducto;
     }
 
-    public void setIdInfoProducto(Integer idInfoProducto) {
-        this.idInfoProducto = idInfoProducto;
-    }
-
-    public float getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(float precio) {
-        this.precio = precio;
+    public void setValorProducto(float valorProducto) {
+        this.valorProducto = valorProducto;
     }
     @Override
     public boolean equals(Object obj) {

@@ -39,7 +39,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHol
         fixName(drink);
         holder.name.setText(drink.getNombreProducto());
         holder.info.setText("BEBIDA");
-        holder.price.setText(String.format("$%.2f", drink.getPrecio()));
+        holder.price.setText(String.format("$%.2f", drink.getValorProducto()));
         holder.addButton.setTag(drink.getIdProducto());
         holder.addButton.setOnClickListener(v -> {
             if (listener != null) {

@@ -153,7 +153,7 @@ public class CartDialogFragment extends DialogFragment {
     private void updateSubtotal() {
         double subtotal = 0;
         for (Map.Entry<Producto, Integer> entry : carrito.entrySet()) {
-            subtotal += entry.getKey().getPrecio() * entry.getValue();
+            subtotal += entry.getKey().getValorProducto() * entry.getValue();
         }
         txtSubtotal.setText("Subtotal: $ " + String.format("%.2f", subtotal));
     }

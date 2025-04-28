@@ -11,13 +11,11 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.crunchy_app.DBconnection.AppDataBase;
 import com.example.crunchy_app.productos.OnProductsSelectedListener;
-import com.example.crunchy_app.productos.model.InfoProducto;
 import com.example.crunchy_app.productos.comidas.adapter.FoodPagerAdapter;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.model.Producto;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
