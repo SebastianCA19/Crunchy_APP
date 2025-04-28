@@ -7,7 +7,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.crunchy_app.productos.OnProductsSelectedListener;
 import com.example.crunchy_app.productos.comidas.fragment.ComidasPageFragment;
-import com.example.crunchy_app.productos.model.InfoProducto;
 import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.ArrayList;

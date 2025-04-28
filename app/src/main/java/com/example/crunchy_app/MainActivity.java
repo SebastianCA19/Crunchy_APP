@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.room.Room;
 
 import com.example.crunchy_app.DBconnection.AppDataBase;
 import com.example.crunchy_app.pagos.DAO.MetodoPagoDao;
@@ -20,12 +19,8 @@ import com.example.crunchy_app.pedidos.DAO.EstadoPedidoDao;
 import com.example.crunchy_app.pedidos.DAO.LocacionDao;
 import com.example.crunchy_app.pedidos.model.EstadoPedido;
 import com.example.crunchy_app.pedidos.model.Locacion;
-import com.example.crunchy_app.productos.DAO.InfoProductoDao;
 import com.example.crunchy_app.productos.DAO.ProductoDao;
 import com.example.crunchy_app.productos.DAO.TipoProductoDao;
-import com.example.crunchy_app.productos.model.InfoProducto;
-
-import java.util.List;
 
 import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.TipoProducto;

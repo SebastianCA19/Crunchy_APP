@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.comidas.adapter.FoodAdapter;
 import com.example.crunchy_app.productos.OnProductsSelectedListener;
-import com.example.crunchy_app.productos.model.InfoProducto;
 import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.ArrayList;
