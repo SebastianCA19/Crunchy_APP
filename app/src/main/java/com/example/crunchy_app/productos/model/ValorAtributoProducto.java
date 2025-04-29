@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity (tableName = "valores_atributo_producto", foreignKeys = {
@@ -22,7 +23,8 @@ import androidx.room.PrimaryKey;
                 onDelete = ForeignKey.RESTRICT,
                 onUpdate = ForeignKey.CASCADE
         )
-})
+},
+        indices = {@Index(value = "id_atributo_producto")})
 
 
 public class ValorAtributoProducto {
@@ -43,7 +45,7 @@ public class ValorAtributoProducto {
     public ValorAtributoProducto() {
     }
 
-    public ValorAtributoProducto(float valorAtributoProducto, Integer idAtributoProducto, Integer idProducto) {
+    public ValorAtributoProducto(Integer idProducto, Integer idAtributoProducto,float valorAtributoProducto) {
         this.valorAtributoProducto = valorAtributoProducto;
         this.idAtributoProducto = idAtributoProducto;
         this.idProducto = idProducto;
@@ -72,6 +74,12 @@ public class ValorAtributoProducto {
     public Integer getIdProducto() {
         return idProducto;
     }
+
+    public void setIdValorAtributoProducto(Integer idValorAtributoProducto) {
+        this.idValorAtributoProducto = idValorAtributoProducto;
+    }
+
+
 
     public void setIdProducto(Integer idProducto) {
         this.idProducto = idProducto;

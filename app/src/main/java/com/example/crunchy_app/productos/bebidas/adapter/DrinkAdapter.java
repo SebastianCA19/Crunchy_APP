@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.OnProductsSelectedListener;
 import com.example.crunchy_app.productos.model.Producto;
+import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
 import java.util.List;
 
@@ -20,9 +21,12 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHol
 
     private OnProductsSelectedListener listener;
 
-    public DrinkAdapter(List<Producto> drinkList, OnProductsSelectedListener listener){
+    private List<ValorAtributoProducto> mlValues;
+
+    public DrinkAdapter(List<Producto> drinkList, List<ValorAtributoProducto> mlValues, OnProductsSelectedListener listener){
         this.drinkList = drinkList;
         this.listener = listener;
+        this.mlValues = mlValues;
     }
 
 
@@ -38,7 +42,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHol
         Producto drink = drinkList.get(position);
         fixName(drink);
         holder.name.setText(drink.getNombreProducto());
-        holder.info.setText("BEBIDA");
+        holder.info.setText(getMlInfo(drink));
         holder.price.setText(String.format("$%.2f", drink.getValorProducto()));
         holder.addButton.setTag(drink.getIdProducto());
         holder.addButton.setOnClickListener(v -> {
@@ -63,6 +67,31 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHol
         drink.setNombreProducto(name);
     }
 
+    private String getMlInfo(Producto drink){
+        int drinkId = drink.getIdProducto();
+        String info = "";
+        float value = 0;
+        for (ValorAtributoProducto mlValue : mlValues) {
+            if (mlValue.getIdProducto() == drinkId) {
+                value = mlValue.getValorAtributoProducto();
+                if(value >= 1000){
+                    info = (value/1000) + " L";
+                }else{
+                    info = value + " ML";
+                }
+                break;
+            }
+        }
+
+        setValues(drink, value);
+
+        return info;
+    }
+
+    private void setValues(Producto drink, float value){
+        drink.setVolumenMl(value);
+    }
+
     public static class DrinkViewHolder extends RecyclerView.ViewHolder {
         TextView name, info, price;
         Button addButton;
@@ -71,7 +100,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHol
             name = itemView.findViewById(R.id.drink_name);
             info = itemView.findViewById(R.id.drink_info);
             price = itemView.findViewById(R.id.drink_price);
-            addButton = itemView.findViewById(R.id.btn_add_chorizo);
+            addButton = itemView.findViewById(R.id.btn_add);
         }
     }
 }

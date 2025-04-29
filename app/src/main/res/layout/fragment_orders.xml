@@ -47,6 +47,7 @@
         android:text="Buscar"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:backgroundTint="#D84315"
         android:padding="8dp"
         app:layout_constraintTop_toBottomOf="@id/textView4"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,6 +70,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="#D84315"
             android:text="Comidas"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -81,6 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Bebidas"
+            android:backgroundTint="#D84315"
             android:textSize="18sp"
             android:textStyle="bold"
             android:padding="8dp"
@@ -89,6 +92,7 @@
         <Button
             android:id="@+id/btOtros"
             android:layout_width="0dp"
+            android:backgroundTint="#D84315"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Otros"
@@ -115,8 +119,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:backgroundTint="#D84315"
             android:contentDescription="Carrito de compras"
-            android:src="@drawable/baseline_add_shopping_cart_24" />
+            android:src="@drawable/baseline_add_shopping_cart_24"
+            app:tint="@color/white" />
     </FrameLayout>
 
 

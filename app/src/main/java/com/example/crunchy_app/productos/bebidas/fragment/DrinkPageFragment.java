@@ -15,6 +15,7 @@ import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.OnProductsSelectedListener;
 import com.example.crunchy_app.productos.bebidas.adapter.DrinkAdapter;
 import com.example.crunchy_app.productos.model.Producto;
+import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +26,15 @@ public class DrinkPageFragment extends Fragment {
 
     private OnProductsSelectedListener listener;
 
-    public DrinkPageFragment(OnProductsSelectedListener listener) {
+    private List<ValorAtributoProducto> mlValues;
+
+    public DrinkPageFragment(OnProductsSelectedListener listener, List<ValorAtributoProducto> mlValues) {
         this.listener = listener;
+        this.mlValues = mlValues;
     }
 
-    public static DrinkPageFragment newInstance(List<Producto> drinks, OnProductsSelectedListener listener) {
-        DrinkPageFragment fragment = new DrinkPageFragment(listener);
+    public static DrinkPageFragment newInstance(List<Producto> drinks, List<ValorAtributoProducto> mlValues, OnProductsSelectedListener listener) {
+        DrinkPageFragment fragment = new DrinkPageFragment(listener, mlValues);
         Bundle args = new Bundle();
         args.putSerializable(ARG_DRINK_LIST, new ArrayList<>(drinks));
         fragment.setArguments(args);
@@ -50,7 +54,7 @@ public class DrinkPageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_bebidas_page, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new DrinkAdapter(drinkList, listener));
+        recyclerView.setAdapter(new DrinkAdapter(drinkList, mlValues,listener));
         return view;
     }
 }

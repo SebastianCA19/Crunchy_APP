@@ -12,10 +12,13 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.crunchy_app.DBconnection.AppDataBase;
+import com.example.crunchy_app.productos.DAO.ProductoDao;
+import com.example.crunchy_app.productos.DAO.ValorAtributoProductoDao;
 import com.example.crunchy_app.productos.OnProductsSelectedListener;
 import com.example.crunchy_app.productos.bebidas.adapter.DrinksPagerAdapter;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.model.Producto;
+import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -28,11 +31,16 @@ public class BebidasFragment extends Fragment implements OnProductsSelectedListe
     private DrinksPagerAdapter adapter;
 
     private List<Producto> drinksList;
+
+    private List<ValorAtributoProducto> mlValues;
     private int selectedDrink;
 
     private OnProductsSelectedListener listener;
 
     private String filter;
+
+    private ProductoDao productoDao;
+    private ValorAtributoProductoDao atributoProductoDao;
 
     public BebidasFragment(OnProductsSelectedListener listener) {
         this.listener = listener;
@@ -53,17 +61,20 @@ public class BebidasFragment extends Fragment implements OnProductsSelectedListe
         viewPager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
 
         AppDataBase db = AppDataBase.getInstance(requireContext());
+        productoDao = db.productoDao();
+        atributoProductoDao = db.valorAtributoProductoDao();
 
         new Thread(() -> {
             if(filter == null) {
-                drinksList = db.productoDao().getBebidas();
+                drinksList = productoDao.getBebidas();
             }else{
                 filter = formatFilter(filter);
                 Log.d("BebidasFragment", "Filter: " + filter);
-                drinksList = db.productoDao().searchBebidas(filter);
+                drinksList = productoDao.searchBebidas(filter);
             }
+            mlValues = atributoProductoDao.getVolumenMl();
             requireActivity().runOnUiThread(() -> {
-                adapter = new DrinksPagerAdapter(requireActivity(), drinksList, this);
+                adapter = new DrinksPagerAdapter(requireActivity(), drinksList,mlValues, this);
                 viewPager.setAdapter(adapter);
             });
         }).start();

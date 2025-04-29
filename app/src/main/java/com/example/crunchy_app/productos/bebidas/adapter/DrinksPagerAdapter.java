@@ -8,6 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.example.crunchy_app.productos.OnProductsSelectedListener;
 import com.example.crunchy_app.productos.bebidas.fragment.DrinkPageFragment;
 import com.example.crunchy_app.productos.model.Producto;
+import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +17,13 @@ public class DrinksPagerAdapter extends FragmentStateAdapter {
     private List<List<Producto>> drinkPages;
     private OnProductsSelectedListener listener;
 
-    public DrinksPagerAdapter(FragmentActivity fragmentActivity, List<Producto> drinkList, OnProductsSelectedListener listener) {
+    private List<ValorAtributoProducto> mlValues;
+
+    public DrinksPagerAdapter(FragmentActivity fragmentActivity, List<Producto> drinkList, List<ValorAtributoProducto> mlValues,OnProductsSelectedListener listener) {
         super(fragmentActivity);
         this.drinkPages = partitionList(drinkList, 6);
         this.listener = listener;
+        this.mlValues = mlValues;
     }
 
 
@@ -31,12 +35,10 @@ public class DrinksPagerAdapter extends FragmentStateAdapter {
         return partitions;
     }
 
-
-
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return DrinkPageFragment.newInstance(drinkPages.get(position), listener);
+        return DrinkPageFragment.newInstance(drinkPages.get(position),mlValues, listener);
     }
 
     @Override

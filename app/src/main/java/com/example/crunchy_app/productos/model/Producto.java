@@ -30,10 +30,21 @@ public class Producto {
     @NonNull
     private Integer idTipoProducto;
 
-
-    @ColumnInfo(name = "precio")
+    @ColumnInfo(name = "valor_producto")
     @NonNull
     private float valorProducto;
+
+    @Ignore
+    private int cantidadChicharron;
+
+    @Ignore
+    private int cantidadChorizo;
+
+    @Ignore
+    private int cantidadBollo;
+
+    @Ignore
+    private float volumenMl;
 
     @Ignore
     private String infoString;
@@ -46,10 +57,9 @@ public class Producto {
     }
 
 
-    public Producto(@NonNull String nombreProducto, @NonNull Integer idTipoProducto, float valorProducto) {
+    public Producto(@NonNull String nombreProducto, @NonNull Integer idTipoProducto, @NonNull float valorProducto){
         this.nombreProducto = nombreProducto;
         this.idTipoProducto = idTipoProducto;
-
         this.valorProducto = valorProducto;
     }
 
@@ -98,6 +108,38 @@ public class Producto {
 
     public float getValorProducto() {
         return valorProducto;
+    }
+
+    public void setCantidadBollo(int cantidadBollo) {
+        this.cantidadBollo = cantidadBollo;
+    }
+
+    public void setCantidadChorizo(int cantidadChorizo) {
+        this.cantidadChorizo = cantidadChorizo;
+    }
+
+    public void setCantidadChicharron(int cantidadChicharron) {
+        this.cantidadChicharron = cantidadChicharron;
+    }
+
+    public void setVolumenMl(float volumenMl) {
+        this.volumenMl = volumenMl;
+    }
+
+    public float getVolumenMl() {
+        return volumenMl;
+    }
+
+    public int getCantidadBollo() {
+        return cantidadBollo;
+    }
+
+    public int getCantidadChicharron() {
+        return cantidadChicharron;
+    }
+
+    public int getCantidadChorizo() {
+        return cantidadChorizo;
     }
 
     public void setValorProducto(float valorProducto) {

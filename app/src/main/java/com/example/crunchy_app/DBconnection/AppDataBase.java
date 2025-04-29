@@ -17,17 +17,21 @@ import com.example.crunchy_app.pedidos.model.EstadoPedido;
 import com.example.crunchy_app.pedidos.model.Pedido;
 import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
 import com.example.crunchy_app.pedidos.model.Locacion;
+import com.example.crunchy_app.productos.DAO.AtributoProductoDao;
 import com.example.crunchy_app.productos.DAO.ProductoDao;
 import com.example.crunchy_app.productos.DAO.TipoProductoDao;
+import com.example.crunchy_app.productos.DAO.ValorAtributoProductoDao;
+import com.example.crunchy_app.productos.model.AtributoProducto;
 import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.TipoProducto;
+import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 import com.example.crunchy_app.reportes.Dao.ResumenPorDiaDao;
 import com.example.crunchy_app.DBconnection.converters.Converters;
 import com.example.crunchy_app.reportes.model.ResumenPorDia;
 
-@Database(entities = {InfoProducto.class, Producto.class, TipoProducto.class,
+@Database(entities = {Producto.class, TipoProducto.class, ValorAtributoProducto.class, AtributoProducto.class,
 MetodoPago.class ,Pedido.class, EstadoPedido.class , Locacion.class,
-ProductoDelPedido.class, ResumenPorDia.class}, version = 6)
+ProductoDelPedido.class, ResumenPorDia.class}, version = 10)
 @TypeConverters({Converters.class})
 public abstract class AppDataBase extends RoomDatabase {
 
@@ -47,8 +51,9 @@ public abstract class AppDataBase extends RoomDatabase {
         return INSTANCE;
     }
 
-    public abstract InfoProductoDao infoProductoDao();
     public abstract ProductoDao productoDao();
+    public abstract ValorAtributoProductoDao valorAtributoProductoDao();
+    public abstract AtributoProductoDao atributoProductoDao();
     public abstract TipoProductoDao tipoProductoDao();
     public abstract PedidoDao pedidoDao();
     public abstract MetodoPagoDao metodoPagoDao();

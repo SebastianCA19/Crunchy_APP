@@ -46,18 +46,18 @@
             android:id="@+id/txtSubtotal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Subtotal: €0.00"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:text="Subtotal: $0.00"
             android:textColor="@color/black"
-            android:layout_marginBottom="8dp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnCheckout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="CONFIRMAR PEDIDO"
-            android:backgroundTint="#6200EE"
+            android:backgroundTint="#D84315"
             android:textColor="@android:color/white"
             android:textAllCaps="false"
             android:textSize="16sp"/>

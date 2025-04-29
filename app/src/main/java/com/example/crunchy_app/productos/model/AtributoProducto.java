@@ -7,15 +7,7 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "atributos_producto", foreignKeys ={
-        @ForeignKey(
-                entity = ValorAtributoProducto.class,
-                parentColumns = "id_atributo_producto",
-                childColumns = "id_atributo_producto",
-                onDelete = ForeignKey.RESTRICT,
-                onUpdate = ForeignKey.CASCADE
-        )
-})
+@Entity(tableName = "atributos_producto")
 
 public class AtributoProducto {
 

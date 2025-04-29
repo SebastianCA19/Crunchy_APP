@@ -12,19 +12,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.OnProductsSelectedListener;
 import com.example.crunchy_app.productos.model.Producto;
+import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
 import java.util.List;
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder> {
     private List<Producto> foodList;
-    private List<InfoProducto> infoList;
+
+    private List<ValorAtributoProducto> chicharronValues;
+    private List<ValorAtributoProducto> chorizoValues;
+    private List<ValorAtributoProducto> bolloValues;
 
     private OnProductsSelectedListener listener;
 
-    public FoodAdapter(List<Producto> foodList, List<InfoProducto> infoList, OnProductsSelectedListener listener) {
+    public FoodAdapter(List<Producto> foodList, List<ValorAtributoProducto> chicharronValues, List<ValorAtributoProducto> chorizoValues, List<ValorAtributoProducto> bolloValues, OnProductsSelectedListener listener) {
         this.foodList = foodList;
-        this.infoList = infoList;
         this.listener = listener;
+        this.chicharronValues = chicharronValues;
+        this.chorizoValues = chorizoValues;
+        this.bolloValues = bolloValues;
     }
 
     @NonNull
@@ -37,9 +43,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     @Override
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
         Producto food = foodList.get(position);
-        InfoProducto info = getInfoById(food.getIdInfoProducto());
         holder.name.setText(food.getNombreProducto().toUpperCase());
-        holder.info.setText(getInfoText(info));
+        holder.info.setText(getInfoProduct(food));
         holder.price.setText(String.format("$%.2f", food.getValorProducto()));
         holder.addButton.setTag(food.getIdProducto());
         holder.addButton.setOnClickListener(v -> {
@@ -55,37 +60,55 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         return foodList.size();
     }
 
-    private InfoProducto getInfoById(Integer idInfoProducto) {
-        for (InfoProducto info : infoList) {
-            if (info.getIdInfoProducto().equals(idInfoProducto)) {
-                return info;
+
+    private String getInfoProduct(Producto food){
+        int idProducto = food.getIdProducto();
+        float chorizo = 0;
+        float chicharron = 0;
+        float bollo = 0;
+        String chorizoString = "";
+        String chicharronString = "";
+        String bolloString = "";
+        for(ValorAtributoProducto valorAtributoProducto : chicharronValues){
+            if(valorAtributoProducto.getIdProducto() == idProducto){
+                chicharron = valorAtributoProducto.getValorAtributoProducto();
+                chicharronString = chicharron + "gr de chicharron";
+                break;
             }
         }
-        return null;
+        for(ValorAtributoProducto valorAtributoProducto : chorizoValues){
+            if(valorAtributoProducto.getIdProducto() == idProducto){
+                chorizo = valorAtributoProducto.getValorAtributoProducto();
+                String valueString = chorizo == 1 ? "unidad" : "unidades";
+                chorizoString = (int) chorizo + " "+ valueString +" de chorizo";
+                break;
+            }
+        }
+        for(ValorAtributoProducto valorAtributoProducto : bolloValues){
+            if(valorAtributoProducto.getIdProducto() == idProducto){
+                bolloString = "Bollo de queso";
+                break;
+            }
+        }
+
+        setValues(food, chorizo, chicharron, bollo);
+
+        if(chorizoString.isEmpty()){
+            return String.join(" + ",chicharronString, bolloString);
+        } else if (chicharronString.isEmpty()) {
+            return String.join(" + ",chorizoString, bolloString);
+        } else if(bolloString.isEmpty()){
+            return String.join(" + ",chorizoString, chicharronString);
+        }
+        return String.join(" + ",chicharronString, chorizoString, bolloString);
     }
 
-    private String getInfoText(InfoProducto info) {
-        StringBuilder infoText = new StringBuilder();
-        int chorizo = info.getCantidadChorizo();
-        float chicharron = info.getCantidadChicharronGramos();
-        float bollo = info.getCantidadBollo();
-        if(chicharron > 0) {
-            infoText.append(String.format("%.2f gramos de chicharron", chicharron));
-        }
-        if(chorizo > 0) {
-            if(infoText.length() > 0) {
-                infoText.append(", ");
-            }
-            infoText.append(String.format("%d chorizos", chorizo));
-        }
-        if(bollo > 0) {
-            if(infoText.length() > 0) {
-                infoText.append(", ");
-            }
-            infoText.append(String.format("%.1f bollos", bollo));
-        }
-        return infoText.toString();
+    private void setValues(Producto food, float chorizo, float chicharron, float bollo){
+        food.setCantidadChicharron((int) chicharron);
+        food.setCantidadChorizo((int) chorizo);
+        food.setCantidadBollo((int) bollo);
     }
+
 
     public static class FoodViewHolder extends RecyclerView.ViewHolder {
 
@@ -97,7 +120,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
             name = itemView.findViewById(R.id.food_name);
             info = itemView.findViewById(R.id.food_info);
             price = itemView.findViewById(R.id.food_price);
-            addButton = itemView.findViewById(R.id.btn_add_chorizo);
+            addButton = itemView.findViewById(R.id.btn_add);
         }
     }
 }
