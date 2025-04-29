@@ -1,12 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:padding="16dp">
 
     <!-- Botón para cerrar -->
+
+    <EditText
+        android:id="@+id/inApellido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="924dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inNombre" />
+
+    <EditText
+        android:id="@+id/inNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="924dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerCart" />
+
     <TextView
         android:id="@+id/btnClose"
         android:layout_width="wrap_content"
@@ -19,17 +43,20 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <!-- Lista del carrito -->
+
+    <!-- Subtotal + Botón Checkout -->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerCart"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/btnClose"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@id/layoutSubtotal"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"/>
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnClose" />
 
-    <!-- Subtotal + Botón Checkout -->
     <LinearLayout
         android:background="@color/white"
         android:id="@+id/layoutSubtotal"
@@ -62,5 +89,62 @@
             android:textAllCaps="false"
             android:textSize="16sp"/>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="56dp"
+        android:text="Nombre:"
+        app:layout_constraintEnd_toStartOf="@+id/inNombre"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerCart" />
+
+    <TextView
+        android:id="@+id/textApellido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="56dp"
+        android:text="Apellido:"
+        app:layout_constraintEnd_toStartOf="@+id/inApellido"
+        app:layout_constraintTop_toBottomOf="@+id/textNombre" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="161dp"
+        android:layout_height="140dp"
+        tools:layout_editor_absoluteX="948dp"
+        tools:layout_editor_absoluteY="390dp">
+
+        <RadioButton
+            android:id="@+id/rbEfectivo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="efectivo" />
+
+        <RadioButton
+            android:id="@+id/rbTransferencia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="transferencia" />
+
+        <RadioButton
+            android:id="@+id/rbMixto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="mixto" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textMP"
+        android:layout_width="111dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="100dp"
+        android:text="metodos de pago:"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/radioGroup"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerCart" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
