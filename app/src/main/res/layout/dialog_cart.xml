@@ -100,9 +100,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/textMP"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/textMP">
 
             <RadioButton
                 android:id="@+id/rbEfectivo"
@@ -122,8 +122,18 @@
                 android:layout_height="wrap_content"
                 android:text="Mixto" />
         </RadioGroup>
-       <!--Hola desde comidas -->
-
+        <TextView
+            android:id="@+id/txtLocation"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="828dp"
+            android:drawableEnd="@drawable/ic_arrow_down"
+            android:hint="Locacion"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="15dp"
+            app:layout_constraintTop_toBottomOf="@+id/inApellido"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Subtotal y botón -->
@@ -147,6 +157,26 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Valor domicilio: "
+            android:id="@+id/txtValorDomicilio"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Total: $0.00"
+            android:id="@+id/txtTotal"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
 
         <Button
             android:id="@+id/btnCheckout"

@@ -1,14 +1,23 @@
 package com.example.crunchy_app.carrito.fragment;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +30,7 @@ import androidx.room.Room;
 import com.example.crunchy_app.DBconnection.AppDataBase;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.carrito.adapter.CartAdapter;
+import com.example.crunchy_app.pedidos.model.Locacion;
 import com.example.crunchy_app.pedidos.model.Pedido;
 import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
 import com.example.crunchy_app.productos.model.Producto;
@@ -28,6 +38,7 @@ import com.example.crunchy_app.productos.model.Producto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CartDialogFragment extends DialogFragment {
@@ -37,8 +48,17 @@ public class CartDialogFragment extends DialogFragment {
     private Button btnCheckout;
     private TextView btnClose;
 
+    private TextView txtLocacion;
+
+    private TextView txtValorDomicilio;
+
+    private Dialog dialog;
+
+    private List<Locacion> locations;
     private Map<Producto, Integer> carrito = new HashMap<>();
     private CartAdapter adapter;
+
+    private AppDataBase db;
 
     public CartDialogFragment(Map<Producto, Integer> carrito) {
         this.carrito = carrito;
@@ -75,6 +95,13 @@ public class CartDialogFragment extends DialogFragment {
         txtSubtotal = view.findViewById(R.id.txtSubtotal);
         btnCheckout = view.findViewById(R.id.btnCheckout);
         btnClose = view.findViewById(R.id.btnClose);
+        txtLocacion = view.findViewById(R.id.txtLocation);
+        txtValorDomicilio = view.findViewById(R.id.txtValorDomicilio);
+
+        new Thread(() ->{
+            db = AppDataBase.getInstance(getActivity().getApplicationContext());
+            locations = db.locacionDao().getAll();
+        }).start();
 
         setupRecyclerView();
 
@@ -90,14 +117,6 @@ public class CartDialogFragment extends DialogFragment {
                 @Override
                 public void run() {
                     try {
-                        // Instancia de Room
-                        AppDataBase db = Room.databaseBuilder(
-                                getContext().getApplicationContext(),
-                                AppDataBase.class,
-
-                                "crunchy-DB" // 👈 Pon aquí tu nombre real de la DB
-                        ).build();
-
                         // Crear nuevo pedido
                         Pedido pedido = null;
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -140,6 +159,47 @@ public class CartDialogFragment extends DialogFragment {
             dismiss(); // Por ahora solo cerrar
         });
 
+        txtLocacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                dialog = new Dialog(getContext());
+                dialog.setContentView(R.layout.dialog_searchable_location);
+                dialog.getWindow().setLayout(1000, 900);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+
+                EditText inLocation = dialog.findViewById(R.id.inLocation);
+                ListView listLocations = dialog.findViewById(R.id.listLocations);
+
+                ArrayAdapter<Locacion> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, locations);
+                listLocations.setAdapter(adapter);
+
+                inLocation.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            adapter.getFilter().filter(s);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+                listLocations.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        txtLocacion.setText(locations.get(position).getNombreLocacion().toUpperCase());
+                        txtValorDomicilio.setText("Valor del domicilio: " + locations.get(position).getValorDomicilio());
+                    }
+                });
+            }
+        });
+
         return view;
     }
 
@@ -158,4 +218,3 @@ public class CartDialogFragment extends DialogFragment {
         txtSubtotal.setText("Subtotal: $ " + String.format("%.2f", subtotal));
     }
 }
-
