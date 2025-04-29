@@ -65,4 +65,9 @@ public class Locacion {
     public void setValorDomicilio(float valorDomicilio) {
         this.valorDomicilio = valorDomicilio;
     }
+
+    @Override
+    public String toString() {
+        return nombreLocacion.toUpperCase();
+    }
 }

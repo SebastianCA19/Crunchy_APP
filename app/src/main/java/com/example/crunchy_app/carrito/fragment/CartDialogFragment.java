@@ -35,6 +35,8 @@ import com.example.crunchy_app.pedidos.model.Pedido;
 import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
 import com.example.crunchy_app.productos.model.Producto;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -57,6 +59,13 @@ public class CartDialogFragment extends DialogFragment {
     private List<Locacion> locations;
     private Map<Producto, Integer> carrito = new HashMap<>();
     private CartAdapter adapter;
+
+    private double subtotal;
+    private double total;
+
+    private Locacion locacionSeleccionada;
+
+    private TextView txtTotal;
 
     private AppDataBase db;
 
@@ -97,10 +106,27 @@ public class CartDialogFragment extends DialogFragment {
         btnClose = view.findViewById(R.id.btnClose);
         txtLocacion = view.findViewById(R.id.txtLocation);
         txtValorDomicilio = view.findViewById(R.id.txtValorDomicilio);
+        txtTotal = view.findViewById(R.id.txtTotal);
 
-        new Thread(() ->{
+        new Thread(() -> {
             db = AppDataBase.getInstance(getActivity().getApplicationContext());
             locations = db.locacionDao().getAll();
+
+            int savedLocacionId = getActivity()
+                    .getSharedPreferences("cart_prefs", 0)
+                    .getInt("locacion_id", -1);
+
+            if (savedLocacionId != -1) {
+                for (Locacion loc : locations) {
+                    if (loc.getIdLocacion() == savedLocacionId) {
+                        locacionSeleccionada = loc;
+                        getActivity().runOnUiThread(() -> {
+                            updateLocacionValue(loc.getNombreLocacion());
+                        });
+                        break;
+                    }
+                }
+            }
         }).start();
 
         setupRecyclerView();
@@ -167,6 +193,7 @@ public class CartDialogFragment extends DialogFragment {
                 dialog.getWindow().setLayout(1000, 900);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
+                dialog.setCanceledOnTouchOutside(true);
 
                 EditText inLocation = dialog.findViewById(R.id.inLocation);
                 ListView listLocations = dialog.findViewById(R.id.listLocations);
@@ -193,9 +220,19 @@ public class CartDialogFragment extends DialogFragment {
                 listLocations.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        txtLocacion.setText(locations.get(position).getNombreLocacion().toUpperCase());
-                        txtValorDomicilio.setText("Valor del domicilio: " + locations.get(position).getValorDomicilio());
+                        locacionSeleccionada = locations.get(position);
+
+                        // Guardar en SharedPreferences
+                        getActivity().getSharedPreferences("cart_prefs", 0)
+                                .edit()
+                                .putInt("locacion_id", locacionSeleccionada.getIdLocacion())
+                                .apply();
+
+                        updateLocacionValue(locacionSeleccionada.getNombreLocacion());
+                        updateTotal();
+                        dialog.dismiss();
                     }
+
                 });
             }
         });
@@ -211,10 +248,26 @@ public class CartDialogFragment extends DialogFragment {
     }
 
     private void updateSubtotal() {
-        double subtotal = 0;
+        subtotal = 0;
         for (Map.Entry<Producto, Integer> entry : carrito.entrySet()) {
             subtotal += entry.getKey().getValorProducto() * entry.getValue();
         }
         txtSubtotal.setText("Subtotal: $ " + String.format("%.2f", subtotal));
+        updateTotal();
+    }
+
+    private void updateLocacionValue(String locacion){
+        txtValorDomicilio.setText("Valor domicilio: $" + locacionSeleccionada.getValorDomicilio());
+        txtLocacion.setText(locacion.toUpperCase());
+        updateTotal();
+    }
+
+    private void updateTotal(){
+        if (locacionSeleccionada == null){
+            total = subtotal;
+        }else{
+            total = subtotal + locacionSeleccionada.getValorDomicilio();
+        }
+        txtTotal.setText("Total: $ " + String.format("%.2f", total));
     }
 }
