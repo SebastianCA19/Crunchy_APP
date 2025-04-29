@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".productos.comidas.fragment.ComidasFragment"
-    android:layout_marginTop="60dp">
+    android:layout_marginTop="60dp"
+    android:background="#FFF9F0">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"

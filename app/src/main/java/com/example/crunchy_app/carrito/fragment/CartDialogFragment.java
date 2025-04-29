@@ -55,7 +55,7 @@ public class CartDialogFragment extends DialogFragment {
         super.onStart();
         if (getDialog() != null && getDialog().getWindow() != null) {
             Window window = getDialog().getWindow();
-            window.setLayout((int) (getResources().getDisplayMetrics().widthPixels * 0.4), ViewGroup.LayoutParams.MATCH_PARENT);
+            window.setLayout((int) (getResources().getDisplayMetrics().widthPixels * 0.7), ViewGroup.LayoutParams.MATCH_PARENT);
             window.setGravity(Gravity.END);
         }
     }
