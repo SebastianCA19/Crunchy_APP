@@ -18,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,6 +32,8 @@ import androidx.room.Room;
 import com.example.crunchy_app.DBconnection.AppDataBase;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.carrito.adapter.CartAdapter;
+import com.example.crunchy_app.pagos.DAO.MetodoPagoDao;
+import com.example.crunchy_app.pagos.model.MetodoPago;
 import com.example.crunchy_app.pedidos.model.Locacion;
 import com.example.crunchy_app.pedidos.model.Pedido;
 import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
@@ -69,7 +73,18 @@ public class CartDialogFragment extends DialogFragment {
 
     private TextView txtTotal;
 
+    private RadioGroup radioGroup;
+
     private AppDataBase db;
+
+    private String nameUser;
+
+    private String lastNameUser;
+
+    private int metodoPagoId;
+
+    private TextView txtNombre;
+    private TextView txtApellido;
 
     private final NumberFormat numberFormat;
 
@@ -112,6 +127,9 @@ public class CartDialogFragment extends DialogFragment {
         txtLocacion = view.findViewById(R.id.txtLocation);
         txtValorDomicilio = view.findViewById(R.id.txtValorDomicilio);
         txtTotal = view.findViewById(R.id.txtTotal);
+        radioGroup = view.findViewById(R.id.radioGroup);
+        txtNombre = view.findViewById(R.id.inNombre);
+        txtApellido = view.findViewById(R.id.inApellido);
 
         new Thread(() -> {
             db = AppDataBase.getInstance(getActivity().getApplicationContext());
@@ -143,7 +161,7 @@ public class CartDialogFragment extends DialogFragment {
                 Log.w("CartDialogFragment", "El carrito está vacío. No se puede confirmar pedido.");
                 return;
             }
-
+            getFields();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -152,10 +170,10 @@ public class CartDialogFragment extends DialogFragment {
                         Pedido pedido = null;
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             pedido = new Pedido(
-                                    "Cliente", // Puedes pasar nombre real si lo tienes
-                                    "Anonimo", // o dejarlo vacío si no capturas apellido
-                                    1,         // idMetodoPago (puedes cambiarlo según lo que tengas)
-                                    1,         // idLocacion
+                                    nameUser, // Puedes pasar nombre real si lo tienes
+                                    lastNameUser, // o dejarlo vacío si no capturas apellido
+                                    metodoPagoId,         // idMetodoPago (puedes cambiarlo según lo que tengas)
+                                    locacionSeleccionada.getIdLocacion(),         // idLocacion
                                     1,         // idEstadoPedido (ej: 1 = Pendiente)
                                     LocalDate.now(),
                                     LocalTime.now()
@@ -275,4 +293,33 @@ public class CartDialogFragment extends DialogFragment {
         }
         txtTotal.setText("Total: " + numberFormat.format(total));
     }
+
+    private void getFields(){
+        //Nombre y apellido del usuario
+        nameUser = txtNombre.getText().toString();
+        lastNameUser = txtApellido.getText().toString();
+
+        //Obtener el metodo de pago
+        int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+        RadioButton selectedRadioButton = radioGroup.findViewById(selectedRadioButtonId);
+        if (selectedRadioButtonId != -1) {
+            String selectedText = selectedRadioButton.getText().toString();
+            getMetodoPago(selectedText);
+        }
+    }
+
+    private void getMetodoPago(String selectedText) {
+        switch (selectedText) {
+            case "Efectivo":
+                metodoPagoId = 1;
+                break;
+            case "Transferencia":
+                metodoPagoId = 2;
+                break;
+            case "Mixto":
+                metodoPagoId = 3;
+                break;
+        }
+    }
+
 }

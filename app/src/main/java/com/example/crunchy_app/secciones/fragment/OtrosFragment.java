@@ -23,8 +23,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class OtrosFragment extends Fragment implements OnProductsSelectedListener {
 
-    private EditText inGramos;
-    private EditText inDinero;
+    private final int VALOR_POR_GRAMO = 80;
+
     private Button btnConvert;
 
     private Button btnAddChicharron;
@@ -61,8 +61,6 @@ public class OtrosFragment extends Fragment implements OnProductsSelectedListene
 
         //Asignar cada elemento de la view a una variable
         btnConvert = view.findViewById(R.id.btn_convert);
-        inGramos = view.findViewById(R.id.inGramos);
-        inDinero = view.findViewById(R.id.inDinero);
         btnAddChicharron = view.findViewById(R.id.btn_add_chicharron);
         btnAddChorizo = view.findViewById(R.id.btn_add_chorizo);
         btnAddBollo = view.findViewById(R.id.btn_add_bollo);
@@ -115,11 +113,11 @@ public class OtrosFragment extends Fragment implements OnProductsSelectedListene
         try {
             if (!gramos.isEmpty() && dinero.isEmpty()) {
                 gramosNum = Double.parseDouble(gramos);
-                dineroNum = gramosNum * 80;
+                dineroNum = gramosNum * VALOR_POR_GRAMO;
                 etDinero.setText("$" + dineroNum);
             } else if (!dinero.isEmpty() && gramos.isEmpty()) {
                 dineroNum = Double.parseDouble(dinero);
-                gramosNum = dineroNum / 80;
+                gramosNum = dineroNum / VALOR_POR_GRAMO;
                 etGramos.setText(gramosNum + "gr");
             }
 
