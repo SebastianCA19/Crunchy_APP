@@ -84,10 +84,6 @@ public class ComidasFragment extends Fragment implements OnProductsSelectedListe
         return view;
     }
 
-    public void setFilter(String filter) {
-        this.filter = filter;
-    }
-
     @Override
     public void onFoodSelected(int foodId) {
         selectedFood = foodId;

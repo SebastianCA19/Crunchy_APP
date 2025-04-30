@@ -51,7 +51,7 @@ public class OrdersFragment extends Fragment implements OnProductsSelectedListen
     public OrdersFragment() {
         comidasFragment = new ComidasFragment(this);
         bebidasFragment = new BebidasFragment(this);
-        otrosFragment = new OtrosFragment();
+        otrosFragment = new OtrosFragment(this);
     }
 
     @Override

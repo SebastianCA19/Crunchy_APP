@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.productos.model.Producto;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
@@ -23,10 +25,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     private final List<Producto> productos;
     private final Runnable onCartUpdated;
 
+    private final NumberFormat numberFormat;
+
     public CartAdapter(Map<Producto, Integer> carrito, Runnable onCartUpdated) {
         this.carrito = carrito;
         this.productos = new ArrayList<>(carrito.keySet());
         this.onCartUpdated = onCartUpdated;
+        this.numberFormat = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
         Log.d("CartAdapter", "Adapter creado con " + productos.size() + " productos");
     }
 
@@ -52,7 +57,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         Log.d("CartAdapter", "onBindViewHolder -> " + producto.getNombreProducto() + " x" + cantidad);
 
         holder.txtNombre.setText(producto.getNombreProducto().toUpperCase());
-        holder.txtPrecio.setText("$" + String.format("%.2f", producto.getValorProducto()));
+        holder.txtPrecio.setText(numberFormat.format(producto.getValorProducto()));
         holder.txtCantidad.setText(String.valueOf(cantidad));
 
         holder.btnSumar.setOnClickListener(v -> {

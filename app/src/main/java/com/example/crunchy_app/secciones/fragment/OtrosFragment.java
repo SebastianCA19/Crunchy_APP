@@ -4,67 +4,95 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.example.crunchy_app.DBconnection.AppDataBase;
 import com.example.crunchy_app.R;
+import com.example.crunchy_app.productos.DAO.ProductoDao;
+import com.example.crunchy_app.productos.DAO.ValorAtributoProductoDao;
+import com.example.crunchy_app.productos.OnProductsSelectedListener;
+import com.example.crunchy_app.productos.model.Producto;
+import com.example.crunchy_app.productos.model.ValorAtributoProducto;
+import com.google.android.material.snackbar.Snackbar;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link OtrosFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class OtrosFragment extends Fragment {
+public class OtrosFragment extends Fragment implements OnProductsSelectedListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private EditText inGramos;
+    private EditText inDinero;
+    private Button btnConvert;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Button btnAddChicharron;
 
-    public OtrosFragment() {
-        // Required empty public constructor
+    private Button btnAddChorizo;
+
+    private Button btnAddBollo;
+
+    private ProductoDao productoDao;
+    private ValorAtributoProductoDao atributoProductoDao;
+
+    double gramosNum;
+
+    double dineroNum;
+
+    private byte completado;
+
+    private OnProductsSelectedListener listener;
+
+    public OtrosFragment(OnProductsSelectedListener listener) {
+        this.listener = listener;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment OtrosFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static OtrosFragment newInstance(String param1, String param2) {
-        OtrosFragment fragment = new OtrosFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_otros, container, false);
-        Button btnConvert = view.findViewById(R.id.btn_convert);
+
+        //Asignar cada elemento de la view a una variable
+        btnConvert = view.findViewById(R.id.btn_convert);
+        inGramos = view.findViewById(R.id.inGramos);
+        inDinero = view.findViewById(R.id.inDinero);
+        btnAddChicharron = view.findViewById(R.id.btn_add_chicharron);
+        btnAddChorizo = view.findViewById(R.id.btn_add_chorizo);
+        btnAddBollo = view.findViewById(R.id.btn_add_bollo);
+
+        AppDataBase db = AppDataBase.getInstance(requireContext());
+        productoDao = db.productoDao();
+        atributoProductoDao = db.valorAtributoProductoDao();
+
         btnConvert.setOnClickListener(this::convertValues);
+        btnAddChicharron.setOnClickListener(v -> {
+            completado = addChicharron();
+            if(completado == 1){
+                showInfoDialog("Chicharron");
+                completado = 0;
+            }
+        });
+        btnAddChorizo.setOnClickListener(v -> {
+            completado = addChorizo();
+            if(completado == 1){
+                showInfoDialog("Chorizo");
+                completado = 0;
+            }
+        });
+        btnAddBollo.setOnClickListener(v -> {
+            completado = addBollo();
+            if(completado == 1){
+                showInfoDialog("Bollo");
+                completado = 0;
+                }
+        });
         return view;
     }
 
@@ -86,17 +114,57 @@ public class OtrosFragment extends Fragment {
 
         try {
             if (!gramos.isEmpty() && dinero.isEmpty()) {
-                double gramosNum = Double.parseDouble(gramos);
-                etDinero.setText("$" + (gramosNum * 80));
+                gramosNum = Double.parseDouble(gramos);
+                dineroNum = gramosNum * 80;
+                etDinero.setText("$" + dineroNum);
             } else if (!dinero.isEmpty() && gramos.isEmpty()) {
-                double dineroNum = Double.parseDouble(dinero);
-                etGramos.setText((dineroNum / 80) + "gr");
+                dineroNum = Double.parseDouble(dinero);
+                gramosNum = dineroNum / 80;
+                etGramos.setText(gramosNum + "gr");
             }
+
         } catch (NumberFormatException e) {
             // Manejar un posible error de conversión
             e.printStackTrace();
         }
     }
 
+    private byte addChicharron() {
+        if(gramosNum != 0 && dineroNum != 0){
+            //Obtenemos el producto chicharron personalizado
+            new Thread(() -> {
+                Producto chicharron = productoDao.getProductoById(41);
+                chicharron.setValorProducto((float) dineroNum);
+                chicharron.setCantidadChicharron((int) gramosNum);
 
+                Log.d("Chicharron", "Datos: "+ chicharron.getValorProducto() + " " + chicharron.getCantidadChicharron());
+
+                listener.sendToCart(chicharron);
+            }).start();
+            return 1;
+        }
+        return 0;
+    }
+
+    private byte addChorizo(){
+        new Thread(() -> {
+            Producto chorizo = productoDao.getProductoById(42);
+            listener.sendToCart(chorizo);
+        }).start();
+        return 1;
+    }
+
+    private byte addBollo(){
+        new Thread(() -> {
+            Producto bollo = productoDao.getProductoById(43);
+            listener.sendToCart(bollo);
+        }).start();
+        return 1;
+    }
+
+    @Override
+    public void showInfoDialog(String productName) {
+        Snackbar.make(getView(), "Has agregado " + productName.toUpperCase() + " a tu carrito", Snackbar.LENGTH_SHORT)
+                .show();
+    }
 }

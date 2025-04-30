@@ -37,10 +37,12 @@ import com.example.crunchy_app.productos.model.Producto;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class CartDialogFragment extends DialogFragment {
@@ -69,8 +71,11 @@ public class CartDialogFragment extends DialogFragment {
 
     private AppDataBase db;
 
+    private final NumberFormat numberFormat;
+
     public CartDialogFragment(Map<Producto, Integer> carrito) {
         this.carrito = carrito;
+        this.numberFormat = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
     }
 
     @Override
@@ -252,12 +257,12 @@ public class CartDialogFragment extends DialogFragment {
         for (Map.Entry<Producto, Integer> entry : carrito.entrySet()) {
             subtotal += entry.getKey().getValorProducto() * entry.getValue();
         }
-        txtSubtotal.setText("Subtotal: $ " + String.format("%.2f", subtotal));
+        txtSubtotal.setText("Subtotal: "+ numberFormat.format(subtotal));
         updateTotal();
     }
 
     private void updateLocacionValue(String locacion){
-        txtValorDomicilio.setText("Valor domicilio: $" + locacionSeleccionada.getValorDomicilio());
+        txtValorDomicilio.setText("Valor domicilio: " + numberFormat.format(locacionSeleccionada.getValorDomicilio()));
         txtLocacion.setText(locacion.toUpperCase());
         updateTotal();
     }
@@ -268,6 +273,6 @@ public class CartDialogFragment extends DialogFragment {
         }else{
             total = subtotal + locacionSeleccionada.getValorDomicilio();
         }
-        txtTotal.setText("Total: $ " + String.format("%.2f", total));
+        txtTotal.setText("Total: " + numberFormat.format(total));
     }
 }

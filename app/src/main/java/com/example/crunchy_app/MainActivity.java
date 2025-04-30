@@ -164,6 +164,11 @@ public class MainActivity extends AppCompatActivity {
             productoDao.insert(new Producto("heineken", 5, 4000));            // id 38
             productoDao.insert(new Producto("coronita", 5, 4000));            // id 39
             productoDao.insert(new Producto("club-colombia", 5, 4000));       // id 40
+
+            //Personalizados (idProducto 41-42-43)
+            productoDao.insert(new Producto("chicharron personalizado", 6, 0)); //id 41
+            productoDao.insert(new Producto("chorizo personalizado", 6, 5000));    //id 42
+            productoDao.insert(new Producto("bollo personalizado", 6, 3500));      //id 43
         }
 
         // Insertar Valores de Atributos
