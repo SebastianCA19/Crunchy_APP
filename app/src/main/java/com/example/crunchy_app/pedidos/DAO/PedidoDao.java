@@ -34,6 +34,9 @@ public interface PedidoDao {
     @Query("SELECT * FROM pedidos ORDER BY fecha DESC")
     List<PedidoConEstado> getPedidosConEstado();
 
+    @Query("SELECT * FROM pedidos WHERE id_estado_pedido = :estadoId")
+    List<Pedido> getPedidosPorEstado(int estadoId);
+
 
     @Update
     int update(Pedido pedido);
