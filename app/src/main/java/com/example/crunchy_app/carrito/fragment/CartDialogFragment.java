@@ -170,10 +170,10 @@ public class CartDialogFragment extends DialogFragment {
                         Pedido pedido = null;
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             pedido = new Pedido(
-                                    nameUser, // Puedes pasar nombre real si lo tienes
-                                    lastNameUser, // o dejarlo vacío si no capturas apellido
-                                    metodoPagoId,         // idMetodoPago (puedes cambiarlo según lo que tengas)
-                                    locacionSeleccionada.getIdLocacion(),         // idLocacion
+                                    nameUser,
+                                    lastNameUser,
+                                    metodoPagoId,
+                                    locacionSeleccionada.getIdLocacion(),
                                     1,         // idEstadoPedido (ej: 1 = Pendiente)
                                     LocalDate.now(),
                                     LocalTime.now()

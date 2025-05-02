@@ -10,7 +10,8 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 
 import com.example.crunchy_app.R;
-//import com.example.crunchy_app.pedidos.activity.HistoryActivity;
+import com.example.crunchy_app.pedidos.activity.HistorialPedidosActivity;
+
 
 public class AdminFragment extends Fragment {
 
@@ -21,23 +22,19 @@ public class AdminFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflar la vista del fragmento
+
         View view = inflater.inflate(R.layout.fragment_admin, container, false);
-
-        // Buscar el botón en la vista inflada
-        /*
-        Button btnHistorial = view.findViewById(R.id.btHistorial);
-
-        // Configurar el clic del botón
+        Button btnHistorial = view.findViewById(R.id.btnHistorial);
         btnHistorial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), HistoryActivity.class);
+                Intent intent = new Intent(getContext(), HistorialPedidosActivity.class);
                 startActivity(intent);
             }
         });
 
-         */
+
+
 
         return view;
     }

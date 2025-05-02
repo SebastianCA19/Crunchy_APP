@@ -8,6 +8,8 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "productos", foreignKeys = {
         @ForeignKey(
                 entity = TipoProducto.class,
@@ -17,7 +19,7 @@ import androidx.room.PrimaryKey;
                 onUpdate = ForeignKey.CASCADE
         )
 })
-public class Producto {
+public class Producto implements Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_producto")
     private Integer idProducto;
