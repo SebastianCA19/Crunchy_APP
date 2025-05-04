@@ -74,7 +74,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 carrito.remove(producto);
                 productos.remove(position);
                 notifyItemRemoved(position);
-                notifyItemRangeChanged(position, productos.size()); // ✅ Actualizar rango restante
+                notifyItemRangeChanged(position, productos.size()); // Actualizar rango restante
             } else {
                 carrito.put(producto, nuevaCantidad);
                 holder.txtCantidad.setText(String.valueOf(nuevaCantidad));

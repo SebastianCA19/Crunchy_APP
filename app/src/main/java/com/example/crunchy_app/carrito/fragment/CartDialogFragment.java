@@ -199,7 +199,7 @@ public class CartDialogFragment extends DialogFragment {
                         }
 
                         Log.d("CartDialogFragment", "Pedido confirmado con ID: " + pedidoId);
-
+                        carrito.clear();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
