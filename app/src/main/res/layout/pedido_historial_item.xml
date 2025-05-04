@@ -8,56 +8,68 @@
 
     <LinearLayout
         android:id="@+id/containerPedido"
-        android:orientation="vertical"
-        android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/txtNombreCliente"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:text="Juan Pérez"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Juan Pérez"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txtFecha"
-            android:text="01/05/2025"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp" />
+            android:layout_marginTop="4dp"
+            android:text="01/05/2025" />
 
         <TextView
             android:id="@+id/txtProductos"
-            android:text="Combo 1 x2\nChorizo x1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:text="Combo 1 x2\nChorizo x1" />
 
         <TextView
             android:id="@+id/txtEstado"
-            android:text="Estado: Encargada"
-            android:textColor="#555"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:text="Estado: Encargada"
+            android:textColor="#555" />
 
         <TextView
             android:id="@+id/txtTotal"
-            android:text="Total: $41.000"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp" />
+            android:layout_marginTop="4dp"
+            android:text="Total: $41.000"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnCambiarEstado"
-            android:text="Cambiar Estado"
-            android:backgroundTint="#D84315"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#D84315"
+            android:text="Cambiar Estado" />
+
+        <Button
+            android:id="@+id/btnCancelar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#D84315"
+            android:layout_gravity="end"
+            android:text="Cancelar" />
+
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

@@ -28,4 +28,8 @@ public interface ProductoDelPedidoDao {
 
     @Query("DELETE FROM productos_del_pedido WHERE id_pedido = :idPedido AND id_producto = :idProducto")
     public int deleteProductosByProducto(Integer idPedido, Integer idProducto);
+
+   //funcion para eliminar todos los productos de un pedido
+    @Query("DELETE FROM productos_del_pedido WHERE id_pedido = :idPedido")
+    public void eliminarPorPedido(String idPedido);
 }

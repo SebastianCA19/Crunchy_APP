@@ -85,9 +85,103 @@ public class MainActivity extends AppCompatActivity {
         }
         //Insertar Locaciones
         if(locacionDao.count() == 0){
-            locacionDao.insert(new Locacion("libano", null, 4000));
-            locacionDao.insert(new Locacion("pando", null, 8000));
-            locacionDao.insert(new Locacion("santa cruz", null, 0));
+            // los de 4k
+            locacionDao.insert(new Locacion("Juan 23", null, 4000));
+            locacionDao.insert(new Locacion("Olivos", null, 4000));
+            // los de 5k
+            locacionDao.insert(new Locacion("Jardin", null, 5000));
+            locacionDao.insert(new Locacion("RCN", null, 5000));
+            locacionDao.insert(new Locacion("Balcones del L.", null, 5000));
+            locacionDao.insert(new Locacion("Riasco", null, 5000));
+            locacionDao.insert(new Locacion("Ensencida J 23", null, 5000));
+            locacionDao.insert(new Locacion("San Francisco", null, 5000));
+            locacionDao.insert(new Locacion("Fresseniuss", null, 5000));
+            locacionDao.insert(new Locacion("7 de Agosto", null, 5000));
+            locacionDao.insert(new Locacion("Tayrona City", null, 5000));
+            locacionDao.insert(new Locacion("Alto Vento", null, 5000));
+            //los de 6k
+            locacionDao.insert(new Locacion("Almendros", null, 6000));
+            locacionDao.insert(new Locacion("20 Julio", null, 6000));
+            locacionDao.insert(new Locacion("Postobon", null, 6000));
+            locacionDao.insert(new Locacion("Alcazares", null, 6000));
+            locacionDao.insert(new Locacion("Centro", null, 6000));
+            locacionDao.insert(new Locacion("Pescaito", null, 6000));
+            locacionDao.insert(new Locacion("Estatua El Pibe", null, 6000));
+            locacionDao.insert(new Locacion("Naranjos", null, 6000));
+            locacionDao.insert(new Locacion("Miraflores", null, 6000));
+            locacionDao.insert(new Locacion("San Fernando", null, 6000));
+            locacionDao.insert(new Locacion("Malvinas", null, 6000));
+            locacionDao.insert(new Locacion("Santa Catalina", null, 6000));
+            locacionDao.insert(new Locacion("El Reposo", null, 6000));
+            locacionDao.insert(new Locacion("Palma", null, 6000));
+            locacionDao.insert(new Locacion("Trevol", null, 6000));
+            locacionDao.insert(new Locacion("Ed. Torre", null, 6000));
+            locacionDao.insert(new Locacion("Ed. Santa Ana", null, 6000));
+            locacionDao.insert(new Locacion("Clinica Salud", null, 6000));
+            locacionDao.insert(new Locacion("Porvenir", null, 6000));
+            locacionDao.insert(new Locacion("El Mayor", null, 6000));
+            locacionDao.insert(new Locacion("1 de Mayor", null, 6000));
+            locacionDao.insert(new Locacion("Cun", null, 6000));
+            locacionDao.insert(new Locacion("ocean Mall", null, 6000));
+            locacionDao.insert(new Locacion("8 de Febrero", null, 6000));
+            locacionDao.insert(new Locacion("Nacho Vives", null, 6000));
+            locacionDao.insert(new Locacion("Altos Santa Rita", null, 6000));
+            locacionDao.insert(new Locacion("Boulevard Las Rosas", null, 6000));
+            locacionDao.insert(new Locacion("Villa Sara", null, 6000));
+            // los de 7k
+            locacionDao.insert(new Locacion("Libano", null, 7000));
+            locacionDao.insert(new Locacion("Pando", null, 7000));
+            locacionDao.insert(new Locacion("Santa Cruz", null, 7000));
+            locacionDao.insert(new Locacion("Santa Elena", null, 7000));
+            locacionDao.insert(new Locacion("Bastidas", null, 7000));
+            locacionDao.insert(new Locacion("Bavaria", null, 7000));
+            locacionDao.insert(new Locacion("Galicia", null, 7000));
+            locacionDao.insert(new Locacion("Tejares", null, 7000));
+            locacionDao.insert(new Locacion("Andrea Carolina", null, 7000));
+            locacionDao.insert(new Locacion("Concepcion", null, 7000));
+            locacionDao.insert(new Locacion("Parque", null, 7000));
+            locacionDao.insert(new Locacion("Manzanares", null, 7000));
+            locacionDao.insert(new Locacion("Ciudadela", null, 7000));
+            locacionDao.insert(new Locacion("La U", null, 7000));
+            locacionDao.insert(new Locacion("Laureles", null, 7000));
+            locacionDao.insert(new Locacion("V. Marbella", null, 7000));
+            locacionDao.insert(new Locacion("V. Cacho", null, 7000));
+            locacionDao.insert(new Locacion("San Jorge", null, 7000));
+            locacionDao.insert(new Locacion("Americas", null, 7000));
+            locacionDao.insert(new Locacion("Santana", null, 7000));
+            locacionDao.insert(new Locacion("Puerto", null, 7000));
+            locacionDao.insert(new Locacion("C. Campestre", null, 7000));
+            locacionDao.insert(new Locacion("Nogal", null, 7000));
+            locacionDao.insert(new Locacion("Paraiso", null, 7000));
+            locacionDao.insert(new Locacion("San Pedro", null, 7000));
+            locacionDao.insert(new Locacion("Boston", null, 7000));
+            locacionDao.insert(new Locacion("Sierra Dentro", null, 7000));
+            locacionDao.insert(new Locacion("Tayrona", null, 7000));
+            locacionDao.insert(new Locacion("P. Tesoro", null, 7000));
+            locacionDao.insert(new Locacion("Ciudad del Sol", null, 7000));
+            locacionDao.insert(new Locacion("E. Tayrona", null, 7000));
+            locacionDao.insert(new Locacion("C. Sierra Mar", null, 7000));
+            locacionDao.insert(new Locacion("V. Bella", null, 7000));
+            locacionDao.insert(new Locacion("Taminaka", null, 7000));
+            locacionDao.insert(new Locacion("Mamatoco", null, 7000));
+            locacionDao.insert(new Locacion("Divino Niño", null, 7000));
+            locacionDao.insert(new Locacion("17 de Diciembre", null, 7000));
+            locacionDao.insert(new Locacion("Chimila", null, 7000));
+            locacionDao.insert(new Locacion("Luz del Mundo", null, 7000));
+            //los de 8k
+            locacionDao.insert(new Locacion("T. de Venecia", null, 8000));
+            locacionDao.insert(new Locacion("R. de Curinca", null, 8000));
+            //a los de 12k
+            locacionDao.insert(new Locacion("Cisne", null, 12000));
+            locacionDao.insert(new Locacion("Gaira", null, 12000));
+            locacionDao.insert(new Locacion("yuca", null, 12000));
+            locacionDao.insert(new Locacion("P. de Bolivar", null, 12000));
+            locacionDao.insert(new Locacion("V. Mercedes", null, 12000));
+            locacionDao.insert(new Locacion("Rodadero", null, 12000));
+            // los de 15k
+            locacionDao.insert(new Locacion("Taganga", null, 15000));
+            locacionDao.insert(new Locacion("V. Concha", null, 15000));
+
         }
 
         // Insertar Métodos de Pago

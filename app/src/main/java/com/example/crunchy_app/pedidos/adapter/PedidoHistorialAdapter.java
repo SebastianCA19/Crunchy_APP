@@ -1,5 +1,7 @@
 package com.example.crunchy_app.pedidos.adapter;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +44,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         this.productos = productos;
         this.estados = estados;
         this.db = db;
+
     }
 
     @NonNull
@@ -111,6 +115,25 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
             default:
                 container.setBackgroundColor(Color.WHITE); break;
         }
+        holder.btnCancelar.setOnClickListener(v -> {
+            new AlertDialog.Builder(holder.itemView.getContext())
+                    .setTitle("Cancelar pedido")
+                    .setMessage("¿Estás seguro de que quieres cancelar este pedido?")
+                    .setPositiveButton("Sí", (dialog, which) -> new Thread(() -> {
+                        db.productoDelPedidoDao().eliminarPorPedido(pedido.getIdPedido().toString());
+                        db.pedidoDao().delete(pedido);
+
+                        // Ejecuta en el hilo principal:
+                        holder.itemView.post(() -> {
+                            pedidos.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, pedidos.size());
+                        });
+                    }).start())
+                    .setNegativeButton("No", null)
+                    .show();
+        });
+
 
         // Cambiar estado
         holder.btnCambiarEstado.setOnClickListener(v -> {
@@ -148,7 +171,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
 
     static class PedidoViewHolder extends RecyclerView.ViewHolder {
         TextView txtNombreCliente, txtFecha, txtProductos, txtEstado, txtTotal;
-        Button btnCambiarEstado;
+        Button btnCambiarEstado, btnCancelar;
 
         public PedidoViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -158,6 +181,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
             txtEstado = itemView.findViewById(R.id.txtEstado);
             txtTotal = itemView.findViewById(R.id.txtTotal);
             btnCambiarEstado = itemView.findViewById(R.id.btnCambiarEstado);
+            btnCancelar = itemView.findViewById(R.id.btnCancelar);
         }
     }
 }

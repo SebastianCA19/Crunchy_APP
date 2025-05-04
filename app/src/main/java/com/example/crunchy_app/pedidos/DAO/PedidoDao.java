@@ -2,6 +2,7 @@ package com.example.crunchy_app.pedidos.DAO;
 
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
@@ -37,6 +38,9 @@ public interface PedidoDao {
     @Query("SELECT * FROM pedidos WHERE id_estado_pedido = :estadoId")
     List<Pedido> getPedidosPorEstado(int estadoId);
 
+
+    @Delete
+    void delete(Pedido pedido);
 
     @Update
     int update(Pedido pedido);
