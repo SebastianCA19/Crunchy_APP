@@ -17,8 +17,8 @@ public interface ValorAtributoProductoDao {
     @Query("SELECT * FROM valores_atributo_producto")
     List<ValorAtributoProducto> getValoresAtributoProducto();
 
-    @Query("SELECT * FROM valores_atributo_producto WHERE id_valor_atributo_producto = :id")
-    ValorAtributoProducto getValorAtributoProductoById(int id);
+    @Query("SELECT * FROM valores_atributo_producto WHERE personalizado_id = :id")
+    ValorAtributoProducto getValorAtributoProductoPersonalizado(int id);
 
     @Insert
     void insert(ValorAtributoProducto valorAtributoProducto);

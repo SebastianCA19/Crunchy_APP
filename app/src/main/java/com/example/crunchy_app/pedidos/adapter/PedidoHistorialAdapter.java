@@ -1,6 +1,5 @@
 package com.example.crunchy_app.pedidos.adapter;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +19,9 @@ import com.example.crunchy_app.pedidos.model.EstadoPedido;
 import com.example.crunchy_app.pedidos.model.Pedido;
 import com.example.crunchy_app.pedidos.model.PedidoConEstado;
 import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
+import com.example.crunchy_app.productos.DAO.ValorAtributoProductoDao;
 import com.example.crunchy_app.productos.model.Producto;
+import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +33,8 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
     private final List<Producto> productos;
     private final List<EstadoPedido> estados;
     private final AppDataBase db;
+
+    private final int CANTIDAD_GRAMOS_CHICHARRON = 80;
 
     public PedidoHistorialAdapter(List<PedidoConEstado> pedidos,
                                   List<ProductoDelPedido> productosDelPedido,
@@ -90,8 +92,25 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
                 productosTxt.append(producto.getNombreProducto())
                         .append(" x").append(pdp.getCantidad())
                         .append("\n");
+                if (producto.getIdProducto() == 41) {
+                    final Producto finalProducto = producto;
+                    new Thread(() -> {
+                        ValorAtributoProductoDao valorAtributoProductoDao = db.valorAtributoProductoDao();
+                        String productoIdFormat = String.format("%d%d", finalProducto.getIdProducto(), pedido.getIdPedido());
+                        ValorAtributoProducto atributoProducto = valorAtributoProductoDao.getValorAtributoProductoPersonalizado(Integer.valueOf(productoIdFormat));
+                        if (atributoProducto != null) {
+                            finalProducto.setCantidadChicharron((int) atributoProducto.getValorAtributoProducto());
+                            double subtotal = finalProducto.getCantidadChicharron() * CANTIDAD_GRAMOS_CHICHARRON;
 
-                total += producto.getValorProducto() * pdp.getCantidad();
+                            holder.itemView.post(() -> {
+                                holder.txtTotal.setText("Total: $" + String.format("%,.0f", subtotal));
+                            });
+                        }
+                    }).start();
+                } else {
+                    total += producto.getValorProducto() * pdp.getCantidad();
+                }
+
             }
         }
 

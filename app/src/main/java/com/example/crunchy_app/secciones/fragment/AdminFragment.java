@@ -15,6 +15,7 @@ import com.example.crunchy_app.R;
 import com.example.crunchy_app.pedidos.activity.HistorialPedidosActivity;
 import com.example.crunchy_app.pedidos.model.Pedido;
 import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
+import com.example.crunchy_app.productos.DAO.ValorAtributoProductoDao;
 import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.List;
@@ -68,6 +69,13 @@ public class AdminFragment extends Fragment {
                     if (pdp.getIdPedido().equals(pedido.getIdPedido())) {
                         for (Producto producto : productos) {
                             if (producto.getIdProducto().equals(pdp.getIdProducto())) {
+                                if(producto.getIdProducto() == 41){
+                                    ValorAtributoProductoDao atributoProductoDao = db.valorAtributoProductoDao();
+                                    String productoIdFormat = String.format("%d%d", producto.getIdProducto(), pedido.getIdPedido());
+                                    float chicharron = atributoProductoDao.getValorAtributoProductoPersonalizado(Integer.valueOf(productoIdFormat)).getValorAtributoProducto();
+                                    totalGanancias += chicharron * 80;
+                                    break;
+                                }
                                 totalGanancias += producto.getValorProducto() * pdp.getCantidad();
                                 break;
                             }

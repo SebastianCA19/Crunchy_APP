@@ -6,7 +6,7 @@
     android:padding="8dp"
     android:minHeight="64dp"
     android:gravity="center_vertical"
-    android:background="@color/white">
+    android:background="#FFF9F0">
 
     <TextView
         android:id="@+id/txtNombre"

@@ -34,7 +34,6 @@ public class OtrosFragment extends Fragment implements OnProductsSelectedListene
     private Button btnAddBollo;
 
     private ProductoDao productoDao;
-    private ValorAtributoProductoDao atributoProductoDao;
 
     double gramosNum;
 
@@ -67,7 +66,6 @@ public class OtrosFragment extends Fragment implements OnProductsSelectedListene
 
         AppDataBase db = AppDataBase.getInstance(requireContext());
         productoDao = db.productoDao();
-        atributoProductoDao = db.valorAtributoProductoDao();
 
         btnConvert.setOnClickListener(this::convertValues);
         btnAddChicharron.setOnClickListener(v -> {
@@ -136,7 +134,6 @@ public class OtrosFragment extends Fragment implements OnProductsSelectedListene
                 chicharron.setCantidadChicharron((int) gramosNum);
 
                 Log.d("Chicharron", "Datos: "+ chicharron.getValorProducto() + " " + chicharron.getCantidadChicharron());
-
                 listener.sendToCart(chicharron);
             }).start();
             return 1;
