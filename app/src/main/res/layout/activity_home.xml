@@ -27,5 +27,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:menu="@menu/bottom_menu" />
+        app:menu="@menu/bottom_menu"
+        app:itemTextColor="#D84315"
+        app:itemIconTint="#D84315"
+        app:itemIconSize="30dp"
+        app:itemTextAppearanceInactive="@color/white"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

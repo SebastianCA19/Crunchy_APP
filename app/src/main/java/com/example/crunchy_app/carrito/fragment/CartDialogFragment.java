@@ -37,7 +37,10 @@ import com.example.crunchy_app.pagos.model.MetodoPago;
 import com.example.crunchy_app.pedidos.model.Locacion;
 import com.example.crunchy_app.pedidos.model.Pedido;
 import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
+import com.example.crunchy_app.productos.DAO.AtributoProductoDao;
+import com.example.crunchy_app.productos.DAO.ValorAtributoProductoDao;
 import com.example.crunchy_app.productos.model.Producto;
+import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -194,6 +197,12 @@ public class CartDialogFragment extends DialogFragment {
                                     producto.getIdProducto(),
                                     cantidad
                             );
+
+                            if(producto.getIdProducto() == 41){
+                                ValorAtributoProductoDao valorAtributoProductoDao = db.valorAtributoProductoDao();
+                                String productoIdFormat = String.format("%d%d", producto.getIdProducto(), pedidoId);
+                                valorAtributoProductoDao.insert(new ValorAtributoProducto(41, 2, producto.getCantidadChicharron(), Integer.valueOf(productoIdFormat)));
+                            }
 
                             db.productoDelPedidoDao().insert(productoDelPedido);
                         }

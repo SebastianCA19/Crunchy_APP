@@ -42,6 +42,10 @@ public class ValorAtributoProducto {
     @ColumnInfo(name= "valor_atributo_producto")
     @NonNull
     private float valorAtributoProducto;
+
+    @ColumnInfo(name = "personalizado_id")
+    private Integer personalizadoId;
+
     public ValorAtributoProducto() {
     }
 
@@ -49,6 +53,13 @@ public class ValorAtributoProducto {
         this.valorAtributoProducto = valorAtributoProducto;
         this.idAtributoProducto = idAtributoProducto;
         this.idProducto = idProducto;
+    }
+
+    public ValorAtributoProducto(Integer idProducto, Integer idAtributoProducto,float valorAtributoProducto, Integer personalizadoId) {
+        this.valorAtributoProducto = valorAtributoProducto;
+        this.idAtributoProducto = idAtributoProducto;
+        this.idProducto = idProducto;
+        this.personalizadoId = personalizadoId;
     }
 
     public Integer getIdValorAtributoProducto() {
@@ -79,9 +90,15 @@ public class ValorAtributoProducto {
         this.idValorAtributoProducto = idValorAtributoProducto;
     }
 
-
-
     public void setIdProducto(Integer idProducto) {
         this.idProducto = idProducto;
+    }
+
+    public Integer getPersonalizadoId() {
+        return personalizadoId;
+    }
+
+    public void setPersonalizadoId(Integer personalizadoId) {
+        this.personalizadoId = personalizadoId;
     }
 }
