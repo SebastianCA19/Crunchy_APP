@@ -27,6 +27,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="01/05/2025" />
+        <TextView
+            android:id="@+id/txtHora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hora: 2:00 PM"
+            android:textColor="#8D6E63"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
 
         <TextView
             android:id="@+id/txtProductos"

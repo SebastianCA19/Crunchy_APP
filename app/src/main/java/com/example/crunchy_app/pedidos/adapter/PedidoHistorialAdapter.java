@@ -2,6 +2,7 @@ package com.example.crunchy_app.pedidos.adapter;
 
 import android.app.AlertDialog;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.example.crunchy_app.productos.DAO.ValorAtributoProductoDao;
 import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +78,14 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
 
 
         holder.txtFecha.setText(pedido.getFecha().toString());
+
+        DateTimeFormatter formatter = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            formatter = DateTimeFormatter.ofPattern("hh:mm a");
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            holder.txtHora.setText("Hora: " + pedido.getHora().format(formatter));
+        }
 
 
         List<ProductoDelPedido> productosDeEstePedido = new ArrayList<>();
@@ -226,7 +236,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
     }
 
     static class PedidoViewHolder extends RecyclerView.ViewHolder {
-        TextView txtNombreCliente, txtFecha, txtProductos, txtEstado, txtTotal,txtValorDomicilio, txtTotalFinal;
+        TextView txtNombreCliente, txtFecha, txtHora,txtProductos, txtEstado, txtTotal,txtValorDomicilio, txtTotalFinal;
         Button btnCambiarEstado, btnCancelar;
 
 
@@ -243,6 +253,8 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
             btnCancelar = itemView.findViewById(R.id.btnCancelar);
             txtValorDomicilio = itemView.findViewById(R.id.txtValorDomicilio);
             txtTotalFinal = itemView.findViewById(R.id.txtTotalFinal);
+            txtHora = itemView.findViewById(R.id.txtHora);
+
         }
     }
 }
