@@ -2,6 +2,7 @@ package com.example.crunchy_app.pedidos.adapter;
 
 import android.app.AlertDialog;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.crunchy_app.DBconnection.AppDataBase;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.pedidos.model.EstadoPedido;
+import com.example.crunchy_app.pedidos.model.Locacion;
 import com.example.crunchy_app.pedidos.model.Pedido;
 import com.example.crunchy_app.pedidos.model.PedidoConEstado;
 import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
@@ -23,6 +25,7 @@ import com.example.crunchy_app.productos.DAO.ValorAtributoProductoDao;
 import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +35,9 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
     private final List<ProductoDelPedido> productosDelPedido;
     private final List<Producto> productos;
     private final List<EstadoPedido> estados;
+
+    private final List<Locacion> locaciones;
+
     private final AppDataBase db;
 
     private final int CANTIDAD_GRAMOS_CHICHARRON = 80;
@@ -40,11 +46,13 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
                                   List<ProductoDelPedido> productosDelPedido,
                                   List<Producto> productos,
                                   List<EstadoPedido> estados,
+                                  List<Locacion> locaciones,
                                   AppDataBase db) {
         this.pedidos = pedidos;
         this.productosDelPedido = productosDelPedido;
         this.productos = productos;
         this.estados = estados;
+        this.locaciones = locaciones;
         this.db = db;
 
     }
@@ -63,11 +71,21 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         Pedido pedido = pedidoConEstado.pedido;
 
 
+
+
         String nombreCompleto = pedido.getNombreCliente() + " " + pedido.getApellidoCliente();
         holder.txtNombreCliente.setText(nombreCompleto);
 
 
         holder.txtFecha.setText(pedido.getFecha().toString());
+
+        DateTimeFormatter formatter = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            formatter = DateTimeFormatter.ofPattern("hh:mm a");
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            holder.txtHora.setText("Hora: " + pedido.getHora().format(formatter));
+        }
 
 
         List<ProductoDelPedido> productosDeEstePedido = new ArrayList<>();
@@ -115,7 +133,36 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         }
 
         holder.txtProductos.setText(productosTxt.toString().trim()); // trim para evitar \n al final
-        holder.txtTotal.setText("Total: $" + String.format("%,.0f", total));
+        Locacion locacion = null;
+        for (Locacion l : locaciones) {
+            if (l.getIdLocacion().equals(pedido.getIdLocacion())) {
+                locacion = l;
+                break;
+            }
+        }
+        double totalProductos = 0;
+        for (ProductoDelPedido pdp : productosDeEstePedido) {
+            Producto producto = null;
+            for (Producto p : productos) {
+                if (p.getIdProducto().equals(pdp.getIdProducto())) {
+                    producto = p;
+                    break;
+                }
+            }
+            if (producto != null) {
+                totalProductos += producto.getValorProducto() * pdp.getCantidad();
+            }
+        }
+
+
+        double valorDomicilio = locacion != null ? locacion.getValorDomicilio() : 0;
+        double totalFinal = totalProductos + valorDomicilio;
+
+        holder.txtTotal.setText("Total productos: $" + String.format("%,.0f", totalProductos));
+        holder.txtValorDomicilio.setText("Domicilio: $" + String.format("%,.0f", valorDomicilio));
+        holder.txtTotalFinal.setText("Total: $" + String.format("%,.0f", totalFinal));
+
+
 
         // Estado actual
         String nombreEstado = pedidoConEstado.estado.getNombreEstadoPedido();
@@ -189,8 +236,11 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
     }
 
     static class PedidoViewHolder extends RecyclerView.ViewHolder {
-        TextView txtNombreCliente, txtFecha, txtProductos, txtEstado, txtTotal;
+        TextView txtNombreCliente, txtFecha, txtHora,txtProductos, txtEstado, txtTotal,txtValorDomicilio, txtTotalFinal;
         Button btnCambiarEstado, btnCancelar;
+
+
+
 
         public PedidoViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -201,6 +251,10 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
             txtTotal = itemView.findViewById(R.id.txtTotal);
             btnCambiarEstado = itemView.findViewById(R.id.btnCambiarEstado);
             btnCancelar = itemView.findViewById(R.id.btnCancelar);
+            txtValorDomicilio = itemView.findViewById(R.id.txtValorDomicilio);
+            txtTotalFinal = itemView.findViewById(R.id.txtTotalFinal);
+            txtHora = itemView.findViewById(R.id.txtHora);
+
         }
     }
 }

@@ -51,6 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class CartDialogFragment extends DialogFragment {
 
@@ -252,10 +253,9 @@ public class CartDialogFragment extends DialogFragment {
                 listLocations.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        locacionSeleccionada = locations.get(position);
 
-                        // Guardar en SharedPreferences
-                        getActivity().getSharedPreferences("cart_prefs", 0)
+                        locacionSeleccionada = (Locacion) parent.getItemAtPosition(position);
+                        requireActivity().getSharedPreferences("cart_prefs", 0)
                                 .edit()
                                 .putInt("locacion_id", locacionSeleccionada.getIdLocacion())
                                 .apply();
@@ -264,7 +264,6 @@ public class CartDialogFragment extends DialogFragment {
                         updateTotal();
                         dialog.dismiss();
                     }
-
                 });
             }
         });
