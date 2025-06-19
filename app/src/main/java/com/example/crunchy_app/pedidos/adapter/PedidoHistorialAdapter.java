@@ -1,6 +1,8 @@
 package com.example.crunchy_app.pedidos.adapter;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -10,11 +12,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.DBconnection.AppDataBase;
+import com.example.crunchy_app.MainActivity;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.pedidos.model.EstadoPedido;
 import com.example.crunchy_app.pedidos.model.Locacion;
@@ -27,7 +31,9 @@ import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorialAdapter.PedidoViewHolder> {
 
@@ -199,9 +205,6 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
                     .setNegativeButton("No", null)
                     .show();
         });
-
-
-        // Cambiar estado
         holder.btnCambiarEstado.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(holder.itemView.getContext(), holder.btnCambiarEstado);
             for (EstadoPedido estado : estados) {
@@ -209,25 +212,90 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
             }
 
             popup.setOnMenuItemClickListener(item -> {
-                for (EstadoPedido estado : estados) {
-                    if (estado.getNombreEstadoPedido().equals(item.getTitle())) {
-                        pedido.setIdEstadoPedido(estado.getIdEstadoPedido());
-                        pedidoConEstado.estado = estado;
+                new Thread(() -> {
+                    try {
+                        int estadoOriginalId = pedido.getIdEstadoPedido();
+                        int nuevoEstadoId = -1;
+                        EstadoPedido nuevoEstadoSeleccionado = null;
 
-                        // Actualizar en la DB
-                        new Thread(() -> db.pedidoDao().update(pedido)).start();
+                        for (EstadoPedido estado : estados) {
+                            if (estado.getNombreEstadoPedido().contentEquals(Objects.requireNonNull(item.getTitle()))) {
+                                nuevoEstadoId = estado.getIdEstadoPedido();
+                                nuevoEstadoSeleccionado = estado;
+                                break;
+                            }
+                        }
 
-                        // Forzar actualización visual del item
-                        int currentPosition = holder.getAdapterPosition();
-                        notifyItemChanged(currentPosition);
-                        break;
+                        if (nuevoEstadoId == -1) return;
+
+
+
+                        List<Integer> estadosActivos = Arrays.asList(2, 3, 4); // IDs de estados que consumen stock
+
+                        boolean eraActivo = estadosActivos.contains(estadoOriginalId);
+                        boolean seraActivo = estadosActivos.contains(nuevoEstadoId);
+
+                        if (!eraActivo && seraActivo) {
+                            int chorizosNecesarios = 0;
+                            float chicharronNecesario = 0f;
+
+
+                            for (ProductoDelPedido pdp : productosDelPedido) {
+                                if (pdp.getIdPedido().equals(pedido.getIdPedido())) {
+                                    if (pdp.getIdProducto() == 40) {
+                                        chorizosNecesarios += pdp.getCantidad();
+                                    }
+
+                                }
+                            }
+
+
+                            // Obtener stock disponible total
+                            SharedPreferences prefs = holder.itemView.getContext().getSharedPreferences("stock_prefs", Context.MODE_PRIVATE);
+                            int chorizosDisponibles = prefs.getInt("chorizos", 0);
+                            int chicharronDisponible = prefs.getInt("chicharron", 0);
+
+
+
+
+                            int chorizosVendidos = db.pedidoDao().getTotalChorizosVendidos();
+                            float chicharronVendido = db.pedidoDao().getTotalChicharronVendido();
+
+
+                            if (chorizosVendidos + chorizosNecesarios >= chorizosDisponibles ||
+                                    chicharronVendido + chicharronNecesario >= chicharronDisponible) {
+
+                                holder.itemView.post(() ->
+                                        Toast.makeText(holder.itemView.getContext(), "No hay suficiente stock para activar este pedido", Toast.LENGTH_LONG).show()
+                                );
+                                return;
+                            }
+                        }
+
+                        pedido.setIdEstadoPedido(nuevoEstadoId);
+                        pedidoConEstado.estado = nuevoEstadoSeleccionado;
+                        db.pedidoDao().update(pedido);
+
+                        holder.itemView.post(() -> {
+                            notifyItemChanged(holder.getAdapterPosition());
+
+                        });
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        holder.itemView.post(() ->
+                                Toast.makeText(holder.itemView.getContext(), "Error al cambiar el estado", Toast.LENGTH_SHORT).show()
+                        );
                     }
-                }
+                }).start();
+
                 return true;
             });
 
             popup.show();
         });
+
     }
 
     @Override
