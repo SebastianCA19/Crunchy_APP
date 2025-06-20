@@ -79,7 +79,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
 
 
 
-        String nombreCompleto = pedido.getNombreCliente() + " " + pedido.getApellidoCliente();
+        String nombreCompleto = pedido.getNombreCliente();
         holder.txtNombreCliente.setText(nombreCompleto);
 
 
@@ -262,7 +262,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
                             float chicharronVendido = db.pedidoDao().getTotalChicharronVendido();
 
 
-                            if (chorizosVendidos + chorizosNecesarios >= chorizosDisponibles ||
+                            if (chorizosVendidos + chorizosNecesarios >= chorizosDisponibles &&
                                     chicharronVendido + chicharronNecesario >= chicharronDisponible) {
 
                                 holder.itemView.post(() ->

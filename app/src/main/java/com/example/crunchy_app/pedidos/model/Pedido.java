@@ -45,8 +45,11 @@ public class Pedido {
     @NonNull
     private String nombreCliente;
 
-    @ColumnInfo(name = "apellido_cliente")
-    private String apellidoCliente;
+    @ColumnInfo(name = "direccion_cliente")
+    private String direccionCliente;
+
+    @ColumnInfo(name = "nombre-domiciliario")
+    private String nombreDomiciliario;
 
     @ColumnInfo(name = "id_metodo_pago")
     @NonNull
@@ -71,9 +74,10 @@ public class Pedido {
     public Pedido() {
     }
 
-    public Pedido(@NonNull String nombreCliente, String apellidoCliente, @NonNull Integer idMetodoPago, @NonNull Integer idLocacion, @NonNull Integer idEstadoPedido, @NonNull LocalDate fecha, @NonNull LocalTime hora) {
+    public Pedido(@NonNull String nombreCliente, String direccionCliente, String nombreDomiciliario, @NonNull Integer idMetodoPago, @NonNull Integer idLocacion, @NonNull Integer idEstadoPedido, @NonNull LocalDate fecha, @NonNull LocalTime hora) {
         this.nombreCliente = nombreCliente;
-        this.apellidoCliente = apellidoCliente;
+        this.direccionCliente = direccionCliente;
+        this.nombreDomiciliario = nombreDomiciliario;
         this.idMetodoPago = idMetodoPago;
         this.idLocacion = idLocacion;
         this.idEstadoPedido = idEstadoPedido;
@@ -98,12 +102,20 @@ public class Pedido {
         this.nombreCliente = nombreCliente;
     }
 
-    public String getApellidoCliente() {
-        return apellidoCliente;
+    public String getDireccionCliente() {
+        return direccionCliente;
     }
 
-    public void setApellidoCliente(String apellidoCliente) {
-        this.apellidoCliente = apellidoCliente;
+    public void setDireccionCliente(String direccionCliente) {
+        this.direccionCliente = direccionCliente;
+    }
+
+    public String getNombreDomiciliario() {
+        return nombreDomiciliario;
+    }
+
+    public void setNombreDomiciliario(String nombreDomiciliario) {
+        this.nombreDomiciliario = nombreDomiciliario;
     }
 
     @NonNull

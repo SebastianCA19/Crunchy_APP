@@ -1,5 +1,6 @@
 package com.example.crunchy_app.carrito.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -27,23 +28,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import com.example.crunchy_app.DBconnection.AppDataBase;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.carrito.adapter.CartAdapter;
-import com.example.crunchy_app.pagos.DAO.MetodoPagoDao;
-import com.example.crunchy_app.pagos.model.MetodoPago;
 import com.example.crunchy_app.pedidos.model.Locacion;
 import com.example.crunchy_app.pedidos.model.Pedido;
 import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
-import com.example.crunchy_app.productos.DAO.AtributoProductoDao;
 import com.example.crunchy_app.productos.DAO.ValorAtributoProductoDao;
 import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -51,7 +46,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 public class CartDialogFragment extends DialogFragment {
 
@@ -80,15 +74,15 @@ public class CartDialogFragment extends DialogFragment {
     private RadioGroup radioGroup;
 
     private AppDataBase db;
-
-    private String nameUser;
-
-    private String lastNameUser;
-
     private int metodoPagoId;
 
+    private String nameUser;
+    private String directionUser;
+
+    private String domName;
     private TextView txtNombre;
-    private TextView txtApellido;
+    private TextView txtDireccion;
+    private TextView txtDomName;
 
     private final NumberFormat numberFormat;
 
@@ -112,7 +106,7 @@ public class CartDialogFragment extends DialogFragment {
             window.setGravity(Gravity.END);
         }
     }
-
+    
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -133,7 +127,8 @@ public class CartDialogFragment extends DialogFragment {
         txtTotal = view.findViewById(R.id.txtTotal);
         radioGroup = view.findViewById(R.id.radioGroup);
         txtNombre = view.findViewById(R.id.inNombre);
-        txtApellido = view.findViewById(R.id.inApellido);
+        txtDireccion = view.findViewById(R.id.inDireccion);
+        txtDomName = view.findViewById(R.id.inDomiciliario);
 
         new Thread(() -> {
             db = AppDataBase.getInstance(getActivity().getApplicationContext());
@@ -175,7 +170,8 @@ public class CartDialogFragment extends DialogFragment {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             pedido = new Pedido(
                                     nameUser,
-                                    lastNameUser,
+                                    directionUser,
+                                    domName,
                                     metodoPagoId,
                                     locacionSeleccionada.getIdLocacion(),
                                     1,         // idEstadoPedido (ej: 1 = Pendiente)
@@ -305,7 +301,8 @@ public class CartDialogFragment extends DialogFragment {
     private void getFields(){
         //Nombre y apellido del usuario
         nameUser = txtNombre.getText().toString();
-        lastNameUser = txtApellido.getText().toString();
+        directionUser = txtDireccion.getText().toString();
+        domName = txtDomName.getText().toString();
 
         //Obtener el metodo de pago
         int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
