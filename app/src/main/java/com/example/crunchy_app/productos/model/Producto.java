@@ -36,6 +36,10 @@ public class Producto implements Serializable {
     @NonNull
     private float valorProducto;
 
+    @ColumnInfo(name = "activo")
+    @NonNull
+    private boolean activo;
+
     @Ignore
     private int cantidadChicharron;
 
@@ -63,6 +67,15 @@ public class Producto implements Serializable {
         this.nombreProducto = nombreProducto;
         this.idTipoProducto = idTipoProducto;
         this.valorProducto = valorProducto;
+        this.activo = true;
+    }
+
+    public void setActivo(boolean activo){
+        this.activo = activo;
+    }
+
+    public boolean isActivo(){
+        return activo;
     }
 
     public void setInfoString(String infoString){
