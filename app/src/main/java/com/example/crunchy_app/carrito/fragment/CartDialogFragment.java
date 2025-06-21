@@ -2,6 +2,8 @@ package com.example.crunchy_app.carrito.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -37,7 +39,7 @@ import com.example.crunchy_app.pedidos.model.Pedido;
 import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
 import com.example.crunchy_app.productos.DAO.ValorAtributoProductoDao;
 import com.example.crunchy_app.productos.model.Producto;
-import com.example.crunchy_app.productos.model.ValorAtributoProducto;
+import com.example.crunchy_app.productos.model.ValorAtributoProducto;;
 
 import java.text.NumberFormat;
 import java.time.LocalDate;
@@ -46,6 +48,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import androidx.appcompat.app.AlertDialog;
 
 public class CartDialogFragment extends DialogFragment {
 
@@ -165,6 +169,54 @@ public class CartDialogFragment extends DialogFragment {
                 @Override
                 public void run() {
                     try {
+                        SharedPreferences prefs = requireContext().getSharedPreferences("stock_prefs", Context.MODE_PRIVATE);
+                        int cantidadChicharron = prefs.getInt("chicharron", 0);
+                        int cantidadChorizos = prefs.getInt("chorizos", 0);
+
+                        int chorizosVendido = 0;
+                        float chicharronVendido = 0;
+                        int pass = 0;
+                        SharedPreferences productosVendidos = requireContext().getSharedPreferences("productos_vendidos", Context.MODE_PRIVATE);
+                        if(productosVendidos.contains("chicharron_vendido") && productosVendidos.contains("chorizo_vendido")){
+                            chorizosVendido = productosVendidos.getInt("chorizo_vendido", 0);
+                            chicharronVendido = productosVendidos.getFloat("chicharron_vendido", 0);
+                            pass = 1;
+                        }
+
+                        //Verificar si la cantidad de chorizos y chicharron del pedido es permitida
+                        if(pass == 1){
+                            ValorAtributoProductoDao valorAtributoProductoDao = db.valorAtributoProductoDao();
+                            int cantidadChorizoPedido = 0;
+                            float cantidadChicharronPedido = 0;
+                            for(Map.Entry<Producto, Integer> entry : carrito.entrySet()){
+                                Producto producto = entry.getKey();
+                                int cantidad = entry.getValue();
+
+                                if(producto.getIdProducto() == 41){
+                                    cantidadChicharronPedido += producto.getCantidadChicharron() * cantidad;;
+                                }else if(producto.getIdProducto() == 42){
+                                    cantidadChorizoPedido += cantidad;
+                                }else{
+                                    int chorizoProducto = valorAtributoProductoDao.getChorizoValue(producto.getIdProducto());
+                                    float chicharronProducto = valorAtributoProductoDao.getChicharronValue(producto.getIdProducto());
+
+                                    cantidadChorizoPedido += chorizoProducto * cantidad;
+                                    cantidadChicharronPedido += chicharronProducto * cantidad;
+                                }
+                            }
+
+                            if((cantidadChorizoPedido + chorizosVendido) > cantidadChorizos || (cantidadChicharronPedido + chicharronVendido) > cantidadChicharron){
+                                requireActivity().runOnUiThread(() -> {
+                                    new AlertDialog.Builder(requireContext())
+                                            .setTitle("Stock insuficiente")
+                                            .setMessage("No hay suficientes chorizos o chicharrones para completar este pedido.")
+                                            .setPositiveButton("Entendido", null)
+                                            .show();
+                                });
+                                return;
+                            }
+                        }
+
                         // Crear nuevo pedido
                         Pedido pedido = null;
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

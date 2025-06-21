@@ -2,8 +2,6 @@ package com.example.crunchy_app.secciones.fragment;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -15,8 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
+
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.carrito.fragment.CartDialogFragment;
 import com.example.crunchy_app.productos.OnProductsSelectedListener;
@@ -24,13 +21,9 @@ import com.example.crunchy_app.productos.bebidas.fragment.BebidasFragment;
 import com.example.crunchy_app.productos.comidas.fragment.ComidasFragment;
 import com.example.crunchy_app.productos.model.Producto;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,7 +50,6 @@ public class OrdersFragment extends Fragment implements OnProductsSelectedListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
-
 
         // Inicialización de botones
         Button btComidas = view.findViewById(R.id.btComidas);

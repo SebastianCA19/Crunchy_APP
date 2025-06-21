@@ -59,6 +59,14 @@ public class AdminFragment extends Fragment {
         cantidadChicharron = prefs.getInt("chicharron", 0);
         cantidadChorizos = prefs.getInt("chorizos", 0);
 
+        SharedPreferences productosVendidos = requireContext().getSharedPreferences("productos_vendidos", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = productosVendidos.edit();
+        if(!productosVendidos.contains("chicharron_vendido") && !productosVendidos.contains("chorizo_vendido")){
+            editor.putFloat("chicharron_vendido", 0);
+            editor.putInt("chorizo_vendido", 0);
+            editor.apply();
+        }
+
         actualizarCantidadChicharron(view);
         actualizarCantidadChorizos(view);
         Button btnHistorial = view.findViewById(R.id.btnHistorial);
@@ -72,12 +80,31 @@ public class AdminFragment extends Fragment {
         btnGuardarChicharron.setOnClickListener(v -> {
             EditText inputMaxChicharron = view.findViewById(R.id.inputMaxChicharron);
             String valorInput = inputMaxChicharron.getText().toString().trim();
-
             if (!valorInput.isEmpty() && Integer.parseInt(valorInput) > 0) {
                 cantidadChicharron += Integer.parseInt(valorInput);
                 actualizarCantidadChicharron(view);
                 inputMaxChicharron.setText("");
             } else {
+                inputMaxChicharron.setError("Este campo no puede estar vacío");
+            }
+            prefs.edit().putInt("chicharron", cantidadChicharron).apply();
+        });
+
+        Button btnRestarChicharron = view.findViewById(R.id.btnRestarChicharron);
+
+        btnRestarChicharron.setOnClickListener(v -> {
+            EditText inputMaxChicharron = view.findViewById(R.id.inputMaxChicharron);
+            String valorInput = inputMaxChicharron.getText().toString().trim();
+            int cantidadInput = Integer.parseInt(valorInput);
+            if (!valorInput.isEmpty() && Integer.parseInt(valorInput) > 0) {
+                if(!(cantidadChicharron - cantidadInput < 0)){
+                    cantidadChicharron -= cantidadInput;
+                }else{
+                    inputMaxChicharron.setError("No se puede restar más de lo que hay en stock");
+                }
+                actualizarCantidadChicharron(view);
+                inputMaxChicharron.setText("");
+            }else{
                 inputMaxChicharron.setError("Este campo no puede estar vacío");
             }
             prefs.edit().putInt("chicharron", cantidadChicharron).apply();
@@ -92,7 +119,6 @@ public class AdminFragment extends Fragment {
                 cantidadChorizos += Integer.parseInt(valorInput);
                 actualizarCantidadChorizos(view);
                 inputMaxChorizos.setText("");
-
             } else {
                 inputMaxChorizos.setError("Este campo no puede estar vacío");
             }
@@ -100,6 +126,24 @@ public class AdminFragment extends Fragment {
 
         });
 
+        Button btnRestarChorizos = view.findViewById(R.id.btnRestarChorizos);
+        btnRestarChorizos.setOnClickListener(v -> {
+            EditText inputMaxChorizos = view.findViewById(R.id.inputMaxChorizos);
+            String valorInput = inputMaxChorizos.getText().toString().trim();
+            int cantidadInput = Integer.parseInt(valorInput);
+            if (!valorInput.isEmpty() && Integer.parseInt(valorInput) > 0) {
+                if(!(cantidadChorizos - cantidadInput < 0)){
+                    cantidadChorizos -= cantidadInput;
+                }else{
+                    inputMaxChorizos.setError("No se puede restar más de lo que hay en stock");
+                }
+                actualizarCantidadChorizos(view);
+                inputMaxChorizos.setText("");
+            } else {
+                inputMaxChorizos.setError("Este campo no puede estar vacío");
+            }
+            prefs.edit().putInt("chorizos", cantidadChorizos).apply();
+        });
 
         return view;
     }
@@ -108,14 +152,20 @@ public class AdminFragment extends Fragment {
         TextView txtChorizos = view.findViewById(R.id.chorizosLabel);
         txtChorizos.setText("Chorizos: " + cantidadChorizosVendidos + " / " + cantidadChorizos+" Unidades");
         actualizarProgressBarChorizos(view);
-
-
+        SharedPreferences productosVendidos = requireContext().getSharedPreferences("productos_vendidos", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = productosVendidos.edit();
+        editor.putInt("chorizo_vendido", cantidadChorizosVendidos);
+        editor.apply();
     }
 
     private void actualizarCantidadChicharron(View view) {
         TextView txtChicharron = view.findViewById(R.id.chicharronLabel);
         txtChicharron.setText("Chicharrón: " + cantidadChicharronVendidos + " / " + cantidadChicharron+ " gr");
         actualizarProgressBarChicharron(view);
+        SharedPreferences productosVendidos = requireContext().getSharedPreferences("productos_vendidos", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = productosVendidos.edit();
+        editor.putFloat("chicharron_vendido", cantidadChicharronVendidos);
+        editor.apply();
     }
 
     private void actualizarProgressBarChicharron(View view) {
@@ -123,7 +173,6 @@ public class AdminFragment extends Fragment {
                 (int) ((double) cantidadChicharronVendidos / cantidadChicharron * 100);
         ProgressBar progressBar = view.findViewById(R.id.progressChicharron);
         progressBar.setProgress(progress);
-
     }
 
     private void actualizarProgressBarChorizos(View view) {
@@ -200,7 +249,7 @@ public class AdminFragment extends Fragment {
                                     if (valor != null) {
                                         cantidadChicharronVendidos += valor.getValorAtributoProducto();
                                     }
-                                } else if (producto.getIdProducto() == 40) {
+                                } else if (producto.getIdProducto() == 42) {
                                     cantidadChorizosVendidos += pdp.getCantidad();
                                 } else {
                                     for (ValorAtributoProducto vap : atributoProductoDao.getCantidadChicharron()) {

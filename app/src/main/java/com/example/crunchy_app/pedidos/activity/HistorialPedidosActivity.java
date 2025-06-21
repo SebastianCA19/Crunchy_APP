@@ -16,6 +16,7 @@ import com.example.crunchy_app.pedidos.model.Locacion;
 import com.example.crunchy_app.pedidos.model.PedidoConEstado;
 import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
 import com.example.crunchy_app.productos.model.Producto;
+import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
 import java.util.List;
 import java.util.Objects;
@@ -53,10 +54,11 @@ public class HistorialPedidosActivity extends AppCompatActivity {
             List<ProductoDelPedido> productosPedido = db.productoDelPedidoDao().getAll();
             List<Producto> productos = db.productoDao().getAll();
             List<Locacion> locaciones = db.locacionDao().getAll();
+            List<ValorAtributoProducto> chicharronQuantities = db.valorAtributoProductoDao().getCantidadChicharron();
 
             runOnUiThread(() -> {
                 PedidoHistorialAdapter adapter = new PedidoHistorialAdapter(
-                        pedidos, productosPedido, productos, estados, locaciones ,db
+                        pedidos, productosPedido, productos, estados, locaciones ,db, chicharronQuantities
                 );
                 recyclerView.setAdapter(adapter);
             });

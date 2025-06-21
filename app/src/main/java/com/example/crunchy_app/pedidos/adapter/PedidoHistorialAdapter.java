@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.DBconnection.AppDataBase;
-import com.example.crunchy_app.MainActivity;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.pedidos.model.EstadoPedido;
 import com.example.crunchy_app.pedidos.model.Locacion;
@@ -46,20 +45,29 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
 
     private final AppDataBase db;
 
+    private final Object totalLock = new Object();
+
+    private final Object totalFinalLock = new Object();
+
+    private final Object totalProductosLock = new Object();
+
     private final int CANTIDAD_GRAMOS_CHICHARRON = 80;
+    private  List<ValorAtributoProducto> chicharronQuantities;
+
 
     public PedidoHistorialAdapter(List<PedidoConEstado> pedidos,
                                   List<ProductoDelPedido> productosDelPedido,
                                   List<Producto> productos,
                                   List<EstadoPedido> estados,
                                   List<Locacion> locaciones,
-                                  AppDataBase db) {
+                                  AppDataBase db, List<ValorAtributoProducto> chicharronQuantities) {
         this.pedidos = pedidos;
         this.productosDelPedido = productosDelPedido;
         this.productos = productos;
         this.estados = estados;
         this.locaciones = locaciones;
         this.db = db;
+        this.chicharronQuantities = chicharronQuantities;
 
     }
 
@@ -75,9 +83,6 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
     public void onBindViewHolder(@NonNull PedidoViewHolder holder, int position) {
         PedidoConEstado pedidoConEstado = pedidos.get(position);
         Pedido pedido = pedidoConEstado.pedido;
-
-
-
 
         String nombreCompleto = pedido.getNombreCliente();
         holder.txtNombreCliente.setText(nombreCompleto);
@@ -117,21 +122,15 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
                         .append(" x").append(pdp.getCantidad())
                         .append("\n");
                 if (producto.getIdProducto() == 41) {
-                    final Producto finalProducto = producto;
-                    new Thread(() -> {
-                        ValorAtributoProductoDao valorAtributoProductoDao = db.valorAtributoProductoDao();
-                        String productoIdFormat = String.format("%d%d", finalProducto.getIdProducto(), pedido.getIdPedido());
-                        ValorAtributoProducto atributoProducto = valorAtributoProductoDao.getValorAtributoProductoPersonalizado(Integer.valueOf(productoIdFormat));
-                        if (atributoProducto != null) {
-                            finalProducto.setCantidadChicharron((int) atributoProducto.getValorAtributoProducto());
-                            double subtotal = finalProducto.getCantidadChicharron() * CANTIDAD_GRAMOS_CHICHARRON;
-
-                            holder.itemView.post(() -> {
-                                holder.txtTotal.setText("Total: $" + String.format("%,.0f", subtotal));
-                            });
+                    for (ValorAtributoProducto chicharronQuantity : chicharronQuantities) {
+                        if (chicharronQuantity.getIdProducto().equals(producto.getIdProducto())) {
+                            total += chicharronQuantity.getValorAtributoProducto() * CANTIDAD_GRAMOS_CHICHARRON;
                         }
-                    }).start();
-                } else {
+                    }
+                } else if(producto.getIdProducto() == 42){
+
+                }
+                else {
                     total += producto.getValorProducto() * pdp.getCantidad();
                 }
 
@@ -156,7 +155,15 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
                 }
             }
             if (producto != null) {
-                totalProductos += producto.getValorProducto() * pdp.getCantidad();
+                if (producto.getIdProducto() == 41) {
+                    for (ValorAtributoProducto chicharronQuantity : chicharronQuantities) {
+                        if (chicharronQuantity.getIdProducto().equals(producto.getIdProducto())) {
+                            totalProductos += chicharronQuantity.getValorAtributoProducto() * CANTIDAD_GRAMOS_CHICHARRON;
+                        }
+                    }
+                }else{
+                    totalProductos += producto.getValorProducto() * pdp.getCantidad();
+                }
             }
         }
 
@@ -172,7 +179,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
 
         // Estado actual
         String nombreEstado = pedidoConEstado.estado.getNombreEstadoPedido();
-        holder.txtEstado.setText("Estado: " + nombreEstado);
+        holder.txtEstado.setText("Estado: " + nombreEstado.toUpperCase());
 
         LinearLayout container = holder.itemView.findViewById(R.id.containerPedido);
         switch (nombreEstado.toLowerCase()) {
@@ -192,6 +199,24 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
                     .setTitle("Cancelar pedido")
                     .setMessage("¿Estás seguro de que quieres cancelar este pedido?")
                     .setPositiveButton("Sí", (dialog, which) -> new Thread(() -> {
+                        List<ProductoDelPedido> productos  =db.productoDelPedidoDao().getProductosByPedido(pedido.getIdPedido());
+                        SharedPreferences prefs = holder.itemView.getContext().getSharedPreferences("productos_vendidos", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        double totalAEliminar = 0;
+
+                        for (ProductoDelPedido pdp : productos) {
+                            if(pdp.getIdProducto() == 41){
+                                for (ValorAtributoProducto chicharronQuantity : chicharronQuantities) {
+                                    if (chicharronQuantity.getIdProducto().equals(pdp.getIdProducto())) {
+                                        totalAEliminar += chicharronQuantity.getValorAtributoProducto() * CANTIDAD_GRAMOS_CHICHARRON;
+                                    }
+                                }
+                            }else{
+                                totalAEliminar += pdp.getCantidad() * db.productoDao().getProductoById(pdp.getIdProducto()).getValorProducto();
+                            }
+                        }
+
+
                         db.productoDelPedidoDao().eliminarPorPedido(pedido.getIdPedido().toString());
                         db.pedidoDao().delete(pedido);
 
@@ -228,9 +253,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
 
                         if (nuevoEstadoId == -1) return;
 
-
-
-                        List<Integer> estadosActivos = Arrays.asList(2, 3, 4); // IDs de estados que consumen stock
+                        List<Integer> estadosActivos = Arrays.asList(1, 2, 3, 4); // IDs de estados que consumen stock
 
                         boolean eraActivo = estadosActivos.contains(estadoOriginalId);
                         boolean seraActivo = estadosActivos.contains(nuevoEstadoId);
@@ -255,12 +278,8 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
                             int chorizosDisponibles = prefs.getInt("chorizos", 0);
                             int chicharronDisponible = prefs.getInt("chicharron", 0);
 
-
-
-
                             int chorizosVendidos = db.pedidoDao().getTotalChorizosVendidos();
                             float chicharronVendido = db.pedidoDao().getTotalChicharronVendido();
-
 
                             if (chorizosVendidos + chorizosNecesarios >= chorizosDisponibles &&
                                     chicharronVendido + chicharronNecesario >= chicharronDisponible) {
@@ -326,4 +345,3 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         }
     }
 }
-

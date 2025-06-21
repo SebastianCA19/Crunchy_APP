@@ -28,7 +28,7 @@ public interface ValorAtributoProductoDao {
     List<ValorAtributoProducto> getCantidadChicharron();
 
     //Get chorizo values per food
-    @Query("SELECT * FROM valores_atributo_producto WHERE id_atributo_producto = 1 ORDER BY id_producto")
+    @Query("SELECT * FROM valores_atributo_producto WHERE id_atributo_producto = 1  ORDER BY id_producto")
     List<ValorAtributoProducto> getCantidadChorizo();
 
     //Get bollo values per food
@@ -39,5 +39,11 @@ public interface ValorAtributoProductoDao {
     @Query("SELECT * FROM valores_atributo_producto WHERE id_atributo_producto = 4 ORDER BY id_producto")
     List<ValorAtributoProducto> getVolumenMl();
 
+    //Get chorizo value of a product
+    @Query("SELECT valor_atributo_producto FROM valores_atributo_producto WHERE id_producto = :id AND id_atributo_producto = 1")
+    int getChorizoValue(int id);
 
+    //Get chicharron value of a product
+    @Query("SELECT valor_atributo_producto FROM valores_atributo_producto WHERE id_producto = :id AND id_atributo_producto = 2")
+    float getChicharronValue(int id);
 }

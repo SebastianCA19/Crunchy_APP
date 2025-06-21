@@ -96,6 +96,16 @@
                 android:textColor="#FFFFFF"
                 android:backgroundTint="#D84315"
                 android:paddingHorizontal="12dp"/>
+
+            <Button
+                android:id="@+id/btnRestarChicharron"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Restar"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#D84315"
+                android:paddingHorizontal="12dp"
+                android:layout_marginStart="8dp"/>
         </LinearLayout>
 
 
@@ -157,6 +167,16 @@
                 android:paddingHorizontal="12dp"
                 android:text="Añadir"
                 android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/btnRestarChorizos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Restar"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#D84315"
+                android:paddingHorizontal="12dp"
+                android:layout_marginStart="8dp"/>
         </LinearLayout>
 
 
