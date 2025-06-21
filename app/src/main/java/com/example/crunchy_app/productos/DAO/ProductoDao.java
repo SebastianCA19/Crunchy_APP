@@ -2,6 +2,7 @@ package com.example.crunchy_app.productos.DAO;
 
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -29,7 +30,7 @@ public interface ProductoDao {
     @Query("UPDATE productos SET activo = 0 WHERE id_producto = :idProducto")
     public int deleteProductoById(Integer idProducto);
 
-    @Query("SELECT * FROM productos WHERE id_tipo_producto = 1 OR id_tipo_producto = 2 AND activo = 1")
+    @Query("SELECT * FROM productos WHERE id_tipo_producto IN (1,2) AND activo = 1")
     public List<Producto> getComidas();
 
     @Query("SELECT * FROM productos WHERE id_tipo_producto IN (3, 4, 5) AND activo = 1")
@@ -43,5 +44,8 @@ public interface ProductoDao {
 
     @Update
     public void update(Producto producto);
+
+
+
 
 }

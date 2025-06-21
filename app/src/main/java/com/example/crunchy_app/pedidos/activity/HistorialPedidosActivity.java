@@ -31,8 +31,10 @@ public class HistorialPedidosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historial_pedidos);
 
+
         recyclerView = findViewById(R.id.recyclerHistorial);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         db = AppDataBase.getInstance(getApplicationContext());
 
