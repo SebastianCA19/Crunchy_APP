@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutGestionProductos"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#FFF9F0"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gestión de productos"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#5D4037"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Fila con 3 botones -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/btnProdComidas"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Comidas"
+            android:backgroundTint="#D84315"
+            android:layout_marginEnd="4dp" />
+
+        <Button
+            android:id="@+id/btnProdBebidas"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Bebidas"
+            android:backgroundTint="#D84315"
+            android:layout_marginHorizontal="4dp" />
+
+        <Button
+            android:id="@+id/btnLocaciones"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#D84315"
+            android:text="Locaciones"
+            android:layout_marginStart="4dp" />
+    </LinearLayout>
+
+    <!-- RecyclerView para mostrar resultados -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerGestion"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:scrollbars="vertical" />
+
+    <!-- fila con 3 Botóne para agregar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/btnAgregarComida"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Agregar comida"
+            android:backgroundTint="#D84315"
+            android:layout_marginEnd="4dp" />
+
+        <Button
+            android:id="@+id/btnAgregarBebida"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Agregar bebida"
+            android:backgroundTint="#D84315"
+            android:layout_marginHorizontal="4dp" />
+
+        <Button
+            android:id="@+id/btnAgregarLocacion"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#D84315"
+            android:text="Agregar locación"
+            android:layout_marginStart="4dp" />
+    </LinearLayout>
+
+
+
+</LinearLayout>

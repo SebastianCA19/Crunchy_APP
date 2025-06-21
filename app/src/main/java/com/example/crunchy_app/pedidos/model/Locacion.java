@@ -23,6 +23,9 @@ public class Locacion {
     @ColumnInfo(name = "valor_domicilio")
     private float valorDomicilio;
 
+    @ColumnInfo(name = "activo")
+    private boolean activo;
+
     public Locacion(){
 
     }
@@ -31,6 +34,15 @@ public class Locacion {
         this.nombreLocacion = nombreLocacion;
         this.idPadreLocacion = idPadreLocacion;
         this.valorDomicilio = valorDomicilio;
+        this.activo = true;
+    }
+
+    public void setActivo(boolean activo){
+        this.activo = activo;
+    }
+
+    public boolean isActivo(){
+        return activo;
     }
 
     public Integer getIdLocacion() {

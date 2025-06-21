@@ -20,6 +20,7 @@ import com.example.crunchy_app.pedidos.activity.HistorialPedidosActivity;
 import com.example.crunchy_app.pedidos.model.Pedido;
 import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
 import com.example.crunchy_app.productos.DAO.ValorAtributoProductoDao;
+import com.example.crunchy_app.productos.activity.GestionProductosActivity;
 import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
@@ -74,6 +75,13 @@ public class AdminFragment extends Fragment {
             Intent intent = new Intent(getContext(), HistorialPedidosActivity.class);
             startActivity(intent);
         });
+
+        Button btnGestionProductos = view.findViewById(R.id.btnGestionProductos);
+        btnGestionProductos.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), GestionProductosActivity.class);
+            startActivity(intent);
+        });
+
 
         Button btnGuardarChicharron = view.findViewById(R.id.btnGuardarChicharron);
 

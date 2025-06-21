@@ -79,14 +79,14 @@
                 android:id="@+id/inputMaxChicharron"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
+                android:backgroundTint="#D84315"
                 android:hint="Añadir cantidad de chicharrón (gr)"
                 android:inputType="number"
-                android:backgroundTint="#D84315"
-                android:textColorHint="#D84315"
-                android:textColor="#5D4037"
                 android:padding="10dp"
-                android:layout_marginEnd="8dp"/>
+                android:textColor="#5D4037"
+                android:textColorHint="#D84315" />
 
             <Button
                 android:id="@+id/btnGuardarChicharron"
@@ -222,6 +222,21 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/gananciasValor" />
+
+        <Button
+            android:id="@+id/btnGestionProductos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#D84315"
+            android:padding="16dp"
+            android:text="Gestionar productos"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnHistorial" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
