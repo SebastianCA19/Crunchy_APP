@@ -37,6 +37,38 @@
             android:layout_marginBottom="4dp" />
 
         <TextView
+            android:id="@+id/IdDomiciliario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Domiciliario: "
+            android:textColor="#555" />
+
+        <TextView
+            android:id="@+id/idZona"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Zona: "
+            android:textColor="#555" />
+
+        <TextView
+            android:id="@+id/idDireccion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Dirección:  "
+            android:textColor="#555" />
+
+        <TextView
+            android:id="@+id/horaEntrega"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Hora de Entrega: "
+            android:textColor="#555" />
+
+        <TextView
             android:id="@+id/txtProductos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

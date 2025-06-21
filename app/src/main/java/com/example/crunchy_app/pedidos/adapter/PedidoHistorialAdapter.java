@@ -87,17 +87,21 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         String nombreCompleto = pedido.getNombreCliente();
         holder.txtNombreCliente.setText(nombreCompleto);
 
-
+        holder.txtIdDomiciliario.setText("Domiciliario: " + pedido.getNombreDomiciliario());
+        holder.txtIdZona.setText("Zona: " + pedido.getIdLocacion());
+        holder.txtIdDireccion.setText("Dirección: " + pedido.getDireccionCliente());
         holder.txtFecha.setText(pedido.getFecha().toString());
+
 
         DateTimeFormatter formatter = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             formatter = DateTimeFormatter.ofPattern("hh:mm a");
         }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            holder.horaEntrega.setText("Hora de Entrega: " + pedido.getHoraEntrega().format(formatter));
             holder.txtHora.setText("Hora: " + pedido.getHora().format(formatter));
         }
-
 
         List<ProductoDelPedido> productosDeEstePedido = new ArrayList<>();
         for (ProductoDelPedido pdp : productosDelPedido) {
@@ -323,7 +327,8 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
     }
 
     static class PedidoViewHolder extends RecyclerView.ViewHolder {
-        TextView txtNombreCliente, txtFecha, txtHora,txtProductos, txtEstado, txtTotal,txtValorDomicilio, txtTotalFinal;
+        TextView txtNombreCliente, txtFecha, txtHora,txtProductos, txtEstado, txtTotal,txtValorDomicilio, txtTotalFinal,
+                txtIdDomiciliario, txtIdZona, txtIdDireccion, horaEntrega;
         Button btnCambiarEstado, btnCancelar;
 
 
@@ -341,6 +346,10 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
             txtValorDomicilio = itemView.findViewById(R.id.txtValorDomicilio);
             txtTotalFinal = itemView.findViewById(R.id.txtTotalFinal);
             txtHora = itemView.findViewById(R.id.txtHora);
+            horaEntrega = itemView.findViewById(R.id.horaEntrega);
+            txtIdDomiciliario = itemView.findViewById(R.id.IdDomiciliario);
+            txtIdZona = itemView.findViewById(R.id.idZona);
+            txtIdDireccion = itemView.findViewById(R.id.idDireccion);
 
         }
     }

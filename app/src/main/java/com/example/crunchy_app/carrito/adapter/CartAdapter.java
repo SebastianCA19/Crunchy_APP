@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -92,7 +93,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     static class CartViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtNombre, txtPrecio, txtCantidad;
+        TextView txtNombre, txtPrecio, txtCantidad,
+                txtDireccion, txtDomiciliario;
+        EditText txtHoraEnvio;
         Button btnRestar, btnSumar;
 
         public CartViewHolder(@NonNull View itemView) {
@@ -100,6 +103,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             txtNombre = itemView.findViewById(R.id.txtNombre);
             txtPrecio = itemView.findViewById(R.id.txtPrecio);
             txtCantidad = itemView.findViewById(R.id.txtCantidad);
+            txtDireccion = itemView.findViewById(R.id.idDireccion);
+            txtDomiciliario = itemView.findViewById(R.id.IdDomiciliario);
+            txtHoraEnvio = itemView.findViewById(R.id.editTextTime);
             btnRestar = itemView.findViewById(R.id.btnRestar);
             btnSumar = itemView.findViewById(R.id.btnSumar);
         }

@@ -2,6 +2,7 @@ package com.example.crunchy_app.carrito.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -44,6 +45,7 @@ import com.example.crunchy_app.productos.model.ValorAtributoProducto;;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -87,6 +89,8 @@ public class CartDialogFragment extends DialogFragment {
     private TextView txtNombre;
     private TextView txtDireccion;
     private TextView txtDomName;
+    private EditText txtHoraEntrega;
+    private String horaEntrega;
 
     private final NumberFormat numberFormat;
 
@@ -100,6 +104,11 @@ public class CartDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.CartDialogRight);
     }
+
+    private String nullIfEmpty(String s) {
+        return (s == null || s.trim().isEmpty()) ? null : s;
+    }
+
 
     @Override
     public void onStart() {
@@ -131,8 +140,27 @@ public class CartDialogFragment extends DialogFragment {
         txtTotal = view.findViewById(R.id.txtTotal);
         radioGroup = view.findViewById(R.id.radioGroup);
         txtNombre = view.findViewById(R.id.inNombre);
+        txtHoraEntrega = view.findViewById(R.id.editTextTime);
         txtDireccion = view.findViewById(R.id.inDireccion);
         txtDomName = view.findViewById(R.id.inDomiciliario);
+
+        txtHoraEntrega = view.findViewById(R.id.editTextTime);
+
+        // Listener para mostrar el selector de hora
+        txtHoraEntrega.setOnClickListener(v -> {
+            final Calendar calendar = Calendar.getInstance();
+            int hora = calendar.get(Calendar.HOUR_OF_DAY);
+            int minuto = calendar.get(Calendar.MINUTE);
+
+            TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+                    (view1, hourOfDay, minute1) -> {
+                        String horaFormateada = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute1);
+                        txtHoraEntrega.setText(horaFormateada);
+                    }, hora, minuto, true);
+
+            timePickerDialog.show();
+        });
+
 
         new Thread(() -> {
             db = AppDataBase.getInstance(getActivity().getApplicationContext());
@@ -219,17 +247,21 @@ public class CartDialogFragment extends DialogFragment {
 
                         // Crear nuevo pedido
                         Pedido pedido = null;
+                        LocalTime hora_entrega = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            hora_entrega = LocalTime.parse(horaEntrega);
+                        }
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             pedido = new Pedido(
                                     nameUser,
-                                    directionUser,
-                                    domName,
+                                    nullIfEmpty(directionUser),
+                                    nullIfEmpty(domName),
                                     metodoPagoId,
                                     locacionSeleccionada.getIdLocacion(),
                                     1,         // idEstadoPedido (ej: 1 = Pendiente)
                                     LocalDate.now(),
-                                    LocalTime.now()
-
+                                    LocalTime.now(),
+                                    hora_entrega
                             );
                         }
 
@@ -363,6 +395,8 @@ public class CartDialogFragment extends DialogFragment {
             String selectedText = selectedRadioButton.getText().toString();
             getMetodoPago(selectedText);
         }
+
+        horaEntrega = txtHoraEntrega.getText().toString();
     }
 
     private void getMetodoPago(String selectedText) {

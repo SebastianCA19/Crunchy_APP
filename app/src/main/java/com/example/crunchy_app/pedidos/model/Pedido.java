@@ -71,10 +71,13 @@ public class Pedido {
     @NonNull
     private LocalTime hora;
 
+    @ColumnInfo(name = "hora-entrega")
+    private LocalTime horaEntrega;
+
     public Pedido() {
     }
 
-    public Pedido(@NonNull String nombreCliente, String direccionCliente, String nombreDomiciliario, @NonNull Integer idMetodoPago, @NonNull Integer idLocacion, @NonNull Integer idEstadoPedido, @NonNull LocalDate fecha, @NonNull LocalTime hora) {
+    public Pedido(@NonNull String nombreCliente, String direccionCliente, String nombreDomiciliario, @NonNull Integer idMetodoPago, @NonNull Integer idLocacion, @NonNull Integer idEstadoPedido, @NonNull LocalDate fecha, @NonNull LocalTime hora, LocalTime horaEntrega) {
         this.nombreCliente = nombreCliente;
         this.direccionCliente = direccionCliente;
         this.nombreDomiciliario = nombreDomiciliario;
@@ -83,6 +86,15 @@ public class Pedido {
         this.idEstadoPedido = idEstadoPedido;
         this.fecha = fecha;
         this.hora = hora;
+        this.horaEntrega = horaEntrega;
+    }
+
+    public LocalTime getHoraEntrega() {
+        return horaEntrega;
+    }
+
+    public void setHoraEntrega(LocalTime horaEntrega) {
+        this.horaEntrega = horaEntrega;
     }
 
     public Integer getIdPedido() {
