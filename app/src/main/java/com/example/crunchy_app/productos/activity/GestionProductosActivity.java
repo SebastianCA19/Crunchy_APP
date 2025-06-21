@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,7 +21,8 @@ import com.example.crunchy_app.productos.adapter.ProductoAdapter;
 import com.example.crunchy_app.productos.model.Producto;
 
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.Objects;
+
 
 public class GestionProductosActivity extends AppCompatActivity {
 
@@ -32,10 +34,15 @@ public class GestionProductosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gestion_productos);
+
+        Toolbar toolbar = findViewById(R.id.gestionToolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Gestión");
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Gestión de productos");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        setContentView(R.layout.activity_gestion_productos);
+        toolbar.setNavigationOnClickListener(v -> finish());
+
         cargarComidas();
 
         btnComidas = findViewById(R.id.btnProdComidas);
@@ -52,7 +59,6 @@ public class GestionProductosActivity extends AppCompatActivity {
         btnComidas.setOnClickListener(v -> cargarComidas());
         btnBebidas.setOnClickListener(v -> cargarBebidas());
         btnLocaciones.setOnClickListener(v -> cargarLocaciones());
-
         btnAgregarLocacion.setOnClickListener(v -> mostrarDialogAgregarLocacion());
         btnAgregarComida.setOnClickListener(v -> mostrarDialogAgregarProducto(1,this::cargarComidas));
         btnAgregarBebida.setOnClickListener(v -> mostrarDialogAgregarProducto(3,this::cargarBebidas));
@@ -74,10 +80,12 @@ public class GestionProductosActivity extends AppCompatActivity {
                             cargarComidas();
                         });
                     }
-
                     @Override
                     public void onEliminar(Producto producto) {
-                        // Lógica para eliminar producto
+                        mostrarDialogEliminarProducto(producto, () -> {
+                            cargarComidas();
+
+                        });
                     }
                 }));
                 recyclerGestion.setLayoutManager(new LinearLayoutManager(this));
@@ -102,7 +110,9 @@ public class GestionProductosActivity extends AppCompatActivity {
 
                     @Override
                     public void onEliminar(Producto producto) {
-                        // Lógica para eliminar producto
+                         mostrarDialogEliminarProducto(producto, () -> {
+                             cargarBebidas();
+                         });
                     }
                 }));
                 recyclerGestion.setLayoutManager(new LinearLayoutManager(this));
@@ -205,10 +215,8 @@ public class GestionProductosActivity extends AppCompatActivity {
                 db.locacionDao().deleteLocacionById(locacion.getIdLocacion());
                 runOnUiThread(() -> cargarLocaciones());
             }).start();
-
-            builder.setNegativeButton("No", null);
-            builder.show();
         });
+        builder.setNegativeButton("No", null);
         builder.show();
     }
     private void mostrarDialogAgregarProducto(int tipoProductoId, Runnable accionPostGuardar) {
@@ -275,5 +283,24 @@ public class GestionProductosActivity extends AppCompatActivity {
         builder.show();
     }
 
+    private void mostrarDialogEliminarProducto(Producto producto, Runnable accionPostGuardar) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Eliminar producto");
+        builder.setMessage("¿Estás seguro de que quieres eliminar este producto?");
+        builder.setPositiveButton("Sí", (dialog, which) -> {
+            new Thread(() -> {
+                db.productoDao().deleteProductoById(producto.getIdProducto());
+                runOnUiThread(accionPostGuardar);
+            }).start();
+        });
+        builder.setNegativeButton("No", null);
+        builder.show();
+    }
+
+
+
 
 }
+
+
+
