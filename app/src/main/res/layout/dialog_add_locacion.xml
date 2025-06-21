@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <EditText
+        android:id="@+id/etNombreLocacion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre de la locación"
+        android:inputType="text"
+        android:textColor="#5D4037"
+        android:textColorHint="#999999"
+        android:backgroundTint="#D84315" />
+
+    <EditText
+        android:id="@+id/etValorDomicilio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Valor del domicilio"
+        android:inputType="numberDecimal"
+        android:textColor="#5D4037"
+        android:textColorHint="#999999"
+        android:backgroundTint="#D84315"
+        android:layout_marginTop="12dp" />
+
+
+</LinearLayout>

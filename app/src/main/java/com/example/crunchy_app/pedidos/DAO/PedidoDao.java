@@ -42,7 +42,6 @@ public interface PedidoDao {
     List<Pedido> getListaPedidosPorEstados(List<Integer> estados);
 
 
-
     @Query("SELECT SUM(pdp.cantidad * IFNULL(vap.valor_atributo_producto, 1)) " +
             "FROM productos_del_pedido pdp " +
             "JOIN productos p ON pdp.id_producto = p.id_producto " +
@@ -50,7 +49,6 @@ public interface PedidoDao {
             "JOIN pedidos pe ON pe.id_pedido = pdp.id_pedido " +
             "WHERE pe.id_estado_pedido IN (2, 3, 4)")
     int getTotalChorizosVendidos();
-
 
     @Query("SELECT SUM(" +
             "CASE " +

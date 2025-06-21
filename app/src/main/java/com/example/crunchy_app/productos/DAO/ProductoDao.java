@@ -4,6 +4,7 @@ package com.example.crunchy_app.productos.DAO;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.crunchy_app.productos.model.Producto;
 
@@ -38,4 +39,9 @@ public interface ProductoDao {
 
     @Query("SELECT * FROM productos WHERE nombre_producto LIKE :query || '%' AND id_tipo_producto IN (3, 4, 5)")
     public List<Producto> searchBebidas(String query);
+
+
+    @Update
+    public void update(Producto producto);
+
 }

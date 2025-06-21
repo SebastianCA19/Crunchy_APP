@@ -18,6 +18,8 @@
 
        <activity android:name=".pedidos.activity.HistorialPedidosActivity"/>
 
+        <activity android:name=".productos.activity.GestionProductosActivity"/>
+
         <activity
             android:name=".secciones.activity.HomeActivity"
             android:exported="false"

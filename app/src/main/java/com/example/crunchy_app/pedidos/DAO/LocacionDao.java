@@ -3,6 +3,7 @@ package com.example.crunchy_app.pedidos.DAO;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.crunchy_app.pedidos.model.Locacion;
 
@@ -28,4 +29,9 @@ public interface LocacionDao {
 
     @Query("DELETE FROM locaciones WHERE id_locacion = :idLocacion")
     public int deleteLocacionById(Integer idLocacion);
+
+    @Update
+    public void update(Locacion locacion);
+
+
 }

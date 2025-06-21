@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#FFF9F0"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/etNombreProducto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre del producto"
+        android:inputType="text"
+        android:textColorHint="#D84315"/>
+
+    <EditText
+        android:id="@+id/etValorProducto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Valor del producto"
+        android:inputType="numberDecimal"
+        android:textColorHint="#D84315"/>
+
+</LinearLayout>
