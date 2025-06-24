@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -103,10 +104,6 @@ public class CartDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.CartDialogRight);
-    }
-
-    private String nullIfEmpty(String s) {
-        return (s == null || s.trim().isEmpty()) ? null : s;
     }
 
 
@@ -189,10 +186,39 @@ public class CartDialogFragment extends DialogFragment {
 
         btnCheckout.setOnClickListener(v -> {
             if (carrito.isEmpty()) {
-                Log.w("CartDialogFragment", "El carrito está vacío. No se puede confirmar pedido.");
+                Toast.makeText(getContext(), "⚠ El carrito está vacío.", Toast.LENGTH_SHORT).show();
                 return;
             }
             getFields();
+
+            boolean camposValidos = true;
+
+            if (nameUser == null || nameUser.trim().isEmpty()) {
+                txtNombre.setError("Campo obligatorio");
+                camposValidos = false;
+            }
+            if (directionUser == null || directionUser.trim().isEmpty()) {
+                txtDireccion.setError("Campo obligatorio");
+                camposValidos = false;
+            }
+            if (domName == null || domName.trim().isEmpty()) {
+                txtDomName.setError("Campo obligatorio");
+                camposValidos = false;
+            }
+            if (metodoPagoId == 0) {
+                Toast.makeText(requireContext(), "⚠ Seleccione un método de pago", Toast.LENGTH_SHORT).show();
+                camposValidos = false;
+            }
+            if (locacionSeleccionada == null) {
+                Toast.makeText(requireContext(), "⚠ Seleccione una zona de entrega", Toast.LENGTH_SHORT).show();
+                camposValidos = false;
+            }
+
+            if (!camposValidos) {
+                return; // No continúa si hay errores
+            }
+
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -248,14 +274,15 @@ public class CartDialogFragment extends DialogFragment {
                         // Crear nuevo pedido
                         Pedido pedido = null;
                         LocalTime hora_entrega = null;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && (horaEntrega != null && !horaEntrega.trim().isEmpty())) {
                             hora_entrega = LocalTime.parse(horaEntrega);
                         }
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
                             pedido = new Pedido(
                                     nameUser,
-                                    nullIfEmpty(directionUser),
-                                    nullIfEmpty(domName),
+                                    directionUser,
+                                    domName,
                                     metodoPagoId,
                                     locacionSeleccionada.getIdLocacion(),
                                     1,         // idEstadoPedido (ej: 1 = Pendiente)
@@ -288,10 +315,17 @@ public class CartDialogFragment extends DialogFragment {
                             db.productoDelPedidoDao().insert(productoDelPedido);
                         }
 
-                        Log.d("CartDialogFragment", "Pedido confirmado con ID: " + pedidoId);
                         carrito.clear();
+                        requireActivity().runOnUiThread(() -> {
+                            Toast.makeText(getContext(), "✅ Pedido agregado correctamente.", Toast.LENGTH_LONG).show();
+                            dismiss();
+                        });
+
                     } catch (Exception e) {
                         e.printStackTrace();
+                        requireActivity().runOnUiThread(() ->
+                                Toast.makeText(getContext(), "❌ Ocurrió un error al confirmar el pedido.", Toast.LENGTH_LONG).show()
+                        );
                     }
                 }
             }).start();

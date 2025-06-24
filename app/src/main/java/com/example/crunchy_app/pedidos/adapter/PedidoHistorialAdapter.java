@@ -24,7 +24,6 @@ import com.example.crunchy_app.pedidos.model.Locacion;
 import com.example.crunchy_app.pedidos.model.Pedido;
 import com.example.crunchy_app.pedidos.model.PedidoConEstado;
 import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
-import com.example.crunchy_app.productos.DAO.ValorAtributoProductoDao;
 import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
@@ -32,6 +31,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorialAdapter.PedidoViewHolder> {
@@ -41,7 +41,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
     private final List<Producto> productos;
     private final List<EstadoPedido> estados;
 
-    private final List<Locacion> locaciones;
+    private final Map<Integer,Locacion> locaciones;
 
     private final AppDataBase db;
 
@@ -59,7 +59,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
                                   List<ProductoDelPedido> productosDelPedido,
                                   List<Producto> productos,
                                   List<EstadoPedido> estados,
-                                  List<Locacion> locaciones,
+                                  Map<Integer,Locacion> locaciones,
                                   AppDataBase db, List<ValorAtributoProducto> chicharronQuantities) {
         this.pedidos = pedidos;
         this.productosDelPedido = productosDelPedido;
@@ -88,7 +88,8 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         holder.txtNombreCliente.setText(nombreCompleto);
 
         holder.txtIdDomiciliario.setText("Domiciliario: " + pedido.getNombreDomiciliario());
-        holder.txtIdZona.setText("Zona: " + pedido.getIdLocacion());
+        String nombreZona = locaciones.get(pedido.getIdLocacion())!=null?locaciones.get(pedido.getIdLocacion()).getNombreLocacion():"Desconocido";
+        holder.txtIdZona.setText("Zona: " + nombreZona);
         holder.txtIdDireccion.setText("Dirección: " + pedido.getDireccionCliente());
         holder.txtFecha.setText(pedido.getFecha().toString());
 
@@ -99,7 +100,9 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            holder.horaEntrega.setText("Hora de Entrega: " + pedido.getHoraEntrega().format(formatter));
+            if(pedido.getHoraEntrega() != null){
+                holder.horaEntrega.setText("Hora de Entrega: " + pedido.getHoraEntrega().format(formatter));
+            }
             holder.txtHora.setText("Hora: " + pedido.getHora().format(formatter));
         }
 
@@ -142,13 +145,8 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         }
 
         holder.txtProductos.setText(productosTxt.toString().trim()); // trim para evitar \n al final
-        Locacion locacion = null;
-        for (Locacion l : locaciones) {
-            if (l.getIdLocacion().equals(pedido.getIdLocacion())) {
-                locacion = l;
-                break;
-            }
-        }
+        Locacion locacion = locaciones.get(pedido.getIdLocacion());
+
         double totalProductos = 0;
         for (ProductoDelPedido pdp : productosDeEstePedido) {
             Producto producto = null;

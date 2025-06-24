@@ -19,7 +19,9 @@ import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class HistorialPedidosActivity extends AppCompatActivity {
 
@@ -55,7 +57,8 @@ public class HistorialPedidosActivity extends AppCompatActivity {
             List<EstadoPedido> estados = db.estadoPedidoDao().getAll();
             List<ProductoDelPedido> productosPedido = db.productoDelPedidoDao().getAll();
             List<Producto> productos = db.productoDao().getAll();
-            List<Locacion> locaciones = db.locacionDao().getAll();
+            Map<Integer,Locacion> locaciones = db.locacionDao().getAll().stream()
+                    .collect(Collectors.toMap(locacion -> locacion.getIdLocacion(), locacion -> locacion));
             List<ValorAtributoProducto> chicharronQuantities = db.valorAtributoProductoDao().getCantidadChicharron();
 
             runOnUiThread(() -> {

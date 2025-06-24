@@ -65,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Hora de Entrega: "
+            android:text="Hora de Entrega: (no aplica)"
             android:textColor="#555" />
 
         <TextView
