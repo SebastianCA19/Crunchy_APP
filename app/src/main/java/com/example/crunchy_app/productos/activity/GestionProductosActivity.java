@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.DBconnection.AppDataBase;
+import com.example.crunchy_app.DBconnection.JsonExporter;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.pedidos.adapter.LocacionAdapter;
 import com.example.crunchy_app.pedidos.model.Locacion;
@@ -167,7 +168,7 @@ public class GestionProductosActivity extends AppCompatActivity {
 
             new Thread(() -> {
                 db.locacionDao().insert(nuevaLocacion);
-
+                JsonExporter.exportProductos(getApplicationContext(), db.productoDao().getAll());
                 // Volver a cargar locaciones (en el hilo principal)
                 runOnUiThread(this::cargarLocaciones);
             }).start();
@@ -199,6 +200,7 @@ public class GestionProductosActivity extends AppCompatActivity {
             locacion.setValorDomicilio(valor);
             new Thread(() -> {
                 db.locacionDao().update(locacion);
+                JsonExporter.exportLocaciones(getApplicationContext(), db.locacionDao().getAll());
                 runOnUiThread(() -> cargarLocaciones());
                 }).start();
         });
@@ -213,6 +215,7 @@ public class GestionProductosActivity extends AppCompatActivity {
         builder.setPositiveButton("Sí", (dialog, which) -> {
             new Thread(() -> {
                 db.locacionDao().deleteLocacionById(locacion.getIdLocacion());
+                JsonExporter.exportLocaciones(getApplicationContext(), db.locacionDao().getAll());
                 runOnUiThread(() -> cargarLocaciones());
             }).start();
         });
@@ -243,6 +246,8 @@ public class GestionProductosActivity extends AppCompatActivity {
 
             new Thread(() -> {
                 db.productoDao().insert(nuevo);
+                JsonExporter.exportProductos(getApplicationContext(), db.productoDao().getAll());
+                JsonExporter.exportValorAtributoProductos(getApplicationContext(), db.valorAtributoProductoDao().getAll());
                 runOnUiThread(accionPostGuardar);
             }).start();
         });
@@ -276,6 +281,8 @@ public class GestionProductosActivity extends AppCompatActivity {
 
             new Thread(() -> {
                 db.productoDao().update(producto);
+                JsonExporter.exportProductos(getApplicationContext(), db.productoDao().getAll());
+                JsonExporter.exportValorAtributoProductos(getApplicationContext(), db.valorAtributoProductoDao().getAll());
                 runOnUiThread(accionPostGuardar);
             }).start();
         });
@@ -290,6 +297,8 @@ public class GestionProductosActivity extends AppCompatActivity {
         builder.setPositiveButton("Sí", (dialog, which) -> {
             new Thread(() -> {
                 db.productoDao().deleteProductoById(producto.getIdProducto());
+                JsonExporter.exportProductos(getApplicationContext(), db.productoDao().getAll());
+                JsonExporter.exportValorAtributoProductos(getApplicationContext(), db.valorAtributoProductoDao().getAll());
                 runOnUiThread(accionPostGuardar);
             }).start();
         });
