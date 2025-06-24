@@ -1,7 +1,16 @@
 package com.example.crunchy_app;
-
-
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.Settings;
+import android.widget.Toast;
 import android.content.Intent;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +22,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.crunchy_app.DBconnection.AppDataBase;
+import com.example.crunchy_app.DBconnection.JsonExporter;
 import com.example.crunchy_app.pagos.DAO.MetodoPagoDao;
 import com.example.crunchy_app.pagos.model.MetodoPago;
 import com.example.crunchy_app.pedidos.DAO.EstadoPedidoDao;
@@ -30,6 +40,10 @@ import com.example.crunchy_app.productos.model.TipoProducto;
 import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 import com.example.crunchy_app.secciones.activity.HomeActivity;
 
+import java.io.File;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,28 +56,167 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Android 11+
+            if (!Environment.isExternalStorageManager()) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                startActivity(intent); // Esto lleva al usuario a dar acceso total al almacenamiento
+                // Mostrar aviso al usuario
+                runOnUiThread(() -> Toast.makeText(this,
+                        "La app necesita acceso total a archivos para guardar y restaurar los datos.",
+                        Toast.LENGTH_LONG).show());
+            }
+        } else {
+            // Android 6 a Android 10
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(
+                        this,
+                        new String[]{
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        },
+                        1001
+                );
+            }
+        }
+
+        CountDownLatch latch = new CountDownLatch(1);
 
         // Manejo de base de datos en un hilo separado
         new Thread(() -> {
             AppDataBase db = AppDataBase.getInstance(getApplicationContext());
 
-            // Verificar que la BD se creó con un log
-            Log.d("BASE DE DATOS", "Base de datos creada correctamente: " + db);
-            Log.d("BASE DE DATOS", "Ruta de la base de datos: " + getDatabasePath("crunchy-DB").getAbsolutePath());
+            // ✅ Verificar si todas las tablas importantes están completamente vacías
+            boolean datosCriticosVacios =
+                    db.estadoPedidoDao().count() == 0 &&
+                            db.metodoPagoDao().count() == 0 &&
+                            db.tipoProductoDao().count() == 0 &&
+                            db.valorAtributoProductoDao().count() == 0 &&
+                            db.productoDao().count() == 0 &&
+                            db.locacionDao().count() == 0 &&
+                            db.atributoProductoDao().count() == 0;
 
-            if(db.estadoPedidoDao().count() == 0 || db.metodoPagoDao().count() == 0 ||
-                    db.tipoProductoDao().count() == 0 || db.valorAtributoProductoDao().count() == 0 ||
-                    db.productoDao().count() == 0 || db.locacionDao().count() == 0 || db.atributoProductoDao().count() == 0){
-                insertarDatosIniciales(db);
+            if (datosCriticosVacios) {
+
+                Log.d("CARGA DATOS", "Todas las tablas están vacías. Inicializando...");
+
+                // 🔥 Eliminar la base de datos para reiniciar desde cero
+                AppDataBase.resetInstance(); // ✅ Cierra y limpia la instancia
+                getApplicationContext().deleteDatabase("crunchy-DB"); // ✅ Borra la base de datos física
+
+                // ✅ Crear nueva instancia limpia
+                AppDataBase nuevaDb = AppDataBase.getInstance(getApplicationContext());
+
+                // 📂 Archivos JSON externos
+                File prodFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/CrunchyBackup", "productos.json");
+                File locFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/CrunchyBackup", "locaciones.json");
+                File valAttrFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/CrunchyBackup", "valores_atributo_producto.json");
+
+                // 🧠 Si los archivos existen → importar desde ellos
+                if (prodFile.exists() && locFile.exists() && valAttrFile.exists()) {
+                    Log.d("CARGA DATOS", "Importando desde archivos JSON externos...");
+
+                    insertarDatosBasicos(nuevaDb);
+
+                    nuevaDb.productoDao().insertAll(JsonExporter.importProductos(getApplicationContext()));
+                    nuevaDb.locacionDao().insertAll(JsonExporter.importLocaciones(getApplicationContext()));
+                    nuevaDb.valorAtributoProductoDao().insertAll(JsonExporter.importValorAtributoProductos(getApplicationContext()));
+                } else {
+                    Log.d("CARGA DATOS", "No se encontraron JSONs. Usando datos hardcoded...");
+
+                    insertarDatosIniciales(nuevaDb);
+
+                    // Exportar a JSON
+                    JsonExporter.exportProductos(getApplicationContext(), nuevaDb.productoDao().getAll());
+                    JsonExporter.exportLocaciones(getApplicationContext(), nuevaDb.locacionDao().getAll());
+                    JsonExporter.exportValorAtributoProductos(getApplicationContext(), nuevaDb.valorAtributoProductoDao().getAll());
+
+                    Log.d("EXPORTACIÓN", "Datos exportados exitosamente tras carga hardcoded.");
+                }
+
+            } else {
+                Log.d("CARGA DATOS", "La base de datos ya contiene información. No se requiere reinicialización.");
             }
 
-
+            latch.countDown();
         }).start();
 
+        try {
+            latch.await(); // Espera que termine el hilo de carga
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1001) {
+            boolean allGranted = true;
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    allGranted = false;
+                    break;
+                }
+            }
+
+            if (!allGranted) {
+                Toast.makeText(this, "Se necesitan permisos de almacenamiento para guardar los datos", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
     public void goToHome(View v){
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
+    }
+
+    private static void insertarDatosBasicos(AppDataBase db){
+        EstadoPedidoDao estadoPedidoDao = db.estadoPedidoDao();
+        MetodoPagoDao metodoPagoDao = db.metodoPagoDao();
+
+        TipoProductoDao tipoProductoDao = db.tipoProductoDao();
+        AtributoProductoDao atributoProductoDao =  db.atributoProductoDao();
+
+
+        // Insertar Estados de Pedido
+        if(estadoPedidoDao.count() == 0){
+            estadoPedidoDao.insert(new EstadoPedido("encargada"));
+            estadoPedidoDao.insert(new EstadoPedido("preparando"));
+            estadoPedidoDao.insert(new EstadoPedido("pagado"));
+            estadoPedidoDao.insert(new EstadoPedido("en camino"));
+        }
+
+        // Insertar Métodos de Pago
+        if(metodoPagoDao.count() == 0){
+            metodoPagoDao.insert(new MetodoPago("efectivo"));
+            metodoPagoDao.insert(new MetodoPago("transferencia"));
+            metodoPagoDao.insert(new MetodoPago("mixto"));
+        }
+
+        // Insertar Tipos de Producto
+        if (tipoProductoDao.count() == 0){
+            tipoProductoDao.insert(new TipoProducto("combo"));
+            tipoProductoDao.insert(new TipoProducto("picada"));
+            tipoProductoDao.insert(new TipoProducto("bebida-personal"));
+            tipoProductoDao.insert(new TipoProducto("bebida-familiar"));
+            tipoProductoDao.insert(new TipoProducto("bebida-alcoholica"));
+            tipoProductoDao.insert(new TipoProducto("personalizado"));
+        }
+
+        //Insertar Atributos de Producto
+        if (atributoProductoDao.count() == 0){
+            atributoProductoDao.insertAtributoProducto(new AtributoProducto("chicharrón"));
+            atributoProductoDao.insertAtributoProducto(new AtributoProducto("chorizo"));
+            atributoProductoDao.insertAtributoProducto(new AtributoProducto("bollo"));
+            atributoProductoDao.insertAtributoProducto(new AtributoProducto("volumen"));
+        }
+
     }
 
     private static void insertarDatosIniciales(AppDataBase db) {
@@ -77,12 +230,11 @@ public class MainActivity extends AppCompatActivity {
         ProductoDao productoDao = db.productoDao();
 
         // Insertar Estados de Pedido
-        if(estadoPedidoDao.count() == 0){
-            estadoPedidoDao.insert(new EstadoPedido("encargada"));
-            estadoPedidoDao.insert(new EstadoPedido("preparando"));
-            estadoPedidoDao.insert(new EstadoPedido("pagado"));
-            estadoPedidoDao.insert(new EstadoPedido("en camino"));
-        }
+        estadoPedidoDao.insert(new EstadoPedido("encargada"));
+        estadoPedidoDao.insert(new EstadoPedido("preparando"));
+        estadoPedidoDao.insert(new EstadoPedido("pagado"));
+        estadoPedidoDao.insert(new EstadoPedido("en camino"));
+
         //Insertar Locaciones
         if(locacionDao.count() == 0){
             // los de 4k
@@ -211,18 +363,18 @@ public class MainActivity extends AppCompatActivity {
 
         // Insertar Productos
         if (productoDao.count() == 0){
-            productoDao.insert(new Producto("chorizo artesanal", 1,  7000));
-            productoDao.insert(new Producto("combo #1(17+1)", 1, 22000));
-            productoDao.insert(new Producto("combo #2(29+1)", 1, 34000));
-            productoDao.insert(new Producto("combo #3(38+2)", 1,  48000));
-            productoDao.insert(new Producto("combo #4(55+2)", 1, 65000));
-            productoDao.insert(new Producto("combo #5(65+3)", 1, 80000));
-            productoDao.insert(new Producto("chicharron personal", 2,  17000));
-            productoDao.insert(new Producto("picada #1(23)", 2, 23000));
-            productoDao.insert(new Producto("picada #2(34)", 2, 34000));
-            productoDao.insert(new Producto("picada #3(48)", 2, 48000));
-            productoDao.insert(new Producto("picada #4(65)", 2,65000));
-            productoDao.insert(new Producto("kilo(80)", 2, 80000));
+            productoDao.insert(new Producto("chorizo artesanal", 1,  7000)); //id 1
+            productoDao.insert(new Producto("combo #1(17+1)", 1, 22000)); //id 2
+            productoDao.insert(new Producto("combo #2(29+1)", 1, 34000)); //id 3
+            productoDao.insert(new Producto("combo #3(38+2)", 1,  48000)); //id 4
+            productoDao.insert(new Producto("combo #4(55+2)", 1, 65000)); //id 5
+            productoDao.insert(new Producto("combo #5(65+3)", 1, 80000)); //id 6
+            productoDao.insert(new Producto("chicharron personal", 2,  17000)); //id 7
+            productoDao.insert(new Producto("picada #1(23)", 2, 23000)); //id 8
+            productoDao.insert(new Producto("picada #2(34)", 2, 34000)); //id 9
+            productoDao.insert(new Producto("picada #3(48)", 2, 48000)); //id 10
+            productoDao.insert(new Producto("picada #4(65)", 2,65000)); //id 11
+            productoDao.insert(new Producto("kilo(80)", 2, 80000)); //id 12
 
             // Insertar Bebidas
             // Bebidas pequeñas (idProducto 13-28)

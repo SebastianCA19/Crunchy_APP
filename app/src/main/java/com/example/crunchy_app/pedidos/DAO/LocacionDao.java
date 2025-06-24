@@ -34,4 +34,6 @@ public interface LocacionDao {
     public void update(Locacion locacion);
 
 
+    @Insert
+    void insertAll(List<Locacion> locacions);
 }

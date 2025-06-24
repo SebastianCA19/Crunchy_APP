@@ -46,6 +46,6 @@ public interface ProductoDao {
     public void update(Producto producto);
 
 
-
-
+    @Insert
+    void insertAll(List<Producto> productos);
 }

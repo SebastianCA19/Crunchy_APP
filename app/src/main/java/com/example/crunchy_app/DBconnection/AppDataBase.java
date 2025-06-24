@@ -51,6 +51,13 @@ public abstract class AppDataBase extends RoomDatabase {
         return INSTANCE;
     }
 
+    public static void resetInstance() {
+        if (INSTANCE != null) {
+            INSTANCE.close();
+            INSTANCE = null;
+        }
+    }
+
     public abstract ProductoDao productoDao();
     public abstract ValorAtributoProductoDao valorAtributoProductoDao();
     public abstract AtributoProductoDao atributoProductoDao();

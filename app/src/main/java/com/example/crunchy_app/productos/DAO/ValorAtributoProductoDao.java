@@ -46,4 +46,10 @@ public interface ValorAtributoProductoDao {
     //Get chicharron value of a product
     @Query("SELECT valor_atributo_producto FROM valores_atributo_producto WHERE id_producto = :id AND id_atributo_producto = 2")
     float getChicharronValue(int id);
+
+    @Insert
+    void insertAll(List<ValorAtributoProducto> valorAtributoProductos);
+
+    @Query("SELECT * FROM valores_atributo_producto")
+    List<ValorAtributoProducto> getAll();
 }
