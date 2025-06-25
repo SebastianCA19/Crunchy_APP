@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout corregido para ser responsivo manteniendo 100% la estructura original.
+    1. Se eliminaron todos los anchos y alturas fijos en los contenedores principales (ej. layout_width="790dp").
+       Ahora usan '0dp' (match_constraint) para la anchura y 'wrap_content' para la altura,
+       permitiendo que se adapten al espacio disponible.
+    2. Se introdujo una 'Guideline' vertical en el centro del 'layoutUserInfo'.
+       Esto permite mantener el diseño de dos columnas en pantallas grandes (tablets)
+       y que los elementos se ajusten correctamente en pantallas pequeñas (móviles).
+    3. Todos los elementos del formulario (`EditText`, `TextView`, etc.) han sido re-restringidos
+       para anclarse de forma flexible al inicio/fin del layout o a la Guideline central.
+    4. No se ha añadido ni eliminado ningún elemento del XML original.
+-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,84 +24,170 @@
         android:id="@+id/btnClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="8dp"
         android:text="X"
+        android:textColor="@android:color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- RecyclerView para carrito -->
-
-    <!-- Sección: Datos de usuario y pago -->
-
-    <!-- Subtotal y botón -->
-
+    <!-- Ancho '0dp' para que se ajuste. La altura se puede ajustar según necesidad. -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerCart"
-        android:layout_width="682dp"
+        android:layout_width="0dp"
         android:layout_height="154dp"
-        app:layout_constraintBottom_toTopOf="@+id/layoutUserInfo"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.76" />
+        app:layout_constraintTop_toBottomOf="@id/btnClose"
+        app:layout_constraintBottom_toTopOf="@+id/layoutUserInfo"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed"/>
 
+    <!-- Contenedor de datos de usuario y pago. Ahora con altura y anchura flexibles. -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutUserInfo"
-        android:layout_width="790dp"
-        android:layout_height="258dp"
-        android:layout_marginBottom="4dp"
-        android:paddingTop="8dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/recyclerCart"
         app:layout_constraintBottom_toTopOf="@+id/layoutSubtotal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.225"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.923">
+        app:layout_constraintStart_toStartOf="parent">
 
-        <!-- Nombre -->
+        <!-- Guideline para dividir el layout en dos columnas flexibles -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
-        <!-- Apellido -->
-
-        <!-- Métodos de pago -->
+        <!-- Columna Izquierda -->
+        <TextView
+            android:id="@+id/textNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@id/inNombre" />
 
         <EditText
             android:id="@+id/inNombre"
-            android:layout_width="201dp"
-            android:layout_height="40dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:minHeight="48dp"
             android:inputType="textPersonName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.256"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+            app:layout_constraintEnd_toStartOf="@id/guideline_vertical"
+            app:layout_constraintStart_toEndOf="@id/textNombre"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/textDireccion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Dirección:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inNombre"
+            app:layout_constraintBaseline_toBaselineOf="@id/inDireccion"/>
+
+        <EditText
+            android:id="@+id/inDireccion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:minHeight="48dp"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toStartOf="@id/guideline_vertical"
+            app:layout_constraintStart_toEndOf="@id/textDireccion"
+            app:layout_constraintTop_toBottomOf="@id/inNombre" />
+
+        <TextView
+            android:id="@+id/textDomiciliario"
+            android:layout_width="63dp"
+            android:layout_height="14dp"
+            android:layout_marginTop="8dp"
+            android:text="Domiciliario:"
+            app:layout_constraintBaseline_toBaselineOf="@id/inDomiciliario"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inDireccion" />
+
+        <EditText
+            android:id="@+id/inDomiciliario"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toStartOf="@id/guideline_vertical"
+            app:layout_constraintStart_toEndOf="@+id/textDomiciliario"
+            app:layout_constraintTop_toBottomOf="@id/inDireccion" />
+
+        <TextView
+            android:id="@+id/txtEnviarHora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Hora-Envio:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inDomiciliario"
+            app:layout_constraintBaseline_toBaselineOf="@id/editTextTime"/>
+
+        <EditText
+            android:id="@+id/editTextTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:inputType="time"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toStartOf="@id/guideline_vertical"
+            app:layout_constraintStart_toEndOf="@+id/txtEnviarHora"
+            app:layout_constraintTop_toBottomOf="@id/inDomiciliario" />
+
+        <TextView
+            android:id="@+id/txtLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:drawableEnd="@drawable/ic_arrow_down"
+            android:hint="Locación"
+            android:minHeight="48dp"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            app:layout_constraintTop_toBottomOf="@id/editTextTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideline_vertical"/>
+
+
+        <!-- Columna Derecha -->
         <TextView
             android:id="@+id/textMP"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="8dp"
             android:text="Método de pago:"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.15"
-            app:layout_constraintStart_toEndOf="@id/inNombre"
+            app:layout_constraintStart_toStartOf="@id/guideline_vertical"
             app:layout_constraintTop_toTopOf="parent" />
 
         <RadioGroup
             android:id="@+id/radioGroup"
-            android:layout_width="126dp"
-            android:layout_height="120dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline_vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.627"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textMP"
-            app:layout_constraintVertical_bias="0.119">
+            app:layout_constraintTop_toBottomOf="@id/textMP">
 
             <RadioButton
                 android:id="@+id/rbEfectivo"
@@ -99,7 +197,7 @@
 
             <RadioButton
                 android:id="@+id/rbTransferencia"
-                android:layout_width="386dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Transferencia" />
 
@@ -110,151 +208,59 @@
                 android:text="Mixto" />
         </RadioGroup>
 
-        <TextView
-            android:id="@+id/txtLocation"
-            android:layout_width="236dp"
-            android:layout_height="41dp"
-            android:layout_marginTop="108dp"
-            android:drawableEnd="@drawable/ic_arrow_down"
-            android:hint="Locacion"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.92"
-            tools:layout_editor_absoluteX="52dp" />
-
-        <EditText
-            android:id="@+id/editTextTime"
-            android:layout_width="205dp"
-            android:layout_height="44dp"
-            android:layout_marginBottom="52dp"
-            android:ems="10"
-            android:inputType="time"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.261"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/textNombre"
-            android:layout_width="89dp"
-            android:layout_height="34dp"
-            android:layout_marginStart="52dp"
-            android:layout_marginTop="32dp"
-            android:text="Nombre:"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textDireccion"
-            android:layout_width="89dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="52dp"
-            android:layout_marginTop="12dp"
-            android:text="Direccion:"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textNombre" />
-
-        <TextView
-            android:id="@+id/textDomiciliario"
-            android:layout_width="88dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="56dp"
-            android:layout_marginTop="4dp"
-            android:text="Domiciliario:"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textDireccion" />
-
-        <TextView
-            android:id="@+id/txtEnviarHora"
-            android:layout_width="88dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="56dp"
-            android:layout_marginTop="152dp"
-            android:text="Hora-Envio:"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/inDomiciliario"
-            android:layout_width="205dp"
-            android:layout_height="43dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="16dp"
-            android:inputType="textPersonName"
-            app:layout_constraintBottom_toTopOf="@+id/editTextTime"
-            app:layout_constraintEnd_toStartOf="@id/radioGroup"
-            app:layout_constraintHorizontal_bias="0.086"
-            app:layout_constraintStart_toEndOf="@id/textDireccion"
-            app:layout_constraintTop_toBottomOf="@+id/inDireccion"
-            app:layout_constraintVertical_bias="0.0"
-            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-        <EditText
-            android:id="@+id/inDireccion"
-            android:layout_width="203dp"
-            android:layout_height="47dp"
-            android:layout_marginTop="60dp"
-            android:layout_marginEnd="16dp"
-            android:inputType="textPersonName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.269"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Sección de subtotal anclada a la parte inferior. -->
     <LinearLayout
         android:id="@+id/layoutSubtotal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="#FFF9F0"
-        android:padding="16dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/txtSubtotal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:text="Subtotal: $0.00"
             android:textColor="@android:color/black"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
+            android:textStyle="bold" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Valor domicilio: "
             android:id="@+id/txtValorDomicilio"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp"
-            />
-
-        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Total: $0.00"
+            android:layout_marginBottom="8dp"
+            android:text="Valor domicilio: "
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+
+        <TextView
             android:id="@+id/txtTotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Total: $0.00"
             android:textColor="@android:color/black"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp"/>
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnCheckout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="CONFIRMAR PEDIDO"
             android:backgroundTint="#D84315"
-            android:textColor="@android:color/white"
+            android:text="CONFIRMAR PEDIDO"
             android:textAllCaps="false"
-            android:textSize="16sp"/>
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

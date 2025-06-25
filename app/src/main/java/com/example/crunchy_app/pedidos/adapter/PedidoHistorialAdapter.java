@@ -1,40 +1,48 @@
 package com.example.crunchy_app.pedidos.adapter;
 
 import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.DBconnection.AppDataBase;
 import com.example.crunchy_app.R;
-import com.example.crunchy_app.pedidos.activity.EditarPedidoActivity;
 import com.example.crunchy_app.pedidos.model.EstadoPedido;
 import com.example.crunchy_app.pedidos.model.Locacion;
 import com.example.crunchy_app.pedidos.model.Pedido;
 import com.example.crunchy_app.pedidos.model.PedidoConEstado;
 import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
+import com.example.crunchy_app.productos.adapter.EditarProductosPedidoAdapter;
 import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorialAdapter.PedidoViewHolder> {
 
@@ -200,11 +208,16 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         }
 
         holder.btnEditarPedido.setOnClickListener(v -> {
-            // Abre una pantalla de edición con los datos actuales
-            Intent intent = new Intent(holder.itemView.getContext(), EditarPedidoActivity.class);
-            intent.putExtra("pedidoId", pedido.getIdPedido()); // Envías el ID
-            holder.itemView.getContext().startActivity(intent);
+
+                mostrarDialogEditarPedido(
+                        holder.itemView.getContext(),
+                        pedido,
+                        locaciones.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList()),
+                        () -> notifyItemChanged(holder.getAdapterPosition())
+                );
+
         });
+
 
 
         holder.btnCancelar.setOnClickListener(v -> {
@@ -334,6 +347,96 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
     public int getItemCount() {
         return pedidos.size();
     }
+    private void mostrarDialogEditarPedido(Context context, Pedido pedido, List<Locacion> locaciones, Runnable onPedidoActualizado) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_pedido, null);
+        builder.setView(dialogView);
+        builder.setTitle("Editar Pedido");
+
+        Spinner spinnerZona = dialogView.findViewById(R.id.spinnerZona);
+        EditText editDireccion = dialogView.findViewById(R.id.editDireccion);
+        Button btnHoraEntrega = dialogView.findViewById(R.id.btnHoraEntrega);
+        TextView txtHoraEntrega = dialogView.findViewById(R.id.txtHoraEntregaSeleccionada);
+        RecyclerView recyclerProductosEditar = dialogView.findViewById(R.id.recyclerProductosEditar);
+        Button btnAgregarProducto = dialogView.findViewById(R.id.btnAgregarProducto);
+
+        // Llenar spinner con locaciones
+        ArrayAdapter<String> adapterLocaciones = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
+        adapterLocaciones.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        for (Locacion loc : locaciones) adapterLocaciones.add(loc.getNombreLocacion());
+        spinnerZona.setAdapter(adapterLocaciones);
+
+        // Preseleccionar zona
+        int indexZona = 0;
+        for (int i = 0; i < locaciones.size(); i++) {
+            if (Objects.equals(locaciones.get(i).getIdLocacion(), pedido.getIdLocacion())) {
+                indexZona = i;
+                break;
+            }
+        }
+        spinnerZona.setSelection(indexZona);
+
+        // Dirección actual
+        editDireccion.setText(pedido.getDireccionCliente());
+
+        // Hora actual
+        LocalTime horaActual = pedido.getHoraEntrega() != null ? pedido.getHoraEntrega() : LocalTime.now();
+        txtHoraEntrega.setText("Seleccionada: " + horaActual.toString());
+
+        btnHoraEntrega.setOnClickListener(v -> {
+            TimePickerDialog timePicker = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                timePicker = new TimePickerDialog(context, (view, hourOfDay, minute) -> {
+                    LocalTime nuevaHora = null;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        nuevaHora = LocalTime.of(hourOfDay, minute);
+                    }
+                    txtHoraEntrega.setText("Seleccionada: " + nuevaHora.toString());
+                }, horaActual.getHour(), horaActual.getMinute(), true);
+            }
+            timePicker.show();
+        });
+
+        // TODO: Aquí se configurará el RecyclerView con el adapter para editar productos
+
+        builder.setPositiveButton("Guardar", (dialog, which) -> {
+            String nuevaDireccion = editDireccion.getText().toString().trim();
+            LocalTime nuevaHora = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                nuevaHora = LocalTime.parse(txtHoraEntrega.getText().toString().replace("Seleccionada: ", ""));
+            }
+            int idLocacionSeleccionada = locaciones.get(spinnerZona.getSelectedItemPosition()).getIdLocacion();
+
+            pedido.setDireccionCliente(nuevaDireccion);
+            pedido.setHoraEntrega(nuevaHora);
+            pedido.setIdLocacion(idLocacionSeleccionada);
+
+            new Thread(() -> {
+                AppDataBase.getInstance(context).pedidoDao().update(pedido);
+                if (onPedidoActualizado != null) {
+                    new Handler(Looper.getMainLooper()).post(onPedidoActualizado);
+                }
+            }).start();
+        });
+        EditarProductosPedidoAdapter adapterEditar = new EditarProductosPedidoAdapter(
+                productosDelPedido,
+                productos,
+                productoEliminado -> {
+                    // Opcional: mostrar toast u otra acción
+                    Toast.makeText(context, "Producto eliminado", Toast.LENGTH_SHORT).show();
+                    notifyDataSetChanged();
+                    onPedidoActualizado.run();
+
+                }
+        );
+
+        recyclerProductosEditar.setLayoutManager(new LinearLayoutManager(context));
+        recyclerProductosEditar.setAdapter(adapterEditar);
+
+        builder.setNegativeButton("Cancelar", null);
+        builder.create().show();
+    }
+
 
     static class PedidoViewHolder extends RecyclerView.ViewHolder {
         public View btnEditarPedido;
@@ -352,6 +455,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
             txtEstado = itemView.findViewById(R.id.txtEstado);
             txtTotal = itemView.findViewById(R.id.txtTotal);
             btnCambiarEstado = itemView.findViewById(R.id.btnCambiarEstado);
+            btnEditarPedido = itemView.findViewById(R.id.btnEditarPedido);
             btnCancelar = itemView.findViewById(R.id.btnCancelar);
             txtValorDomicilio = itemView.findViewById(R.id.txtValorDomicilio);
             txtTotalFinal = itemView.findViewById(R.id.txtTotalFinal);

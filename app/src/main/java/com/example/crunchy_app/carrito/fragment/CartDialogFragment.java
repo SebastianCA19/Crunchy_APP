@@ -1,6 +1,7 @@
 package com.example.crunchy_app.carrito.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -316,16 +317,21 @@ public class CartDialogFragment extends DialogFragment {
                         }
 
                         carrito.clear();
-                        requireActivity().runOnUiThread(() -> {
-                            Toast.makeText(getContext(), "✅ Pedido agregado correctamente.", Toast.LENGTH_LONG).show();
-                            dismiss();
-                        });
+                        Activity activity = getActivity();
+                        if (activity != null) {
+                            activity.runOnUiThread(() ->
+                                    Toast.makeText(activity, "✅ Pedido agregado correctamente.", Toast.LENGTH_LONG).show()
+                            );
+                        }
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                        requireActivity().runOnUiThread(() ->
-                                Toast.makeText(getContext(), "❌ Ocurrió un error al confirmar el pedido.", Toast.LENGTH_LONG).show()
-                        );
+                        Activity activity = getActivity();
+                        if (activity != null) {
+                            activity.runOnUiThread(() ->
+                                    Toast.makeText(activity, "❌ Ocurrió un error al confirmar el pedido.", Toast.LENGTH_LONG).show()
+                            );
+                        }
                     }
                 }
             }).start();

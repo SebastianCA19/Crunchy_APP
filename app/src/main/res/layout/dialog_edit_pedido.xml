@@ -1,0 +1,67 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Zona -->
+        <Spinner
+            android:id="@+id/spinnerZona"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Dirección -->
+        <EditText
+            android:id="@+id/editDireccion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Dirección"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Hora de entrega -->
+        <Button
+            android:id="@+id/btnHoraEntrega"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar hora de entrega"
+            android:backgroundTint="#D84315"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/txtHoraEntregaSeleccionada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No seleccionada"
+            android:textColor="#8D6E63"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Lista de productos -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Productos"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerProductosEditar"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnAgregarProducto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Agregar nuevo producto"
+            android:backgroundTint="#D84315"
+            android:textColor="#FFF" />
+
+    </LinearLayout>
+</ScrollView>
