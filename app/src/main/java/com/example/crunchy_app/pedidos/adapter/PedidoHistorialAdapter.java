@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,13 +46,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
 
     private final AppDataBase db;
 
-    private final Object totalLock = new Object();
-
-    private final Object totalFinalLock = new Object();
-
-    private final Object totalProductosLock = new Object();
-
-    private final int CANTIDAD_GRAMOS_CHICHARRON = 80;
+    private final int VALOR_POR_GRAMO;
     private  List<ValorAtributoProducto> chicharronQuantities;
 
 
@@ -60,13 +55,14 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
                                   List<Producto> productos,
                                   List<EstadoPedido> estados,
                                   Map<Integer,Locacion> locaciones,
-                                  AppDataBase db, List<ValorAtributoProducto> chicharronQuantities) {
+                                  AppDataBase db, int valorPorGramo, List<ValorAtributoProducto> chicharronQuantities) {
         this.pedidos = pedidos;
         this.productosDelPedido = productosDelPedido;
         this.productos = productos;
         this.estados = estados;
         this.locaciones = locaciones;
         this.db = db;
+        VALOR_POR_GRAMO = valorPorGramo;
         this.chicharronQuantities = chicharronQuantities;
 
     }
@@ -131,7 +127,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
                 if (producto.getIdProducto() == 41) {
                     for (ValorAtributoProducto chicharronQuantity : chicharronQuantities) {
                         if (chicharronQuantity.getIdProducto().equals(producto.getIdProducto())) {
-                            total += chicharronQuantity.getValorAtributoProducto() * CANTIDAD_GRAMOS_CHICHARRON;
+                            total += chicharronQuantity.getValorAtributoProducto() * VALOR_POR_GRAMO;
                         }
                     }
                 } else if(producto.getIdProducto() == 42){
@@ -160,7 +156,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
                 if (producto.getIdProducto() == 41) {
                     for (ValorAtributoProducto chicharronQuantity : chicharronQuantities) {
                         if (chicharronQuantity.getIdProducto().equals(producto.getIdProducto())) {
-                            totalProductos += chicharronQuantity.getValorAtributoProducto() * CANTIDAD_GRAMOS_CHICHARRON;
+                            totalProductos += chicharronQuantity.getValorAtributoProducto() * VALOR_POR_GRAMO;
                         }
                     }
                 }else{
@@ -185,14 +181,12 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
 
         LinearLayout container = holder.itemView.findViewById(R.id.containerPedido);
         switch (nombreEstado.toLowerCase()) {
-            case "encargada":
-                container.setBackgroundColor(Color.parseColor("#FFF1F1")); break;
-            case "preparando":
-                container.setBackgroundColor(Color.parseColor("#FFFBE0")); break;
-            case "pagado":
-                container.setBackgroundColor(Color.parseColor("#E8FCE8")); break;
-            case "en camino":
-                container.setBackgroundColor(Color.parseColor("#E0F4FF")); break;
+            case "encargado":
+                container.setBackgroundColor(Color.parseColor("#FFE0A3")); break;
+            case "entregado":
+                container.setBackgroundColor(Color.parseColor("#F2A6A0")); break;
+            case "entregado + pagado":
+                container.setBackgroundColor(Color.parseColor("#A7E4B5")); break;
             default:
                 container.setBackgroundColor(Color.WHITE); break;
         }
@@ -210,7 +204,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
                             if(pdp.getIdProducto() == 41){
                                 for (ValorAtributoProducto chicharronQuantity : chicharronQuantities) {
                                     if (chicharronQuantity.getIdProducto().equals(pdp.getIdProducto())) {
-                                        totalAEliminar += chicharronQuantity.getValorAtributoProducto() * CANTIDAD_GRAMOS_CHICHARRON;
+                                        totalAEliminar += chicharronQuantity.getValorAtributoProducto() * VALOR_POR_GRAMO;
                                     }
                                 }
                             }else{
@@ -235,7 +229,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         holder.btnCambiarEstado.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(holder.itemView.getContext(), holder.btnCambiarEstado);
             for (EstadoPedido estado : estados) {
-                popup.getMenu().add(estado.getNombreEstadoPedido());
+                popup.getMenu().add(estado.getNombreEstadoPedido().toUpperCase());
             }
 
             popup.setOnMenuItemClickListener(item -> {
@@ -246,7 +240,8 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
                         EstadoPedido nuevoEstadoSeleccionado = null;
 
                         for (EstadoPedido estado : estados) {
-                            if (estado.getNombreEstadoPedido().contentEquals(Objects.requireNonNull(item.getTitle()))) {
+                            Log.d("Estado", "Estado: " + estado.getNombreEstadoPedido() + " Item: " + item.getTitle() + "");
+                            if (estado.getNombreEstadoPedido().contentEquals(Objects.requireNonNull(item.getTitle().toString().toLowerCase()))) {
                                 nuevoEstadoId = estado.getIdEstadoPedido();
                                 nuevoEstadoSeleccionado = estado;
                                 break;
@@ -255,7 +250,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
 
                         if (nuevoEstadoId == -1) return;
 
-                        List<Integer> estadosActivos = Arrays.asList(1, 2, 3, 4); // IDs de estados que consumen stock
+                        List<Integer> estadosActivos = Arrays.asList(1,2,3); // IDs de estados que consumen stock
 
                         boolean eraActivo = estadosActivos.contains(estadoOriginalId);
                         boolean seraActivo = estadosActivos.contains(nuevoEstadoId);

@@ -1,7 +1,10 @@
 package com.example.crunchy_app.secciones.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -40,11 +43,20 @@ public class OrdersFragment extends Fragment implements OnProductsSelectedListen
     private BebidasFragment bebidasFragment;
     private OtrosFragment otrosFragment;
 
-
     public OrdersFragment() {
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        
+        super.onCreate(savedInstanceState);
+
+        SharedPreferences prefs = requireContext().getSharedPreferences("stock_prefs", Context.MODE_PRIVATE);
+        int valorPorGramo = (int) prefs.getFloat("valor_por_gramo", 0.0f);
+
         comidasFragment = new ComidasFragment(this);
         bebidasFragment = new BebidasFragment(this);
-        otrosFragment = new OtrosFragment(this);
+        otrosFragment = new OtrosFragment(valorPorGramo,this);
     }
 
     @Override

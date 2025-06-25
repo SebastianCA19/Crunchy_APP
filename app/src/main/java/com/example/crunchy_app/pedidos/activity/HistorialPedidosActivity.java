@@ -1,5 +1,6 @@
 package com.example.crunchy_app.pedidos.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 
@@ -61,9 +62,12 @@ public class HistorialPedidosActivity extends AppCompatActivity {
                     .collect(Collectors.toMap(locacion -> locacion.getIdLocacion(), locacion -> locacion));
             List<ValorAtributoProducto> chicharronQuantities = db.valorAtributoProductoDao().getCantidadChicharron();
 
+            SharedPreferences prefs = getSharedPreferences("stock_prefs", MODE_PRIVATE);
+            int valorPorGramo = (int) prefs.getFloat("valor_por_gramo", 0);
+
             runOnUiThread(() -> {
                 PedidoHistorialAdapter adapter = new PedidoHistorialAdapter(
-                        pedidos, productosPedido, productos, estados, locaciones ,db, chicharronQuantities
+                        pedidos, productosPedido, productos, estados, locaciones ,db, valorPorGramo, chicharronQuantities
                 );
                 recyclerView.setAdapter(adapter);
             });

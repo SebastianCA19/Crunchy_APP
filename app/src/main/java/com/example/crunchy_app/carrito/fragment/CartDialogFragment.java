@@ -1,6 +1,6 @@
 package com.example.crunchy_app.carrito.fragment;
 
-import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -285,7 +284,7 @@ public class CartDialogFragment extends DialogFragment {
                                     domName,
                                     metodoPagoId,
                                     locacionSeleccionada.getIdLocacion(),
-                                    1,         // idEstadoPedido (ej: 1 = Pendiente)
+                                    1,         // idEstadoPedido (1 = Encargado)
                                     LocalDate.now(),
                                     LocalTime.now(),
                                     hora_entrega
@@ -316,16 +315,20 @@ public class CartDialogFragment extends DialogFragment {
                         }
 
                         carrito.clear();
-                        requireActivity().runOnUiThread(() -> {
-                            Toast.makeText(getContext(), "✅ Pedido agregado correctamente.", Toast.LENGTH_LONG).show();
-                            dismiss();
-                        });
-
+                        Activity activity = getActivity();
+                        if (activity != null) {
+                            activity.runOnUiThread(() ->
+                                    Toast.makeText(activity, "✅ Pedido agregado correctamente.", Toast.LENGTH_LONG).show()
+                            );
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        requireActivity().runOnUiThread(() ->
-                                Toast.makeText(getContext(), "❌ Ocurrió un error al confirmar el pedido.", Toast.LENGTH_LONG).show()
-                        );
+                        Activity activity = getActivity();
+                        if (activity != null) {
+                            activity.runOnUiThread(() ->
+                                    Toast.makeText(activity, "❌ Ocurrió un error al confirmar el pedido.", Toast.LENGTH_LONG).show()
+                            );
+                        }
                     }
                 }
             }).start();
