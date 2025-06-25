@@ -1,17 +1,24 @@
 package com.example.crunchy_app.secciones.fragment;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.crunchy_app.DBconnection.AppDataBase;
@@ -44,7 +51,6 @@ public class AdminFragment extends Fragment {
     public AdminFragment() {
 
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,6 +63,10 @@ public class AdminFragment extends Fragment {
 
         cargarGanancias(); //  llamada inicial
         SharedPreferences prefs = requireContext().getSharedPreferences("stock_prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+        if(!prefs.contains("valor_por_gramo")){
+            mostrarValorDelGramoForm(prefsEditor);
+        }
         cantidadChicharron = prefs.getInt("chicharron", 0);
         cantidadChorizos = prefs.getInt("chorizos", 0);
 
@@ -153,6 +163,11 @@ public class AdminFragment extends Fragment {
             prefs.edit().putInt("chorizos", cantidadChorizos).apply();
         });
 
+        Button btnActualizarValorPorGramo = view.findViewById(R.id.btnValorGramo);
+        btnActualizarValorPorGramo.setOnClickListener(v -> {
+            mostrarValorDelGramoForm(prefsEditor);
+        });
+
         return view;
     }
 
@@ -180,14 +195,20 @@ public class AdminFragment extends Fragment {
         int progress = (cantidadChicharron == 0) ? 0 :
                 (int) ((double) cantidadChicharronVendidos / cantidadChicharron * 100);
         ProgressBar progressBar = view.findViewById(R.id.progressChicharron);
-        progressBar.setProgress(progress);
+        animateProgressBar(progressBar, progress);
     }
 
     private void actualizarProgressBarChorizos(View view) {
         int progress = (cantidadChorizos == 0) ? 0 :
                 (int) ((double) cantidadChorizosVendidos / cantidadChorizos * 100);
         ProgressBar progressBar = view.findViewById(R.id.progressChorizos);
-        progressBar.setProgress(progress);
+        animateProgressBar(progressBar, progress);
+    }
+
+    private void animateProgressBar(ProgressBar progressBar, int progressTo) {
+        ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", progressBar.getProgress(), progressTo);
+        animation.setDuration(500);
+        animation.start();
     }
 
     @Override
@@ -214,7 +235,11 @@ public class AdminFragment extends Fragment {
                                     ValorAtributoProductoDao atributoProductoDao = db.valorAtributoProductoDao();
                                     String productoIdFormat = String.format("%d%d", producto.getIdProducto(), pedido.getIdPedido());
                                     float chicharron = atributoProductoDao.getValorAtributoProductoPersonalizado(Integer.valueOf(productoIdFormat)).getValorAtributoProducto();
-                                    totalGanancias += chicharron * 80;
+
+                                    SharedPreferences prefs = requireContext().getSharedPreferences("stock_prefs", Context.MODE_PRIVATE);
+                                    int valorPorGramo = (int) prefs.getFloat("valor_por_gramo", 0.0f);
+
+                                    totalGanancias += chicharron * valorPorGramo;
                                     break;
                                 }
                                 totalGanancias += producto.getValorProducto() * pdp.getCantidad();
@@ -226,9 +251,7 @@ public class AdminFragment extends Fragment {
             }
 
             double finalTotalGanancias = totalGanancias;
-            requireActivity().runOnUiThread(() ->
-                    txtGanancias.setText("$" + String.format("%,.0f", finalTotalGanancias)+ " COP")
-            );
+            requireActivity().runOnUiThread(() -> animarGanancias(finalTotalGanancias));
         }).start();
     }
 
@@ -237,13 +260,11 @@ public class AdminFragment extends Fragment {
         cantidadChorizosVendidos = 0;
 
         new Thread(() -> {
-            List<Integer> estadosValidos = Arrays.asList(2, 3, 4); // preparando, pagado, en camino
+            List<Integer> estadosValidos = Arrays.asList(1, 2, 3);
             List<Pedido> pedidosFiltrados = db.pedidoDao().getListaPedidosPorEstados(estadosValidos);
             List<ProductoDelPedido> todosProductos = db.productoDelPedidoDao().getAll();
             List<Producto> productos = db.productoDao().getAll();
             ValorAtributoProductoDao atributoProductoDao = db.valorAtributoProductoDao();
-
-            // 🚫 NO reinicies aquí dentro: solo fuera arriba.
 
             for (Pedido pedido : pedidosFiltrados) {
                 for (ProductoDelPedido pdp : todosProductos) {
@@ -279,7 +300,6 @@ public class AdminFragment extends Fragment {
                 }
             }
 
-            // 👇 Importante: NO uses requireView() si hay posibilidad de que no esté aún
             requireActivity().runOnUiThread(() -> {
                 View view = getView();
                 if (view != null) {
@@ -288,6 +308,63 @@ public class AdminFragment extends Fragment {
                 }
             });
         }).start();
+    }
+
+    private void animarGanancias(double gananciasFinales) {
+        ValueAnimator animator = ValueAnimator.ofFloat(0, (float) gananciasFinales);
+        animator.setDuration(1000);
+        animator.setInterpolator(new DecelerateInterpolator());
+
+        animator.addUpdateListener(animation -> {
+            float valorAnimado = (float) animation.getAnimatedValue();
+            String texto = "$" + String.format("%,.0f", valorAnimado) + " COP";
+            txtGanancias.setText(texto);
+        });
+
+        animator.start();
+    }
+
+    private void mostrarValorDelGramoForm(SharedPreferences.Editor prefsEditor){
+        final EditText inputValorGramo = new EditText(requireContext());
+        inputValorGramo.setHint("Valor del gramo de chicharrón");
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        int margin = (int) (16 * getResources().getDisplayMetrics().density);
+        lp.setMargins(margin, 0, margin, 0);
+        inputValorGramo.setLayoutParams(lp);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Ingrese el valor del gramo de chicharrón");
+        builder.setMessage("Para calcular el valor por un gramo de chicharrón debes hacer: valor del kilo / 1000. Este valor es usado en el calculo para los pedidos personalizados");
+
+        LinearLayout container = new LinearLayout(requireContext());
+        container.setOrientation(LinearLayout.VERTICAL);
+        container.addView(inputValorGramo);
+        builder.setView(container);
+
+        builder.setPositiveButton("Guardar", (dialog, which) -> {
+            String valorInput = inputValorGramo.getText().toString().trim();
+            if (!valorInput.isEmpty()) {
+                try {
+                    prefsEditor.putFloat("valor_por_gramo", Float.parseFloat(valorInput));
+                    prefsEditor.apply();
+                } catch (NumberFormatException e) {
+                    Toast.makeText(requireContext(), "Por favor, ingrese un número válido.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(requireContext(), "El valor no puede estar vacío.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", (dialog, which) -> {
+            dialog.cancel();
+        });
+
+        builder.create().show();
     }
 
 }

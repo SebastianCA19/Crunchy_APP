@@ -186,10 +186,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Insertar Estados de Pedido
         if(estadoPedidoDao.count() == 0){
-            estadoPedidoDao.insert(new EstadoPedido("encargada"));
-            estadoPedidoDao.insert(new EstadoPedido("preparando"));
-            estadoPedidoDao.insert(new EstadoPedido("pagado"));
-            estadoPedidoDao.insert(new EstadoPedido("en camino"));
+            estadoPedidoDao.insert(new EstadoPedido("encargado"));
+            estadoPedidoDao.insert(new EstadoPedido("entregado"));
+            estadoPedidoDao.insert(new EstadoPedido("entregado + pagado"));
         }
 
         // Insertar Métodos de Pago

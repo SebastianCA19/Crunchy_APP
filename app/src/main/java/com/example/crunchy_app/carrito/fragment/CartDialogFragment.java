@@ -2,6 +2,7 @@ package com.example.crunchy_app.carrito.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -323,7 +324,6 @@ public class CartDialogFragment extends DialogFragment {
                                     Toast.makeText(activity, "✅ Pedido agregado correctamente.", Toast.LENGTH_LONG).show()
                             );
                         }
-
                     } catch (Exception e) {
                         e.printStackTrace();
                         Activity activity = getActivity();

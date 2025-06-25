@@ -21,9 +21,12 @@ import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class OtrosFragment extends Fragment implements OnProductsSelectedListener {
 
-    private final int VALOR_POR_GRAMO = 80;
+    private final int VALOR_POR_GRAMO;
 
     private Button btnConvert;
 
@@ -43,8 +46,19 @@ public class OtrosFragment extends Fragment implements OnProductsSelectedListene
 
     private OnProductsSelectedListener listener;
 
-    public OtrosFragment(OnProductsSelectedListener listener) {
+    private TextView tvChorizo;
+
+    private TextView tvBollo;
+
+    private Locale locale;
+
+    private NumberFormat numberFormat;
+
+    public OtrosFragment(int valorPorGramo, OnProductsSelectedListener listener) {
+        VALOR_POR_GRAMO = valorPorGramo;
         this.listener = listener;
+        locale = new Locale("es", "CO");
+        numberFormat = NumberFormat.getCurrencyInstance(locale);
     }
 
 
@@ -57,6 +71,15 @@ public class OtrosFragment extends Fragment implements OnProductsSelectedListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_otros, container, false);
+        tvChorizo = view.findViewById(R.id.tvPriceChorizo);
+
+        new Thread(() -> {
+            Producto chorizo = productoDao.getProductoById(42);
+            tvChorizo.setText(numberFormat.format(chorizo.getValorProducto()));
+            tvBollo = view.findViewById(R.id.tvPriceBollo);
+            Producto bollo = productoDao.getProductoById(43);
+            tvBollo.setText(numberFormat.format(bollo.getValorProducto()));
+        }).start();
 
         //Asignar cada elemento de la view a una variable
         btnConvert = view.findViewById(R.id.btn_convert);
