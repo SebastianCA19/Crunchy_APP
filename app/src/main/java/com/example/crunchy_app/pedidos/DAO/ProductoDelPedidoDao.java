@@ -32,6 +32,4 @@ public interface ProductoDelPedidoDao {
    //funcion para eliminar todos los productos de un pedido
     @Query("DELETE FROM productos_del_pedido WHERE id_pedido = :idPedido")
     public void eliminarPorPedido(String idPedido);
-    @Query("SELECT * FROM productos_del_pedido WHERE id_pedido = :pedidoId")
-    List<ProductoDelPedido> getProductosDelPedido(int pedidoId);
 }

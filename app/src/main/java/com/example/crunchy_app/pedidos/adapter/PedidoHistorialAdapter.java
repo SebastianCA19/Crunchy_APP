@@ -2,7 +2,6 @@ package com.example.crunchy_app.pedidos.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crunchy_app.DBconnection.AppDataBase;
 import com.example.crunchy_app.R;
-import com.example.crunchy_app.pedidos.activity.EditarPedidoActivity;
 import com.example.crunchy_app.pedidos.model.EstadoPedido;
 import com.example.crunchy_app.pedidos.model.Locacion;
 import com.example.crunchy_app.pedidos.model.Pedido;
@@ -198,15 +196,6 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
             default:
                 container.setBackgroundColor(Color.WHITE); break;
         }
-
-        holder.btnEditarPedido.setOnClickListener(v -> {
-            // Abre una pantalla de edición con los datos actuales
-            Intent intent = new Intent(holder.itemView.getContext(), EditarPedidoActivity.class);
-            intent.putExtra("pedidoId", pedido.getIdPedido()); // Envías el ID
-            holder.itemView.getContext().startActivity(intent);
-        });
-
-
         holder.btnCancelar.setOnClickListener(v -> {
             new AlertDialog.Builder(holder.itemView.getContext())
                     .setTitle("Cancelar pedido")
@@ -336,7 +325,6 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
     }
 
     static class PedidoViewHolder extends RecyclerView.ViewHolder {
-        public View btnEditarPedido;
         TextView txtNombreCliente, txtFecha, txtHora,txtProductos, txtEstado, txtTotal,txtValorDomicilio, txtTotalFinal,
                 txtIdDomiciliario, txtIdZona, txtIdDireccion, horaEntrega;
         Button btnCambiarEstado, btnCancelar;

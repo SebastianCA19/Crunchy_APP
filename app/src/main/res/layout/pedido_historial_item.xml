@@ -117,24 +117,16 @@
             android:text="Cambiar Estado" />
 
         <Button
-            android:id="@+id/btnEditarPedido"
+            android:id="@+id/btnCancelar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#FFFFFF"
             android:layout_marginTop="8dp"
             android:backgroundTint="#D84315"
             android:layout_gravity="end"
-            android:text="Editar " />
+            android:text="Cancelar" />
 
-        <Button
-                android:id="@+id/btnCancelar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="#D84315"
-                android:layout_gravity="end"
-                android:text="Cancelar" />
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

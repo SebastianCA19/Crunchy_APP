@@ -7,6 +7,7 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import com.example.crunchy_app.pagos.model.MetodoPago;
+import com.example.crunchy_app.productos.model.Producto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -89,7 +90,7 @@ public class Pedido {
     }
 
     public LocalTime getHoraEntrega() {
-        return this.horaEntrega;
+        return horaEntrega;
     }
 
     public void setHoraEntrega(LocalTime horaEntrega) {
