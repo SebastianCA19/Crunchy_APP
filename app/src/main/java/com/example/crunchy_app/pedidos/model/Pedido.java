@@ -7,7 +7,6 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import com.example.crunchy_app.pagos.model.MetodoPago;
-import com.example.crunchy_app.productos.model.Producto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -48,7 +47,7 @@ public class Pedido {
     @ColumnInfo(name = "direccion_cliente")
     private String direccionCliente;
 
-    @ColumnInfo(name = "nombre-domiciliario")
+    @ColumnInfo(name = "nombre_domiciliario")
     private String nombreDomiciliario;
 
     @ColumnInfo(name = "id_metodo_pago")
@@ -71,7 +70,7 @@ public class Pedido {
     @NonNull
     private LocalTime hora;
 
-    @ColumnInfo(name = "hora-entrega")
+    @ColumnInfo(name = "hora_entrega")
     private LocalTime horaEntrega;
 
     public Pedido() {
@@ -90,7 +89,7 @@ public class Pedido {
     }
 
     public LocalTime getHoraEntrega() {
-        return horaEntrega;
+        return this.horaEntrega;
     }
 
     public void setHoraEntrega(LocalTime horaEntrega) {

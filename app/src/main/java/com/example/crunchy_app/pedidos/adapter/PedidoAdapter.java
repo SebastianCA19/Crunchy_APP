@@ -31,11 +31,6 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
     public void onBindViewHolder(@NonNull PedidoViewHolder holder, int position) {
         Pedido pedido = listaPedidos.get(position);
 
-//        holder.tvNombreCliente.setText(pedido.getNombreCliente() + " " + pedido.getApellidoCliente() );
-//        holder.tvComida.setText("Comida: " + pedido.getIdTipoPedido());
-//        holder.tvBebida.setText("Bebida: " + (pedido.getBebida().isEmpty() ? "No compró" : pedido.getBebida()));
-//        holder.tvTotal.setText("Total: $" + pedido);
-//        holder.tvFecha.setText("Fecha: " + pedido.getFecha()+ "/ Hora: " + pedido.getHora());
     }
 
     @Override

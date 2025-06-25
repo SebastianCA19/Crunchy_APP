@@ -1,0 +1,21 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="16dp"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerEditarCarrito"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/btnGuardarCambiosCarrito"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar productos"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#D84315"
+        android:textColor="#FFF" />
+</LinearLayout>
