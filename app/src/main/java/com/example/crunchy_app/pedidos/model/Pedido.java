@@ -48,7 +48,7 @@ public class Pedido {
     @ColumnInfo(name = "direccion_cliente")
     private String direccionCliente;
 
-    @ColumnInfo(name = "nombre-domiciliario")
+    @ColumnInfo(name = "nombre_domiciliario")
     private String nombreDomiciliario;
 
     @ColumnInfo(name = "id_metodo_pago")
@@ -71,7 +71,7 @@ public class Pedido {
     @NonNull
     private LocalTime hora;
 
-    @ColumnInfo(name = "hora-entrega")
+    @ColumnInfo(name = "hora_entrega")
     private LocalTime horaEntrega;
 
     public Pedido() {
