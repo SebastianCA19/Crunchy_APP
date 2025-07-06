@@ -71,6 +71,13 @@ public class Producto implements Serializable {
         this.valorProducto = valorProducto;
         this.activo = true;
     }
+    public Producto(Integer idProducto, @NonNull String nombreProducto, @NonNull Integer idTipoProducto, @NonNull float valorProducto){
+        this.idProducto = idProducto;
+        this.nombreProducto = nombreProducto;
+        this.idTipoProducto = idTipoProducto;
+        this.valorProducto = valorProducto;
+        this.activo = true;
+    }
 
     public void setActivo(boolean activo){
         this.activo = activo;

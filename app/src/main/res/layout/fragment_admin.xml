@@ -246,7 +246,7 @@
             android:layout_marginTop="16dp"
             android:backgroundTint="#D84315"
             android:padding="16dp"
-            android:text="Actualizar valor del gramo de chicharron"
+            android:text="Actualizar Valores Base"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"

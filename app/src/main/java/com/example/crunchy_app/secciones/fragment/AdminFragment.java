@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.crunchy_app.DBconnection.AppDataBase;
+import com.example.crunchy_app.DBconnection.JsonExporter;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.pedidos.activity.HistorialPedidosActivity;
 import com.example.crunchy_app.pedidos.model.Pedido;
@@ -324,47 +326,111 @@ public class AdminFragment extends Fragment {
         animator.start();
     }
 
-    private void mostrarValorDelGramoForm(SharedPreferences.Editor prefsEditor){
-        final EditText inputValorGramo = new EditText(requireContext());
-        inputValorGramo.setHint("Valor del gramo de chicharrón");
+    private void mostrarValorDelGramoForm(SharedPreferences.Editor prefsEditor) {
+        new Thread(() -> {
+            // 1. Consultar desde Room (en segundo plano)
+            Producto chorizoActual = db.productoDao().getProductoById(42);
+            Producto bolloActual = db.productoDao().getProductoById(43);
+            float valorGramoActual = PreferenceManager
+                    .getDefaultSharedPreferences(requireContext())
+                    .getFloat("valor_por_gramo", 0f);
 
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
+            // 2. Volver al hilo principal para mostrar el diálogo
+            requireActivity().runOnUiThread(() -> {
+                // Inputs
+                final EditText inputValorGramo = new EditText(requireContext());
+                final EditText inputValorBollo = new EditText(requireContext());
+                final EditText inputValorChorizo = new EditText(requireContext());
 
-        int margin = (int) (16 * getResources().getDisplayMetrics().density);
-        lp.setMargins(margin, 0, margin, 0);
-        inputValorGramo.setLayoutParams(lp);
+                inputValorGramo.setHint("Valor del gramo de chicharrón");
+                inputValorBollo.setHint("Valor del bollo");
+                inputValorChorizo.setHint("Valor del chorizo");
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Ingrese el valor del gramo de chicharrón");
-        builder.setMessage("Para calcular el valor por un gramo de chicharrón debes hacer: valor del kilo / 1000. Este valor es usado en el calculo para los pedidos personalizados");
+                // Prellenar valores
+                inputValorGramo.setText(valorGramoActual > 0 ? String.valueOf(valorGramoActual) : "");
+                inputValorBollo.setText(bolloActual != null ? String.valueOf(bolloActual.getValorProducto()) : "");
+                inputValorChorizo.setText(chorizoActual != null ? String.valueOf(chorizoActual.getValorProducto()) : "");
 
-        LinearLayout container = new LinearLayout(requireContext());
-        container.setOrientation(LinearLayout.VERTICAL);
-        container.addView(inputValorGramo);
-        builder.setView(container);
+                // LayoutParams
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                int margin = (int) (16 * getResources().getDisplayMetrics().density);
+                lp.setMargins(margin, 0, margin, 0);
 
-        builder.setPositiveButton("Guardar", (dialog, which) -> {
-            String valorInput = inputValorGramo.getText().toString().trim();
-            if (!valorInput.isEmpty()) {
-                try {
-                    prefsEditor.putFloat("valor_por_gramo", Float.parseFloat(valorInput));
-                    prefsEditor.apply();
-                } catch (NumberFormatException e) {
-                    Toast.makeText(requireContext(), "Por favor, ingrese un número válido.", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(requireContext(), "El valor no puede estar vacío.", Toast.LENGTH_SHORT).show();
-            }
-        });
+                inputValorGramo.setLayoutParams(lp);
+                inputValorBollo.setLayoutParams(lp);
+                inputValorChorizo.setLayoutParams(lp);
 
-        builder.setNegativeButton("Cancelar", (dialog, which) -> {
-            dialog.cancel();
-        });
+                // Títulos
+                TextView tituloGramo = new TextView(requireContext());
+                tituloGramo.setText("💰 Valor por gramo de chicharrón");
+                tituloGramo.setPadding(margin, margin, margin, 8);
 
-        builder.create().show();
+                TextView tituloBollo = new TextView(requireContext());
+                tituloBollo.setText("🥚 Valor del bollo");
+                tituloBollo.setPadding(margin, margin, margin, 8);
+
+                TextView tituloChorizo = new TextView(requireContext());
+                tituloChorizo.setText("🌭 Valor del chorizo");
+                tituloChorizo.setPadding(margin, margin, margin, 8);
+
+                // Layout del formulario
+                LinearLayout container = new LinearLayout(requireContext());
+                container.setOrientation(LinearLayout.VERTICAL);
+                container.addView(tituloGramo);
+                container.addView(inputValorGramo);
+                container.addView(tituloBollo);
+                container.addView(inputValorBollo);
+                container.addView(tituloChorizo);
+                container.addView(inputValorChorizo);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                builder.setTitle("Ingrese valores personalizados");
+                builder.setMessage("Modifique los valores o deje los existentes.");
+                builder.setView(container);
+
+                builder.setPositiveButton("Guardar", (dialog, which) -> {
+                    String valorGramoStr = inputValorGramo.getText().toString().trim();
+                    String valorBolloStr = inputValorBollo.getText().toString().trim();
+                    String valorChorizoStr = inputValorChorizo.getText().toString().trim();
+
+                    if (!valorGramoStr.isEmpty() && !valorBolloStr.isEmpty() && !valorChorizoStr.isEmpty()) {
+                        try {
+                            float valorGramo = Float.parseFloat(valorGramoStr);
+                            float valorBollo = Float.parseFloat(valorBolloStr);
+                            float valorChorizo = Float.parseFloat(valorChorizoStr);
+
+                            prefsEditor.putFloat("valor_por_gramo", valorGramo);
+                            prefsEditor.apply();
+
+                            Producto chorizoActualizado = new Producto(42, "chorizo personalizado", 6, valorChorizo);
+                            Producto bolloActualizado = new Producto(43, "bollo personalizado", 6, valorBollo);
+
+                            new Thread(() -> {
+                                db.productoDao().update(bolloActualizado);
+                                db.productoDao().update(chorizoActualizado);
+
+                                JsonExporter.exportProductos(requireContext(), db.productoDao().getAll());
+                                requireActivity().runOnUiThread(() -> {
+                                    Toast.makeText(requireContext(), "Valores guardados correctamente", Toast.LENGTH_SHORT).show();
+                                });
+                            }).start();
+
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(requireContext(), "Por favor, ingrese un número válido.", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "Todos los campos deben estar completos.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.cancel());
+
+                builder.create().show();
+            });
+        }).start();
     }
 
 }
