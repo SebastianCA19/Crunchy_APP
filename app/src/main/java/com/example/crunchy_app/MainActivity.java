@@ -339,25 +339,24 @@ public class MainActivity extends AppCompatActivity {
         if(metodoPagoDao.count() == 0){
             metodoPagoDao.insert(new MetodoPago("efectivo"));
             metodoPagoDao.insert(new MetodoPago("transferencia"));
-            metodoPagoDao.insert(new MetodoPago("mixto"));
         }
 
         // Insertar Tipos de Producto
         if (tipoProductoDao.count() == 0){
-            tipoProductoDao.insert(new TipoProducto("combo"));
-            tipoProductoDao.insert(new TipoProducto("picada"));
-            tipoProductoDao.insert(new TipoProducto("bebida-personal"));
-            tipoProductoDao.insert(new TipoProducto("bebida-familiar"));
-            tipoProductoDao.insert(new TipoProducto("bebida-alcoholica"));
-            tipoProductoDao.insert(new TipoProducto("personalizado"));
+            tipoProductoDao.insert(new TipoProducto("combo")); // id 1
+            tipoProductoDao.insert(new TipoProducto("picada")); // id 2
+            tipoProductoDao.insert(new TipoProducto("bebida-personal")); // id 3
+            tipoProductoDao.insert(new TipoProducto("bebida-familiar")); // id 4
+            tipoProductoDao.insert(new TipoProducto("bebida-alcoholica"));// id 5
+            tipoProductoDao.insert(new TipoProducto("personalizado")); // id 6
         }
 
         //Insertar Atributos de Producto
         if (atributoProductoDao.count() == 0){
-            atributoProductoDao.insertAtributoProducto(new AtributoProducto("chicharrón"));
-            atributoProductoDao.insertAtributoProducto(new AtributoProducto("chorizo"));
-            atributoProductoDao.insertAtributoProducto(new AtributoProducto("bollo"));
-            atributoProductoDao.insertAtributoProducto(new AtributoProducto("volumen"));
+            atributoProductoDao.insertAtributoProducto(new AtributoProducto("chicharrón")); // id atributoProducto 1
+            atributoProductoDao.insertAtributoProducto(new AtributoProducto("chorizo"));// id atributoProducto 2
+            atributoProductoDao.insertAtributoProducto(new AtributoProducto("bollo"));// id atributoProducto 3
+            atributoProductoDao.insertAtributoProducto(new AtributoProducto("volumen"));// id atributoProducto 4
         }
 
         // Insertar Productos

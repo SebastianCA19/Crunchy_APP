@@ -1,10 +1,14 @@
 package com.example.crunchy_app.productos.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -20,7 +24,9 @@ import com.example.crunchy_app.pedidos.adapter.LocacionAdapter;
 import com.example.crunchy_app.pedidos.model.Locacion;
 import com.example.crunchy_app.productos.adapter.ProductoAdapter;
 import com.example.crunchy_app.productos.model.Producto;
+import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -222,30 +228,76 @@ public class GestionProductosActivity extends AppCompatActivity {
         builder.setNegativeButton("No", null);
         builder.show();
     }
-    private void mostrarDialogAgregarProducto(int tipoProductoId, Runnable accionPostGuardar) {
+    private void mostrarDialogAgregarProducto(int tipoProductoIdInicial, Runnable accionPostGuardar) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_producto, null);
         builder.setView(dialogView);
 
         EditText etNombre = dialogView.findViewById(R.id.etNombreProducto);
         EditText etValor = dialogView.findViewById(R.id.etValorProducto);
+        Spinner spinnerTipo = dialogView.findViewById(R.id.spinnerTipoProducto);
+        EditText etCantidadBollo = dialogView.findViewById(R.id.etCantidadBollo);
+        EditText etCantidadChicharron = dialogView.findViewById(R.id.etCantidadChicharron);
+        EditText etCantidadChorizo = dialogView.findViewById(R.id.etCantidadChorizo);
 
+        // Opciones visibles para el usuario
+        String[] tiposVisibles = {"Combo", "Picada"};
+
+        // Adapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, tiposVisibles);
+        spinnerTipo.setAdapter(adapter);
+
+        // Preseleccionar según el ID que llegó
+        spinnerTipo.setSelection(tipoProductoIdInicial == 1 ? 0 : 1); // 1 = Combo (index 0), 2 = Picada (index 1)
 
         builder.setTitle("Agregar producto");
         builder.setPositiveButton("Guardar", (dialog, which) -> {
             String nombre = etNombre.getText().toString().trim();
             String valorStr = etValor.getText().toString().trim();
+            String bolloStr = etCantidadBollo.getText().toString().trim();
+            String chicharronStr = etCantidadChicharron.getText().toString().trim();
+            String chorizoStr = etCantidadChorizo.getText().toString().trim();
 
             if (nombre.isEmpty() || valorStr.isEmpty()) {
                 Toast.makeText(this, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            float valor = Float.parseFloat(valorStr);
+            float valor;
+            try {
+                valor = Float.parseFloat(valorStr);
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "El valor debe ser un número válido", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            float bollo = bolloStr.isEmpty() ? 0f : Float.parseFloat(bolloStr);
+            float chicharron = chicharronStr.isEmpty() ? 0f : Float.parseFloat(chicharronStr);
+            float chorizo = spinnerTipo.getSelectedItemPosition() == 0 && !chorizoStr.isEmpty()
+                    ? Float.parseFloat(chorizoStr)
+                    : 0f;
+
+
+            int tipoProductoId = spinnerTipo.getSelectedItemPosition() == 0 ? 1 : 2; // Combo = 1, Picada = 2
             Producto nuevo = new Producto(nombre, tipoProductoId, valor);
+
+            List<ValorAtributoProducto> atributos = new ArrayList<>();
+
+            if (chicharron > 0f) {
+                atributos.add(new ValorAtributoProducto(nuevo.getIdProducto(), 1, chicharron));
+            }
+            if (tipoProductoId == 1 && chorizo > 0f) { // Solo Combo puede tener chorizo
+                atributos.add(new ValorAtributoProducto(nuevo.getIdProducto(), 2, chorizo));
+            }
+            if (bollo > 0f) {
+                atributos.add(new ValorAtributoProducto(nuevo.getIdProducto(), 3, bollo));
+            }
 
             new Thread(() -> {
                 db.productoDao().insert(nuevo);
+                for (ValorAtributoProducto atributo : atributos) {
+                    db.valorAtributoProductoDao().insert(atributo);
+                }
                 JsonExporter.exportProductos(getApplicationContext(), db.productoDao().getAll());
                 JsonExporter.exportValorAtributoProductos(getApplicationContext(), db.valorAtributoProductoDao().getAll());
                 runOnUiThread(accionPostGuardar);

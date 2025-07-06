@@ -22,4 +22,31 @@
         android:inputType="numberDecimal"
         android:textColorHint="#D84315"/>
 
+    <Spinner
+        android:id="@+id/spinnerTipoProducto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/etCantidadBollo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Cantidad de bollos"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/etCantidadChicharron"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Cantidad de chicharrones"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/etCantidadChorizo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Cantidad de chorizos"
+        android:inputType="numberDecimal" />
+
+
 </LinearLayout>
