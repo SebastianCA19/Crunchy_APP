@@ -171,7 +171,7 @@ public class GestionProductosActivity extends AppCompatActivity {
 
             new Thread(() -> {
                 db.locacionDao().insert(nuevaLocacion);
-                JsonExporter.exportProductos(getApplicationContext(), db.productoDao().getAll());
+                JsonExporter.exportLocaciones(getApplicationContext(), db.locacionDao().getAll());
                 // Volver a cargar locaciones (en el hilo principal)
                 runOnUiThread(this::cargarLocaciones);
             }).start();
@@ -466,6 +466,7 @@ public class GestionProductosActivity extends AppCompatActivity {
         builder.setPositiveButton("Sí", (dialog, which) -> {
             new Thread(() -> {
                 db.productoDao().deleteProductoById(producto.getIdProducto());
+                db.valorAtributoProductoDao().desactivarByProductoId(producto.getIdProducto());
                 JsonExporter.exportProductos(getApplicationContext(), db.productoDao().getAll());
                 JsonExporter.exportValorAtributoProductos(getApplicationContext(), db.valorAtributoProductoDao().getAll());
                 runOnUiThread(accionPostGuardar);

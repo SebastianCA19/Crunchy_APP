@@ -37,7 +37,5 @@ public interface LocacionDao {
     @Insert
     void insertAll(List<Locacion> locacions);
 
-    @Query("SELECT * FROM locaciones WHERE activo = 1")
-    List<Locacion> getAllActivas();
 
 }
