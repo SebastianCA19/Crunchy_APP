@@ -46,21 +46,39 @@ public class ValorAtributoProducto {
     @ColumnInfo(name = "personalizado_id")
     private Integer personalizadoId;
 
+    @NonNull
+    @ColumnInfo(name = "activo")
+    private boolean activo;
+
+
     public ValorAtributoProducto() {
     }
 
-    public ValorAtributoProducto(Integer idProducto, Integer idAtributoProducto,float valorAtributoProducto) {
-        this.valorAtributoProducto = valorAtributoProducto;
-        this.idAtributoProducto = idAtributoProducto;
+    public ValorAtributoProducto(Integer idProducto, Integer idAtributoProducto, float valorAtributoProducto) {
         this.idProducto = idProducto;
+        this.idAtributoProducto = idAtributoProducto;
+        this.valorAtributoProducto = valorAtributoProducto;
+        this.activo = true;
     }
+
 
     public ValorAtributoProducto(Integer idProducto, Integer idAtributoProducto,float valorAtributoProducto, Integer personalizadoId) {
         this.valorAtributoProducto = valorAtributoProducto;
         this.idAtributoProducto = idAtributoProducto;
         this.idProducto = idProducto;
         this.personalizadoId = personalizadoId;
+        this.activo = true;
     }
+
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
 
     public Integer getIdValorAtributoProducto() {
         return idValorAtributoProducto;

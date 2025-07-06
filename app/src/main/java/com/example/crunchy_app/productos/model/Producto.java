@@ -1,6 +1,8 @@
 package com.example.crunchy_app.productos.model;
 
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

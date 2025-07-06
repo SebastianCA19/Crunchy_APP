@@ -1,6 +1,5 @@
 package com.example.crunchy_app.productos.activity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,11 +32,10 @@ import java.util.Objects;
 
 
 public class GestionProductosActivity extends AppCompatActivity {
-
     private Button btnComidas, btnBebidas, btnLocaciones, btnAgregarLocacion, btnAgregarComida, btnAgregarBebida;
     private RecyclerView recyclerGestion;
-
     private AppDataBase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -228,7 +226,7 @@ public class GestionProductosActivity extends AppCompatActivity {
         builder.show();
     }
 
-    ///////////////////////////////
+    ////////////////////////////////////////
     private void mostrarDialogAgregarProducto(int tipoProductoIdInicial, Runnable accionPostGuardar) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_producto, null);
@@ -323,8 +321,9 @@ public class GestionProductosActivity extends AppCompatActivity {
             }
 
             new Thread(() -> {
-                db.productoDao().insert(nuevo);
+                Long idProducto = db.productoDao().insert(nuevo);
                 for (ValorAtributoProducto atributo : atributos) {
+                    atributo.setIdProducto(idProducto.intValue());
                     db.valorAtributoProductoDao().insert(atributo);
                 }
                 JsonExporter.exportProductos(getApplicationContext(), db.productoDao().getAll());
@@ -343,9 +342,67 @@ public class GestionProductosActivity extends AppCompatActivity {
 
         EditText etNombre = dialogView.findViewById(R.id.etNombreProducto);
         EditText etValor = dialogView.findViewById(R.id.etValorProducto);
+        Spinner spinnerTipo = dialogView.findViewById(R.id.spinnerTipoProducto);
 
+        EditText etCantidadBollo = dialogView.findViewById(R.id.etCantidadBollo);
+        EditText etCantidadChicharron = dialogView.findViewById(R.id.etCantidadChicharron);
+        EditText etCantidadChorizo = dialogView.findViewById(R.id.etCantidadChorizo);
+        EditText etMililitros = dialogView.findViewById(R.id.etCantidadMililitros);
+
+        LinearLayout layoutIngredientes = dialogView.findViewById(R.id.layoutIngredientes);
+        LinearLayout layoutMililitros = dialogView.findViewById(R.id.layoutMililitros);
+
+        // Inicializar campos
         etNombre.setText(producto.getNombreProducto());
         etValor.setText(String.valueOf(producto.getValorProducto()));
+
+        int tipoProductoId = producto.getIdTipoProducto();
+        boolean esComida = (tipoProductoId == 1 || tipoProductoId == 2);
+
+        String[] tiposVisibles;
+        int tipoInicialIndex;
+
+        if (esComida) {
+            tiposVisibles = new String[]{"Combo", "Picada"};
+            tipoInicialIndex = (tipoProductoId == 1) ? 0 : 1;
+            layoutIngredientes.setVisibility(View.VISIBLE);
+            layoutMililitros.setVisibility(View.GONE);
+        } else {
+            tiposVisibles = new String[]{"Bebida personal", "Bebida familiar", "Bebida alcohólica"};
+            tipoInicialIndex = tipoProductoId - 3;
+            layoutIngredientes.setVisibility(View.GONE);
+            layoutMililitros.setVisibility(View.VISIBLE);
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, tiposVisibles);
+        spinnerTipo.setAdapter(adapter);
+        spinnerTipo.setSelection(tipoInicialIndex);
+
+        if (esComida) {
+            spinnerTipo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    etCantidadChorizo.setVisibility(position == 0 ? View.VISIBLE : View.GONE); // 0 = Combo
+                }
+                @Override public void onNothingSelected(AdapterView<?> parent) {}
+            });
+        }
+
+        // Obtener valores actuales de los atributos
+        new Thread(() -> {
+            List<ValorAtributoProducto> atributos = db.valorAtributoProductoDao().getByProductoId(producto.getIdProducto());
+
+            runOnUiThread(() -> {
+                for (ValorAtributoProducto a : atributos) {
+                    switch (a.getIdAtributoProducto()) {
+                        case 1: etCantidadChicharron.setText(String.valueOf(a.getValorAtributoProducto())); break;
+                        case 2: etCantidadChorizo.setText(String.valueOf(a.getValorAtributoProducto())); break;
+                        case 3: etCantidadBollo.setText(String.valueOf(a.getValorAtributoProducto())); break;
+                        case 4: etMililitros.setText(String.valueOf(a.getValorAtributoProducto())); break;
+                    }
+                }
+            });
+        }).start();
 
         builder.setTitle("Editar producto");
         builder.setPositiveButton("Guardar", (dialog, which) -> {
@@ -361,16 +418,47 @@ public class GestionProductosActivity extends AppCompatActivity {
             producto.setNombreProducto(nombre);
             producto.setValorProducto(valor);
 
+            int nuevoTipoProductoId;
+            if (esComida) {
+                nuevoTipoProductoId = (spinnerTipo.getSelectedItemPosition() == 0) ? 1 : 2;
+            } else {
+                nuevoTipoProductoId = 3 + spinnerTipo.getSelectedItemPosition(); // 3, 4 o 5
+            }
+            producto.setIdTipoProducto(nuevoTipoProductoId);
+
+            List<ValorAtributoProducto> nuevosAtributos = new ArrayList<>();
+
+            if (nuevoTipoProductoId == 1 || nuevoTipoProductoId == 2) {
+                float bollo = etCantidadBollo.getText().toString().trim().isEmpty() ? 0f : Float.parseFloat(etCantidadBollo.getText().toString().trim());
+                float chicharron = etCantidadChicharron.getText().toString().trim().isEmpty() ? 0f : Float.parseFloat(etCantidadChicharron.getText().toString().trim());
+                float chorizo = etCantidadChorizo.getText().toString().trim().isEmpty() ? 0f : Float.parseFloat(etCantidadChorizo.getText().toString().trim());
+
+                if (chicharron > 0f) nuevosAtributos.add(new ValorAtributoProducto(producto.getIdProducto(), 1, chicharron));
+                if (nuevoTipoProductoId == 1 && chorizo > 0f) nuevosAtributos.add(new ValorAtributoProducto(producto.getIdProducto(), 2, chorizo));
+                if (bollo > 0f) nuevosAtributos.add(new ValorAtributoProducto(producto.getIdProducto(), 3, bollo));
+            } else {
+                float ml = etMililitros.getText().toString().trim().isEmpty() ? 0f : Float.parseFloat(etMililitros.getText().toString().trim());
+                if (ml > 0f) {
+                    nuevosAtributos.add(new ValorAtributoProducto(producto.getIdProducto(), 4, ml));
+                }
+            }
+
             new Thread(() -> {
                 db.productoDao().update(producto);
+                db.valorAtributoProductoDao().desactivarByProductoId(producto.getIdProducto());
+                for (ValorAtributoProducto atributo : nuevosAtributos) {
+                    db.valorAtributoProductoDao().insert(atributo);
+                }
                 JsonExporter.exportProductos(getApplicationContext(), db.productoDao().getAll());
                 JsonExporter.exportValorAtributoProductos(getApplicationContext(), db.valorAtributoProductoDao().getAll());
                 runOnUiThread(accionPostGuardar);
             }).start();
         });
+
         builder.setNegativeButton("Cancelar", null);
         builder.show();
     }
+
     private void mostrarDialogEliminarProducto(Producto producto, Runnable accionPostGuardar) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Eliminar producto");
@@ -386,9 +474,6 @@ public class GestionProductosActivity extends AppCompatActivity {
         builder.setNegativeButton("No", null);
         builder.show();
     }
-
-
-
 
 }
 
