@@ -2,6 +2,7 @@ package com.example.crunchy_app.pedidos.DAO;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
@@ -20,8 +21,8 @@ public interface ProductoDelPedidoDao {
     @Query("SELECT * FROM productos_del_pedido WHERE id_pedido = :idPedido")
     public List<ProductoDelPedido> getProductosByPedido(Integer idPedido);
 
-    @Insert
-    public long insert(ProductoDelPedido productoDelPedido);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(ProductoDelPedido productoDelPedido);
 
     @Query("DELETE FROM productos_del_pedido WHERE id_pedido = :idPedido")
     public int deleteProductosByPedido(Integer idPedido);

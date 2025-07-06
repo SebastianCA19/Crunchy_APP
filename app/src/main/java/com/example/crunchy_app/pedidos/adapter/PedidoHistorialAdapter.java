@@ -75,6 +75,27 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         this.chicharronQuantities = chicharronQuantities;
 
     }
+    public void recargarDatosDesdeDB() {
+        new Thread(() -> {
+            // Carga las listas de datos actualizadas desde la BD
+            List<PedidoConEstado> nuevosPedidos = db.pedidoDao().getPedidosConEstado(); // Asegúrate de tener un método así
+            List<ProductoDelPedido> nuevosProductosDelPedido = db.productoDelPedidoDao().getAll();
+
+            // Vuelve al hilo principal para actualizar la UI
+            new Handler(Looper.getMainLooper()).post(() -> {
+                // Reemplaza los datos viejos con los nuevos
+                this.pedidos.clear();
+                this.pedidos.addAll(nuevosPedidos);
+
+                this.productosDelPedido.clear();
+                this.productosDelPedido.addAll(nuevosProductosDelPedido);
+
+                // Notifica al adaptador que todo el conjunto de datos cambió
+                notifyDataSetChanged();
+                Log.d("AdapterRefresh", "Datos recargados y UI notificada.");
+            });
+        }).start();
+    }
 
     @NonNull
     @Override
@@ -201,14 +222,12 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         }
 
         holder.btnEditarPedido.setOnClickListener(v -> {
-
-                mostrarDialogEditarPedido(
-                        holder.itemView.getContext(),
-                        pedido,
-                        locaciones.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList()),
-                        () -> notifyItemChanged(holder.getAdapterPosition())
-                );
-
+            mostrarDialogEditarPedido(
+                    holder.itemView.getContext(),
+                    pedidos.get(position).pedido, // Pasas el pedido
+                    new ArrayList<>(locaciones.values()), // Pasas las locaciones
+                    this::recargarDatosDesdeDB // ¡AQUÍ ESTÁ LA MAGIA! Se pasa la referencia al método de recarga
+            );
         });
 
 
@@ -405,24 +424,45 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
             pedido.setHoraEntrega(nuevaHora);
             pedido.setIdLocacion(idLocacionSeleccionada);
 
+            List<ProductoDelPedido> productosEditados = ((EditarProductosPedidoAdapter) recyclerProductosEditar.getAdapter()).getProductosActualizados();
+
+
             new Thread(() -> {
-                AppDataBase.getInstance(context).pedidoDao().update(pedido);
+                AppDataBase db = AppDataBase.getInstance(context);
+
+                // 1️⃣ Eliminar productos anteriores del pedido
+                db.productoDelPedidoDao().eliminarPorPedido(pedido.getIdPedido().toString());
+
+                // 2️⃣ Insertar los productos nuevos/modificados
+                for (ProductoDelPedido pdp : productosEditados) {
+                    db.productoDelPedidoDao().insert(pdp);
+                }
+
+                // 3️⃣ Actualizar el pedido (zona, dirección, hora entrega)
+                db.pedidoDao().update(pedido);
+
+                // 4️⃣ Refrescar pantalla en UI thread
                 if (onPedidoActualizado != null) {
                     new Handler(Looper.getMainLooper()).post(onPedidoActualizado);
                 }
             }).start();
         });
+        List<ProductoDelPedido> productosFiltrados = new ArrayList<>();
+        for (ProductoDelPedido pdp : productosDelPedido) {
+            if (pdp.getIdPedido().equals(pedido.getIdPedido())) {
+                productosFiltrados.add(pdp);
+            }
+        }
         EditarProductosPedidoAdapter adapterEditar = new EditarProductosPedidoAdapter(
-                productosDelPedido,
+                productosFiltrados,
                 productos,
                 productoEliminado -> {
                     // Opcional: mostrar toast u otra acción
                     Toast.makeText(context, "Producto eliminado", Toast.LENGTH_SHORT).show();
-                    notifyDataSetChanged();
-                    onPedidoActualizado.run();
-
                 }
         );
+
+        adapterEditar.setRecyclerView(recyclerProductosEditar);
 
         recyclerProductosEditar.setLayoutManager(new LinearLayoutManager(context));
         recyclerProductosEditar.setAdapter(adapterEditar);
@@ -430,6 +470,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         builder.setNegativeButton("Cancelar", null);
         builder.create().show();
     }
+
 
 
     static class PedidoViewHolder extends RecyclerView.ViewHolder {

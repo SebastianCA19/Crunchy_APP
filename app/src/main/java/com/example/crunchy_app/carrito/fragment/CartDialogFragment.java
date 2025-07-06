@@ -447,9 +447,6 @@ public class CartDialogFragment extends DialogFragment {
             case "Transferencia":
                 metodoPagoId = 2;
                 break;
-            case "Mixto":
-                metodoPagoId = 3;
-                break;
         }
     }
 

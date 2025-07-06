@@ -201,11 +201,6 @@
                 android:layout_height="wrap_content"
                 android:text="Transferencia" />
 
-            <RadioButton
-                android:id="@+id/rbMixto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mixto" />
         </RadioGroup>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
