@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:hint="Nombre del producto"
         android:inputType="text"
-        android:textColorHint="#D84315"/>
+        android:minHeight="48dp"
+        android:textColorHint="#D84315" />
 
     <EditText
         android:id="@+id/etValorProducto"
@@ -20,33 +21,61 @@
         android:layout_height="wrap_content"
         android:hint="Valor del producto"
         android:inputType="numberDecimal"
-        android:textColorHint="#D84315"/>
+        android:minHeight="48dp"
+        android:textColorHint="#D84315" />
 
     <Spinner
         android:id="@+id/spinnerTipoProducto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:minHeight="48dp" />
 
-    <EditText
-        android:id="@+id/etCantidadBollo"
+    <!-- Ingredientes solo para comidas -->
+    <LinearLayout
+        android:id="@+id/layoutIngredientes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Cantidad de bollos"
-        android:inputType="numberDecimal" />
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/etCantidadChicharron"
+        <EditText
+            android:id="@+id/etCantidadBollo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cantidad de bollos"
+            android:inputType="numberDecimal"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/etCantidadChicharron"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cantidad de chicharrones"
+            android:inputType="numberDecimal"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/etCantidadChorizo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cantidad de chorizos"
+            android:inputType="numberDecimal"
+            android:minHeight="48dp" />
+    </LinearLayout>
+
+    <!-- Mililitros solo para bebidas -->
+    <LinearLayout
+        android:id="@+id/layoutMililitros"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Cantidad de chicharrones"
-        android:inputType="numberDecimal" />
+        android:orientation="vertical"
+        android:visibility="gone">
 
-    <EditText
-        android:id="@+id/etCantidadChorizo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Cantidad de chorizos"
-        android:inputType="numberDecimal" />
-
+        <EditText
+            android:id="@+id/etCantidadMililitros"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cantidad en mililitros"
+            android:inputType="numberDecimal" />
+    </LinearLayout>
 
 </LinearLayout>

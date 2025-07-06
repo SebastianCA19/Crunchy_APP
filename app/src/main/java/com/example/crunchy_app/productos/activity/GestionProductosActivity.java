@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -70,8 +71,6 @@ public class GestionProductosActivity extends AppCompatActivity {
         btnAgregarComida.setOnClickListener(v -> mostrarDialogAgregarProducto(1,this::cargarComidas));
         btnAgregarBebida.setOnClickListener(v -> mostrarDialogAgregarProducto(3,this::cargarBebidas));
 
-
-
     }
     private void cargarComidas() {
         new Thread(() -> {
@@ -101,7 +100,6 @@ public class GestionProductosActivity extends AppCompatActivity {
             });
         }).start();
     }
-
     private void cargarBebidas() {
         new Thread(() -> {
             List<Producto> bebidas = db.productoDao().getBebidas();
@@ -128,7 +126,6 @@ public class GestionProductosActivity extends AppCompatActivity {
 
         }).start();
     }
-
     private void cargarLocaciones() {
         new Thread(() -> {
             List<Locacion> locaciones = db.locacionDao().getAll();
@@ -149,6 +146,8 @@ public class GestionProductosActivity extends AppCompatActivity {
             });
         }).start();
     }
+
+    /////////////////////////////////////////
     private void mostrarDialogAgregarLocacion() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -228,6 +227,8 @@ public class GestionProductosActivity extends AppCompatActivity {
         builder.setNegativeButton("No", null);
         builder.show();
     }
+
+    ///////////////////////////////
     private void mostrarDialogAgregarProducto(int tipoProductoIdInicial, Runnable accionPostGuardar) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_producto, null);
@@ -236,30 +237,54 @@ public class GestionProductosActivity extends AppCompatActivity {
         EditText etNombre = dialogView.findViewById(R.id.etNombreProducto);
         EditText etValor = dialogView.findViewById(R.id.etValorProducto);
         Spinner spinnerTipo = dialogView.findViewById(R.id.spinnerTipoProducto);
+
         EditText etCantidadBollo = dialogView.findViewById(R.id.etCantidadBollo);
         EditText etCantidadChicharron = dialogView.findViewById(R.id.etCantidadChicharron);
         EditText etCantidadChorizo = dialogView.findViewById(R.id.etCantidadChorizo);
+        EditText etMililitros = dialogView.findViewById(R.id.etCantidadMililitros);
 
-        // Opciones visibles para el usuario
-        String[] tiposVisibles = {"Combo", "Picada"};
+        LinearLayout layoutIngredientes = dialogView.findViewById(R.id.layoutIngredientes);
+        LinearLayout layoutMililitros = dialogView.findViewById(R.id.layoutMililitros);
 
-        // Adapter
+        String[] tiposVisibles;
+        int tipoInicialIndex;
+
+        boolean esComida = (tipoProductoIdInicial == 1 || tipoProductoIdInicial == 2);
+
+        if (esComida) {
+            tiposVisibles = new String[]{"Combo", "Picada"};
+            tipoInicialIndex = (tipoProductoIdInicial == 1) ? 0 : 1;
+            layoutIngredientes.setVisibility(View.VISIBLE);
+            layoutMililitros.setVisibility(View.GONE);
+        } else {
+            tiposVisibles = new String[]{"Bebida personal", "Bebida familiar", "Bebida alcohólica"};
+            tipoInicialIndex = (tipoProductoIdInicial == 3) ? 0 : (tipoProductoIdInicial == 4 ? 1 : 2);
+            layoutIngredientes.setVisibility(View.GONE);
+            layoutMililitros.setVisibility(View.VISIBLE);
+        }
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, tiposVisibles);
         spinnerTipo.setAdapter(adapter);
+        spinnerTipo.setSelection(tipoInicialIndex);
 
-        // Preseleccionar según el ID que llegó
-        spinnerTipo.setSelection(tipoProductoIdInicial == 1 ? 0 : 1); // 1 = Combo (index 0), 2 = Picada (index 1)
+        // Ocultar chorizo si elige "Picada"
+        if (esComida) {
+            spinnerTipo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    etCantidadChorizo.setVisibility(position == 0 ? View.VISIBLE : View.GONE); // 0 = Combo
+                }
+                @Override public void onNothingSelected(AdapterView<?> parent) {}
+            });
+        }
 
         builder.setTitle("Agregar producto");
         builder.setPositiveButton("Guardar", (dialog, which) -> {
             String nombre = etNombre.getText().toString().trim();
             String valorStr = etValor.getText().toString().trim();
-            String bolloStr = etCantidadBollo.getText().toString().trim();
-            String chicharronStr = etCantidadChicharron.getText().toString().trim();
-            String chorizoStr = etCantidadChorizo.getText().toString().trim();
 
             if (nombre.isEmpty() || valorStr.isEmpty()) {
-                Toast.makeText(this, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Por favor completa todos los campos obligatorios", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -271,26 +296,30 @@ public class GestionProductosActivity extends AppCompatActivity {
                 return;
             }
 
-            float bollo = bolloStr.isEmpty() ? 0f : Float.parseFloat(bolloStr);
-            float chicharron = chicharronStr.isEmpty() ? 0f : Float.parseFloat(chicharronStr);
-            float chorizo = spinnerTipo.getSelectedItemPosition() == 0 && !chorizoStr.isEmpty()
-                    ? Float.parseFloat(chorizoStr)
-                    : 0f;
+            int tipoProductoId;
+            if (esComida) {
+                tipoProductoId = (spinnerTipo.getSelectedItemPosition() == 0) ? 1 : 2;
+            } else {
+                tipoProductoId = 3 + spinnerTipo.getSelectedItemPosition(); // 3, 4 o 5
+            }
 
-
-            int tipoProductoId = spinnerTipo.getSelectedItemPosition() == 0 ? 1 : 2; // Combo = 1, Picada = 2
             Producto nuevo = new Producto(nombre, tipoProductoId, valor);
 
             List<ValorAtributoProducto> atributos = new ArrayList<>();
 
-            if (chicharron > 0f) {
-                atributos.add(new ValorAtributoProducto(nuevo.getIdProducto(), 1, chicharron));
-            }
-            if (tipoProductoId == 1 && chorizo > 0f) { // Solo Combo puede tener chorizo
-                atributos.add(new ValorAtributoProducto(nuevo.getIdProducto(), 2, chorizo));
-            }
-            if (bollo > 0f) {
-                atributos.add(new ValorAtributoProducto(nuevo.getIdProducto(), 3, bollo));
+            if (esComida) {
+                float bollo = etCantidadBollo.getText().toString().trim().isEmpty() ? 0f : Float.parseFloat(etCantidadBollo.getText().toString().trim());
+                float chicharron = etCantidadChicharron.getText().toString().trim().isEmpty() ? 0f : Float.parseFloat(etCantidadChicharron.getText().toString().trim());
+                float chorizo = etCantidadChorizo.getText().toString().trim().isEmpty() ? 0f : Float.parseFloat(etCantidadChorizo.getText().toString().trim());
+
+                if (chicharron > 0f) atributos.add(new ValorAtributoProducto(nuevo.getIdProducto(), 1, chicharron));
+                if (tipoProductoId == 1 && chorizo > 0f) atributos.add(new ValorAtributoProducto(nuevo.getIdProducto(), 2, chorizo));
+                if (bollo > 0f) atributos.add(new ValorAtributoProducto(nuevo.getIdProducto(), 3, bollo));
+            } else {
+                float ml = etMililitros.getText().toString().trim().isEmpty() ? 0f : Float.parseFloat(etMililitros.getText().toString().trim());
+                if (ml > 0f) {
+                    atributos.add(new ValorAtributoProducto(nuevo.getIdProducto(), 4, ml)); // Atributo 4 = mililitros
+                }
             }
 
             new Thread(() -> {
@@ -303,6 +332,7 @@ public class GestionProductosActivity extends AppCompatActivity {
                 runOnUiThread(accionPostGuardar);
             }).start();
         });
+
         builder.setNegativeButton("Cancelar", null);
         builder.show();
     }
@@ -341,7 +371,6 @@ public class GestionProductosActivity extends AppCompatActivity {
         builder.setNegativeButton("Cancelar", null);
         builder.show();
     }
-
     private void mostrarDialogEliminarProducto(Producto producto, Runnable accionPostGuardar) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Eliminar producto");

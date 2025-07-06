@@ -195,7 +195,6 @@ public class MainActivity extends AppCompatActivity {
         if(metodoPagoDao.count() == 0){
             metodoPagoDao.insert(new MetodoPago("efectivo"));
             metodoPagoDao.insert(new MetodoPago("transferencia"));
-            metodoPagoDao.insert(new MetodoPago("mixto"));
         }
 
         // Insertar Tipos de Producto
@@ -229,10 +228,9 @@ public class MainActivity extends AppCompatActivity {
         ProductoDao productoDao = db.productoDao();
 
         // Insertar Estados de Pedido
-        estadoPedidoDao.insert(new EstadoPedido("encargada"));
-        estadoPedidoDao.insert(new EstadoPedido("preparando"));
-        estadoPedidoDao.insert(new EstadoPedido("pagado"));
-        estadoPedidoDao.insert(new EstadoPedido("en camino"));
+        estadoPedidoDao.insert(new EstadoPedido("encargado"));
+        estadoPedidoDao.insert(new EstadoPedido("entregado"));
+        estadoPedidoDao.insert(new EstadoPedido("entregado + pagado"));
 
         //Insertar Locaciones
         if(locacionDao.count() == 0){
