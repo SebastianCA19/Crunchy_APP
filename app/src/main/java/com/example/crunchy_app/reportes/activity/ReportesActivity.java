@@ -13,12 +13,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.crunchy_app.DBconnection.AppDataBase;
+import com.example.crunchy_app.DBconnection.JsonExporter;
 import com.example.crunchy_app.R;
 import com.example.crunchy_app.reportes.model.ResumenPorDia;
 import com.example.crunchy_app.reportes.util.GeneradorResumen;
 
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -113,6 +115,10 @@ public class ReportesActivity extends AppCompatActivity {
 
             ResumenPorDia nuevoResumen = GeneradorResumen.generar(getApplicationContext(), fechaSeleccionada.toString());
             db.resumenPorDiaDao().insertarResumen(nuevoResumen);
+
+            // 🔁 Exportar después de insertar
+            List<ResumenPorDia> todosLosResúmenes = db.resumenPorDiaDao().getAll();
+            JsonExporter.exportResumenPorDia(getApplicationContext(), todosLosResúmenes);
 
             runOnUiThread(() -> {
                 txtResumen.setText(formatearResumen(nuevoResumen));

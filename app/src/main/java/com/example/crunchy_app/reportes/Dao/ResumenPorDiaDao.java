@@ -32,6 +32,9 @@ public interface ResumenPorDiaDao {
     @Insert
     long insertarResumen(ResumenPorDia resumenPorDia);
 
+    @Insert
+    void insertAll(List<ResumenPorDia> resumenes);
+
     // ❌ Eliminar resumen por fecha
     @Query("DELETE FROM resumen_por_dia WHERE fecha = :fecha")
     int eliminarResumenPorFecha(String fecha);

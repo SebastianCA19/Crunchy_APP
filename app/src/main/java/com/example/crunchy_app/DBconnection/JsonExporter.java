@@ -7,6 +7,7 @@ import android.util.Log;
 import com.example.crunchy_app.pedidos.model.Locacion;
 import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.ValorAtributoProducto;
+import com.example.crunchy_app.reportes.model.ResumenPorDia;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -120,6 +121,35 @@ public class JsonExporter {
             return gson.fromJson(reader, listType);
         } catch (IOException e) {
             Log.e(TAG, "❌ Error al importar valores atributo producto", e);
+            return Collections.emptyList();
+        }
+    }
+
+    // Exportar productos
+    public static void exportResumenPorDia(Context context, List<ResumenPorDia> reportes) {
+        File file = getJsonFile("reportes.json");
+        if (file == null) return;
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try (FileWriter writer = new FileWriter(file)) {
+            gson.toJson(reportes, writer);
+            Log.d(TAG, "✅ reportes exportados a: " + file.getAbsolutePath());
+        } catch (IOException e) {
+            Log.e(TAG, "❌ Error al exportar reportes", e);
+        }
+    }
+
+    // Importar productos
+    public static List<ResumenPorDia> importResumenPorDia(Context context) {
+        File file = getJsonFile("reportes.json");
+        if (file == null || !file.exists()) return Collections.emptyList();
+
+        Gson gson = new Gson();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            Type listType = new TypeToken<List<ResumenPorDia>>() {}.getType();
+            return gson.fromJson(reader, listType);
+        } catch (IOException e) {
+            Log.e(TAG, "❌ Error al importar reportes", e);
             return Collections.emptyList();
         }
     }

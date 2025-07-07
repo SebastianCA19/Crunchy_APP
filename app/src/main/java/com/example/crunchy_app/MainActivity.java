@@ -96,7 +96,8 @@ public class MainActivity extends AppCompatActivity {
                             db.valorAtributoProductoDao().count() == 0 &&
                             db.productoDao().count() == 0 &&
                             db.locacionDao().count() == 0 &&
-                            db.atributoProductoDao().count() == 0;
+                            db.atributoProductoDao().count() == 0 &&
+                            db.resumenPorDiaDao().count() == 0;
 
             if (datosCriticosVacios) {
 
@@ -123,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                     nuevaDb.productoDao().insertAll(JsonExporter.importProductos(getApplicationContext()));
                     nuevaDb.locacionDao().insertAll(JsonExporter.importLocaciones(getApplicationContext()));
                     nuevaDb.valorAtributoProductoDao().insertAll(JsonExporter.importValorAtributoProductos(getApplicationContext()));
+                    nuevaDb.resumenPorDiaDao().insertAll(JsonExporter.importResumenPorDia(getApplicationContext()));
                 } else {
                     Log.d("CARGA DATOS", "No se encontraron JSONs. Usando datos hardcoded...");
 
