@@ -40,11 +40,11 @@ public interface ValorAtributoProductoDao {
 
     // === Consultas por atributo específico (solo activos) ===
 
-    @Query("SELECT * FROM valores_atributo_producto WHERE id_atributo_producto = 1 AND activo = 1 ORDER BY id_producto")
-    List<ValorAtributoProducto> getCantidadChorizo(); // Chorizo
 
-    @Query("SELECT * FROM valores_atributo_producto WHERE id_atributo_producto = 2 AND activo = 1 ORDER BY id_producto")
+    @Query("SELECT * FROM valores_atributo_producto WHERE id_atributo_producto = 1 AND activo = 1 ORDER BY id_producto")
     List<ValorAtributoProducto> getCantidadChicharron(); // Chicharrón
+    @Query("SELECT * FROM valores_atributo_producto WHERE id_atributo_producto = 2 AND activo = 1 ORDER BY id_producto")
+    List<ValorAtributoProducto> getCantidadChorizo(); // Chorizo
 
     @Query("SELECT * FROM valores_atributo_producto WHERE id_atributo_producto = 3 AND activo = 1 ORDER BY id_producto")
     List<ValorAtributoProducto> getCantidadBollo(); // Bollo
@@ -53,12 +53,10 @@ public interface ValorAtributoProductoDao {
     List<ValorAtributoProducto> getVolumenMl(); // Mililitros (para bebidas)
 
     // === Consultas por producto específico ===
-
     @Query("SELECT valor_atributo_producto FROM valores_atributo_producto WHERE id_producto = :id AND id_atributo_producto = 1 AND activo = 1")
-    int getChorizoValue(int id);
-
-    @Query("SELECT valor_atributo_producto FROM valores_atributo_producto WHERE id_producto = :id AND id_atributo_producto = 2 AND activo = 1")
     float getChicharronValue(int id);
+    @Query("SELECT valor_atributo_producto FROM valores_atributo_producto WHERE id_producto = :id AND id_atributo_producto = 2 AND activo = 1")
+    int getChorizoValue(int id);
 
     // === Personalizados ===
 

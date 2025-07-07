@@ -311,7 +311,7 @@ public class CartDialogFragment extends DialogFragment {
                             if(producto.getIdProducto() == 41){
                                 ValorAtributoProductoDao valorAtributoProductoDao = db.valorAtributoProductoDao();
                                 String productoIdFormat = String.format("%d%d", producto.getIdProducto(), pedidoId);
-                                valorAtributoProductoDao.insert(new ValorAtributoProducto(41, 2, producto.getCantidadChicharron(), Integer.valueOf(productoIdFormat)));
+                                valorAtributoProductoDao.insert(new ValorAtributoProducto(41, 1, producto.getCantidadChicharron(), Integer.valueOf(productoIdFormat)));
                             }
 
                             db.productoDelPedidoDao().insert(productoDelPedido);

@@ -15,6 +15,7 @@ import com.example.crunchy_app.productos.DAO.ValorAtributoProductoDao;
 import com.example.crunchy_app.productos.OnProductsSelectedListener;
 import com.example.crunchy_app.productos.comidas.adapter.FoodPagerAdapter;
 import com.example.crunchy_app.R;
+import com.example.crunchy_app.productos.model.AtributoProducto;
 import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 import com.google.android.material.snackbar.Snackbar;
@@ -22,6 +23,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 public class ComidasFragment extends Fragment implements OnProductsSelectedListener {
@@ -29,12 +31,7 @@ public class ComidasFragment extends Fragment implements OnProductsSelectedListe
     private FoodPagerAdapter adapter;
 
     private List<Producto> foodList;
-
-    private List<ValorAtributoProducto> chicharronValues;
-
-    private List<ValorAtributoProducto> chorizoValues;
-
-    private List<ValorAtributoProducto> bolloValues;
+    private List<ValorAtributoProducto> atributosActivos;
 
     private int selectedFood;
     private String filter;
@@ -66,17 +63,37 @@ public class ComidasFragment extends Fragment implements OnProductsSelectedListe
         atributoProductoDao = db.valorAtributoProductoDao();
 
         new Thread(() -> {
-            if(filter == null) {
-                foodList = productoDao.getComidas();
-            }else{
-                filter = formatFilter(filter);
-                foodList = productoDao.searchComidas(filter);
-            }
-            chicharronValues = atributoProductoDao.getCantidadChicharron();
-            chorizoValues = atributoProductoDao.getCantidadChorizo();
-            bolloValues = atributoProductoDao.getCantidadBollo();
+            // Obtener productos
+            foodList = (filter == null)
+                    ? productoDao.getComidas()
+                    : productoDao.searchComidas(formatFilter(filter));
+
+            // Obtener todos los atributos activos
+            atributosActivos = atributoProductoDao.getAll().stream()
+                    .filter(ValorAtributoProducto::isActivo)
+                    .collect(Collectors.toList());
+
+            // Obtener los IDs dinámicamente por nombre
+            Map<String, Integer> mapaIds = db.atributoProductoDao().getProductos().stream()
+                    .collect(Collectors.toMap(
+                            a -> a.getNombreAtributoProducto().toLowerCase().trim(),
+                            AtributoProducto::getIdAtributoProducto
+                    ));
+
+            int ID_CHICHARRON = mapaIds.getOrDefault("chicharrón", -1);
+            int ID_CHORIZO = mapaIds.getOrDefault("chorizo", -1);
+            int ID_BOLLO = mapaIds.getOrDefault("bollo", -1);
+
             requireActivity().runOnUiThread(() -> {
-                adapter = new FoodPagerAdapter(requireActivity(), foodList, chicharronValues, chorizoValues, bolloValues, this);
+                adapter = new FoodPagerAdapter(
+                        requireActivity(),
+                        foodList,
+                        atributosActivos,
+                        ID_CHICHARRON,
+                        ID_CHORIZO,
+                        ID_BOLLO,
+                        this
+                );
                 viewPager.setAdapter(adapter);
             });
         }).start();

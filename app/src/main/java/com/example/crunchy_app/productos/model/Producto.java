@@ -43,7 +43,7 @@ public class Producto implements Serializable {
     private boolean activo;
 
     @Ignore
-    private int cantidadChicharron;
+    private float cantidadChicharron;
 
     @Ignore
     private int cantidadChorizo;
@@ -142,7 +142,7 @@ public class Producto implements Serializable {
         this.cantidadChorizo = cantidadChorizo;
     }
 
-    public void setCantidadChicharron(int cantidadChicharron) {
+    public void setCantidadChicharron(float cantidadChicharron) {
         this.cantidadChicharron = cantidadChicharron;
     }
 
@@ -158,7 +158,7 @@ public class Producto implements Serializable {
         return cantidadBollo;
     }
 
-    public int getCantidadChicharron() {
+    public float getCantidadChicharron() {
         return cantidadChicharron;
     }
 
