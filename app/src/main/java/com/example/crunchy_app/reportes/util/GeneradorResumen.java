@@ -50,7 +50,7 @@ public class GeneradorResumen {
 
         float totalChicharronGr = 0f;
         int totalChorizoUnidades = 0;
-        int totalBolloUnidades = 0;
+        float totalBolloUnidades = 0f;
 
         float ingresoBebidaPersonal = 0f;
         float ingresoBebidaFamiliar = 0f;
@@ -129,7 +129,7 @@ public class GeneradorResumen {
                             float valor = v.getValorAtributoProducto();
                             if (idAtributo == ID_CHICHARRON) totalChicharronGr += valor * cantidad;
                             if (idAtributo == ID_CHORIZO) totalChorizoUnidades += (int) (valor * cantidad);
-                            if (idAtributo == ID_BOLLO) totalBolloUnidades += (int) (valor * cantidad);
+                            if (idAtributo == ID_BOLLO) totalBolloUnidades += valor * cantidad;
                         }
                     }
                     break;
@@ -141,7 +141,7 @@ public class GeneradorResumen {
                             int idAtributo = v.getIdAtributoProducto();
                             float valor = v.getValorAtributoProducto();
                             if (idAtributo == ID_CHICHARRON) totalChicharronGr += valor * cantidad;
-                            if (idAtributo == ID_BOLLO) totalBolloUnidades += (int) (valor * cantidad);
+                            if (idAtributo == ID_BOLLO) totalBolloUnidades += valor * cantidad;
 
                         }
                     }
@@ -165,7 +165,7 @@ public class GeneradorResumen {
                             float valor = v.getValorAtributoProducto();
                             if (idAtributo == ID_CHICHARRON) totalChicharronGr += valor * cantidad;
                             if (idAtributo == ID_CHORIZO) totalChorizoUnidades += (int) (valor * cantidad);
-                            if (idAtributo == ID_BOLLO) totalBolloUnidades += (int) (valor * cantidad);
+                            if (idAtributo == ID_BOLLO) totalBolloUnidades += valor * cantidad;
                         }
                     }
                     break;
