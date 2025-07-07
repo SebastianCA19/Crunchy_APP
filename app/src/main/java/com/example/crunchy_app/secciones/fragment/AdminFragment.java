@@ -43,10 +43,10 @@ public class AdminFragment extends Fragment {
 
     private TextView txtGanancias;
 
-    private int cantidadChicharron=0;
+    private float cantidadChicharron=0;
     private int cantidadChorizos=0;
 
-    private int cantidadChicharronVendidos=0;
+    private float cantidadChicharronVendidos=0;
     private int cantidadChorizosVendidos=0;
 
     private AppDataBase db;
@@ -70,7 +70,7 @@ public class AdminFragment extends Fragment {
         if(!prefs.contains("valor_por_gramo")){
             mostrarValorDelGramoForm(prefsEditor);
         }
-        cantidadChicharron = prefs.getInt("chicharron", 0);
+        cantidadChicharron = prefs.getFloat("chicharron", 0);
         cantidadChorizos = prefs.getInt("chorizos", 0);
 
         SharedPreferences productosVendidos = requireContext().getSharedPreferences("productos_vendidos", Context.MODE_PRIVATE);
@@ -101,14 +101,14 @@ public class AdminFragment extends Fragment {
         btnGuardarChicharron.setOnClickListener(v -> {
             EditText inputMaxChicharron = view.findViewById(R.id.inputMaxChicharron);
             String valorInput = inputMaxChicharron.getText().toString().trim();
-            if (!valorInput.isEmpty() && Integer.parseInt(valorInput) > 0) {
-                cantidadChicharron += Integer.parseInt(valorInput);
+            if (!valorInput.isEmpty() && Float.parseFloat(valorInput) > 0) {
+                cantidadChicharron += Float.parseFloat(valorInput);
                 actualizarCantidadChicharron(view);
                 inputMaxChicharron.setText("");
             } else {
                 inputMaxChicharron.setError("Este campo no puede estar vacío");
             }
-            prefs.edit().putInt("chicharron", cantidadChicharron).apply();
+            prefs.edit().putFloat("chicharron", cantidadChicharron).apply();
         });
 
         Button btnRestarChicharron = view.findViewById(R.id.btnRestarChicharron);
@@ -116,8 +116,8 @@ public class AdminFragment extends Fragment {
         btnRestarChicharron.setOnClickListener(v -> {
             EditText inputMaxChicharron = view.findViewById(R.id.inputMaxChicharron);
             String valorInput = inputMaxChicharron.getText().toString().trim();
-            int cantidadInput = Integer.parseInt(valorInput);
-            if (!valorInput.isEmpty() && Integer.parseInt(valorInput) > 0) {
+            float cantidadInput = Float.parseFloat(valorInput);
+            if (!valorInput.isEmpty() && Float.parseFloat(valorInput) > 0) {
                 if(!(cantidadChicharron - cantidadInput < 0)){
                     cantidadChicharron -= cantidadInput;
                 }else{
@@ -128,7 +128,7 @@ public class AdminFragment extends Fragment {
             }else{
                 inputMaxChicharron.setError("Este campo no puede estar vacío");
             }
-            prefs.edit().putInt("chicharron", cantidadChicharron).apply();
+            prefs.edit().putFloat("chicharron", cantidadChicharron).apply();
         });
 
         Button btnGuardarChorizos = view.findViewById(R.id.btnGuardarChorizos);

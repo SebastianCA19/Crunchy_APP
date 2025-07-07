@@ -26,7 +26,7 @@ import java.util.Locale;
 
 public class OtrosFragment extends Fragment implements OnProductsSelectedListener {
 
-    private final int VALOR_POR_GRAMO;
+    private final float VALOR_POR_GRAMO;
 
     private Button btnConvert;
 
@@ -54,7 +54,7 @@ public class OtrosFragment extends Fragment implements OnProductsSelectedListene
 
     private NumberFormat numberFormat;
 
-    public OtrosFragment(int valorPorGramo, OnProductsSelectedListener listener) {
+    public OtrosFragment(float valorPorGramo, OnProductsSelectedListener listener) {
         VALOR_POR_GRAMO = valorPorGramo;
         this.listener = listener;
         locale = new Locale("es", "CO");
@@ -154,7 +154,7 @@ public class OtrosFragment extends Fragment implements OnProductsSelectedListene
             new Thread(() -> {
                 Producto chicharron = productoDao.getProductoById(41);
                 chicharron.setValorProducto((float) dineroNum);
-                chicharron.setCantidadChicharron((int) gramosNum);
+                chicharron.setCantidadChicharron((float) gramosNum);
 
                 Log.d("Chicharron", "Datos: "+ chicharron.getValorProducto() + " " + chicharron.getCantidadChicharron());
                 listener.sendToCart(chicharron);

@@ -226,38 +226,38 @@ public class CartDialogFragment extends DialogFragment {
                 public void run() {
                     try {
                         SharedPreferences prefs = requireContext().getSharedPreferences("stock_prefs", Context.MODE_PRIVATE);
-                        int cantidadChicharron = prefs.getInt("chicharron", 0);
+                        float cantidadChicharron = prefs.getFloat("chicharron", 0);
                         int cantidadChorizos = prefs.getInt("chorizos", 0);
 
-                        int chorizosVendido = 0;
                         float chicharronVendido = 0;
+                        int chorizosVendido = 0;
                         int pass = 0;
                         SharedPreferences productosVendidos = requireContext().getSharedPreferences("productos_vendidos", Context.MODE_PRIVATE);
                         if(productosVendidos.contains("chicharron_vendido") && productosVendidos.contains("chorizo_vendido")){
-                            chorizosVendido = productosVendidos.getInt("chorizo_vendido", 0);
                             chicharronVendido = productosVendidos.getFloat("chicharron_vendido", 0);
+                            chorizosVendido = productosVendidos.getInt("chorizo_vendido", 0);
                             pass = 1;
                         }
 
                         //Verificar si la cantidad de chorizos y chicharron del pedido es permitida
                         if(pass == 1){
                             ValorAtributoProductoDao valorAtributoProductoDao = db.valorAtributoProductoDao();
-                            int cantidadChorizoPedido = 0;
                             float cantidadChicharronPedido = 0;
+                            int cantidadChorizoPedido = 0;
                             for(Map.Entry<Producto, Integer> entry : carrito.entrySet()){
                                 Producto producto = entry.getKey();
                                 int cantidad = entry.getValue();
 
                                 if(producto.getIdProducto() == 41){
-                                    cantidadChicharronPedido += producto.getCantidadChicharron() * cantidad;;
+                                    cantidadChicharronPedido += producto.getCantidadChicharron() * cantidad;
                                 }else if(producto.getIdProducto() == 42){
                                     cantidadChorizoPedido += cantidad;
                                 }else{
-                                    int chorizoProducto = valorAtributoProductoDao.getChorizoValue(producto.getIdProducto());
                                     float chicharronProducto = valorAtributoProductoDao.getChicharronValue(producto.getIdProducto());
+                                    int chorizoProducto = valorAtributoProductoDao.getChorizoValue(producto.getIdProducto());
 
-                                    cantidadChorizoPedido += chorizoProducto * cantidad;
                                     cantidadChicharronPedido += chicharronProducto * cantidad;
+                                    cantidadChorizoPedido += chorizoProducto * cantidad;
                                 }
                             }
 

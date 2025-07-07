@@ -52,7 +52,7 @@ public class OrdersFragment extends Fragment implements OnProductsSelectedListen
         super.onCreate(savedInstanceState);
 
         SharedPreferences prefs = requireContext().getSharedPreferences("stock_prefs", Context.MODE_PRIVATE);
-        int valorPorGramo = (int) prefs.getFloat("valor_por_gramo", 0.0f);
+        float valorPorGramo =  prefs.getFloat("valor_por_gramo", 0.0f);
 
         comidasFragment = new ComidasFragment(this);
         bebidasFragment = new BebidasFragment(this);
