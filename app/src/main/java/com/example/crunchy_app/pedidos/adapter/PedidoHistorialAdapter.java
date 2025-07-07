@@ -393,9 +393,13 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         editDireccion.setText(pedido.getDireccionCliente());
 
         // Hora actual
-        LocalTime horaActual = pedido.getHoraEntrega() != null ? pedido.getHoraEntrega() : LocalTime.now();
+        LocalTime horaActual = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            horaActual = pedido.getHoraEntrega() != null ? pedido.getHoraEntrega() : LocalTime.now();
+        }
         txtHoraEntrega.setText("Seleccionada: " + horaActual.toString());
 
+        LocalTime finalHoraActual = horaActual;
         btnHoraEntrega.setOnClickListener(v -> {
             TimePickerDialog timePicker = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -405,7 +409,7 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
                         nuevaHora = LocalTime.of(hourOfDay, minute);
                     }
                     txtHoraEntrega.setText("Seleccionada: " + nuevaHora.toString());
-                }, horaActual.getHour(), horaActual.getMinute(), true);
+                }, finalHoraActual.getHour(), finalHoraActual.getMinute(), true);
             }
             timePicker.show();
         });

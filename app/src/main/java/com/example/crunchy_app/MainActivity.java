@@ -41,7 +41,6 @@ import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 import com.example.crunchy_app.secciones.activity.HomeActivity;
 
 import java.io.File;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 public class MainActivity extends AppCompatActivity {
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show());
             }
         } else {
-            // Android 6 a Android 10
+            // Android 6 (enrealidad de 8) a Android 10
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                     ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
