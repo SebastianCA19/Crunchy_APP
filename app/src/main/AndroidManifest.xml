@@ -22,9 +22,9 @@
 
 
 
-       <activity android:name=".pedidos.activity.HistorialPedidosActivity"/>
-
+        <activity android:name=".pedidos.activity.HistorialPedidosActivity"/>
         <activity android:name=".productos.activity.GestionProductosActivity"/>
+        <activity android:name=".reportes.activity.ReportesActivity" />
 
         <activity
             android:name=".secciones.activity.HomeActivity"

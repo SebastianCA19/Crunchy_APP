@@ -35,4 +35,11 @@ public interface ProductoDelPedidoDao {
     public void eliminarPorPedido(String idPedido);
     @Query("SELECT * FROM productos_del_pedido WHERE id_pedido = :pedidoId")
     List<ProductoDelPedido> getProductosDelPedido(int pedidoId);
+
+    @Query("SELECT pdp.* " +
+            "FROM productos_del_pedido pdp " +
+            "JOIN pedidos p ON pdp.id_pedido = p.id_pedido " +
+            "WHERE p.fecha = :fecha")
+    List<ProductoDelPedido> getProductosDelPedidoPorFecha(String fecha);
+
 }

@@ -31,7 +31,7 @@ import com.example.crunchy_app.reportes.model.ResumenPorDia;
 
 @Database(entities = {Producto.class, TipoProducto.class, ValorAtributoProducto.class, AtributoProducto.class,
 MetodoPago.class ,Pedido.class, EstadoPedido.class , Locacion.class,
-ProductoDelPedido.class, ResumenPorDia.class}, version = 15)
+ProductoDelPedido.class, ResumenPorDia.class}, version = 16)
 @TypeConverters({Converters.class})
 public abstract class AppDataBase extends RoomDatabase {
 

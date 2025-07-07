@@ -32,6 +32,7 @@ import com.example.crunchy_app.productos.DAO.ValorAtributoProductoDao;
 import com.example.crunchy_app.productos.activity.GestionProductosActivity;
 import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.ValorAtributoProducto;
+import com.example.crunchy_app.reportes.activity.ReportesActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -169,6 +170,13 @@ public class AdminFragment extends Fragment {
         btnActualizarValorPorGramo.setOnClickListener(v -> {
             mostrarValorDelGramoForm(prefsEditor);
         });
+
+        Button btnVerReportes = view.findViewById(R.id.btnVerReportes);
+        btnVerReportes.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), ReportesActivity.class);
+            startActivity(intent);
+        });
+
 
         return view;
     }

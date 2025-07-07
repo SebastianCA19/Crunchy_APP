@@ -253,5 +253,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnGestionProductos" />
 
+        <Button
+            android:id="@+id/btnVerReportes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#6A1B9A"
+            android:padding="16dp"
+            android:text="Ver reportes"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnValorGramo" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

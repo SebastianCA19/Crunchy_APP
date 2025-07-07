@@ -416,35 +416,35 @@ public class MainActivity extends AppCompatActivity {
         // Insertar Valores de Atributos
         if (valoresAtributoProductoDao.count() == 0){
             //Atributos de las comidas
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(1, 1, 1));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(1, 2, 1));// chorizo personal
             valoresAtributoProductoDao.insert(new ValorAtributoProducto(1, 3, 1));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(2, 2, 215));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(2, 1, 1));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(2, 3, 1));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(3, 2, 360));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(3, 1, 1));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(3, 3, 1));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(4, 2, 480));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(4, 1, 2));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(4, 3, 1));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(5, 2, 695));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(5, 1, 2));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(5, 3, 1));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(6, 2, 820));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(6, 1, 3));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(6, 3,1));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(7, 2, 215));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(2, 1, 215)); //combo 1
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(2, 2, 1));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(2, 3, 1.5f));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(3, 1, 360)); //combo2
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(3, 2, 1));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(3, 3, 2));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(4, 1, 480)); //combo3
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(4, 2, 2));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(4, 3, 3));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(5, 1, 695)); //combo4
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(5, 2, 2));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(5, 3, 4));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(6, 1, 820)); //combo5
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(6, 2, 3));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(6, 3,5));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(7, 1, 215)); //chicharron ppersonal
             valoresAtributoProductoDao.insert(new ValorAtributoProducto(7, 3, 1));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(8, 2, 290));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(8, 3, 1));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(9, 2, 430));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(9, 3, 1));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(10, 2, 605));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(10, 3, 1));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(11, 2, 820));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(11, 3, 1));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(12, 2, 1000));
-            valoresAtributoProductoDao.insert(new ValorAtributoProducto(12, 3, 1));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(8, 1, 290)); //picada1
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(8, 3, 1.5f));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(9, 1, 430)); //picada2
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(9, 3, 2));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(10, 1, 605)); //picada3
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(10, 3, 3));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(11, 1, 820)); //picada4
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(11, 3, 4));
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(12, 1, 1000)); //kilo
+            valoresAtributoProductoDao.insert(new ValorAtributoProducto(12, 3, 5));
 
             //Atributos de las bebidas
             // Bebidas pequeñas (ml)

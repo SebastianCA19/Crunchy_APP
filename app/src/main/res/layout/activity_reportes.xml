@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFF9F0">
+
+    <!-- Toolbar superior -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarReportes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#D84315"
+        android:title="Reportes"
+        android:titleTextColor="#FFFFFF"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <!-- Contenido principal dentro de un ScrollView -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtFechaSeleccionada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📅 Fecha seleccionada: ..."
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#5D4037"
+                android:paddingBottom="8dp" />
+
+            <Button
+                android:id="@+id/btnSeleccionarFecha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Seleccionar otra fecha"
+                android:backgroundTint="#D84315"
+                android:textColor="#FFFFFF"
+                android:padding="10dp" />
+
+            <Button
+                android:id="@+id/btnCargarResumen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ver resumen del día"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#D84315"
+                android:textColor="#FFFFFF"
+                android:padding="10dp" />
+
+            <Button
+                android:id="@+id/btnGenerarResumen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Generar resumen del día"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#4CAF50"
+                android:textColor="#FFFFFF"
+                android:padding="10dp" />
+
+
+            <TextView
+                android:id="@+id/txtResumen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Aquí aparecerá el resumen..."
+                android:textColor="#5D4037"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

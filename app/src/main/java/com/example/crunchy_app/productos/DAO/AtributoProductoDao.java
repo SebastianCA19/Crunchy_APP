@@ -7,6 +7,7 @@ import androidx.room.Query;
 import com.example.crunchy_app.productos.model.AtributoProducto;
 import com.example.crunchy_app.productos.model.Producto;
 
+import java.util.Arrays;
 import java.util.List;
 @Dao
 public interface AtributoProductoDao {

@@ -1,13 +1,11 @@
 package com.example.crunchy_app.reportes.model;
 
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.time.LocalDate;
-
 
 @Entity(tableName = "resumen_por_dia")
 public class ResumenPorDia {
@@ -16,39 +14,36 @@ public class ResumenPorDia {
     @ColumnInfo(name = "id_dia")
     private Integer idDia;
 
-    @ColumnInfo(name = "fecha")
     @NonNull
+    @ColumnInfo(name = "fecha")
     private LocalDate fecha;
 
-    @ColumnInfo(name = "cantidad_chicharron")
-    private float cantidadChicharron;
+    // Ingresos por método de pago
+    @ColumnInfo(name = "dinero_efectivo")
+    private float dineroEfectivo;
 
+    @ColumnInfo(name = "dinero_transferencia")
+    private float dineroTransferencia;
+
+    // Cantidades vendidas
     @ColumnInfo(name = "cantidad_vendida_chicharron")
     private float cantidadVendidaChicharron;
 
-    @ColumnInfo(name = "cantidad_chorizo")
-    private Integer cantidadChorizo;
-
     @ColumnInfo(name = "cantidad_vendida_chorizo")
-    private Integer cantidadVendidaChorizo;
-
-    @ColumnInfo(name = "cantidad_bollo")
-    private float cantidadBollo;
+    private int cantidadVendidaChorizo;
 
     @ColumnInfo(name = "cantidad_vendida_bollo")
     private float cantidadVendidaBollo;
 
-    @ColumnInfo(name = "dinero_bebidas")
-    private float dineroBebidas;
+    // Ingresos por tipo de producto
+    @ColumnInfo(name = "dinero_bebida_personal")
+    private float dineroBebidaPersonal;
 
-    @ColumnInfo(name = "dinero_chicharron")
-    private float dineroChicharron;
+    @ColumnInfo(name = "dinero_bebida_familiar")
+    private float dineroBebidaFamiliar;
 
-    @ColumnInfo(name = "dinero_chorizo")
-    private float dineroChorizo;
-
-    @ColumnInfo(name = "dinero_bollo")
-    private float dineroBollo;
+    @ColumnInfo(name = "dinero_bebida_alcoholica")
+    private float dineroBebidaAlcoholica;
 
     @ColumnInfo(name = "dinero_combos")
     private float dineroCombos;
@@ -56,25 +51,50 @@ public class ResumenPorDia {
     @ColumnInfo(name = "dinero_picadas")
     private float dineroPicadas;
 
-    public ResumenPorDia() {
+    // Top 3 productos más vendidos
+    @ColumnInfo(name = "top_combo")
+    private String topCombo;
 
-    }
+    @ColumnInfo(name = "top_picada")
+    private String topPicada;
 
-    public ResumenPorDia(@NonNull LocalDate fecha, float cantidadChicharron, float cantidadVendidaChicharron, Integer cantidadChorizo, Integer cantidadVendidaChorizo, float cantidadBollo, float cantidadVendidaBollo, float dineroBebidas, float dineroChicharron, float dineroChorizo, float dineroBollo, float dineroPicadas, float dineroCombos) {
+    @ColumnInfo(name = "top_bebida_personal")
+    private String topBebidaPersonal;
+
+    @ColumnInfo(name = "top_bebida_familiar")
+    private String topBebidaFamiliar;
+
+    @ColumnInfo(name = "top_bebida_alcoholica")
+    private String topBebidaAlcoholica;
+
+
+    // Total de pedidos
+    @ColumnInfo(name = "total_pedidos_dia")
+    private int totalPedidosDia;
+
+    public ResumenPorDia() {}
+
+    public ResumenPorDia(@NonNull LocalDate fecha, float dineroEfectivo, float dineroTransferencia, float cantidadVendidaChicharron, int cantidadVendidaChorizo, float cantidadVendidaBollo, float dineroBebidaPersonal, float dineroBebidaFamiliar, float dineroBebidaAlcoholica, float dineroCombos, float dineroPicadas, String topCombo, String topPicada, String topBebidaPersonal, String topBebidaFamiliar, String topBebidaAlcoholica, int totalPedidosDia) {
         this.fecha = fecha;
-        this.cantidadChicharron = cantidadChicharron;
+        this.dineroEfectivo = dineroEfectivo;
+        this.dineroTransferencia = dineroTransferencia;
         this.cantidadVendidaChicharron = cantidadVendidaChicharron;
-        this.cantidadChorizo = cantidadChorizo;
         this.cantidadVendidaChorizo = cantidadVendidaChorizo;
-        this.cantidadBollo = cantidadBollo;
         this.cantidadVendidaBollo = cantidadVendidaBollo;
-        this.dineroBebidas = dineroBebidas;
-        this.dineroChicharron = dineroChicharron;
-        this.dineroChorizo = dineroChorizo;
-        this.dineroBollo = dineroBollo;
-        this.dineroPicadas = dineroPicadas;
+        this.dineroBebidaPersonal = dineroBebidaPersonal;
+        this.dineroBebidaFamiliar = dineroBebidaFamiliar;
+        this.dineroBebidaAlcoholica = dineroBebidaAlcoholica;
         this.dineroCombos = dineroCombos;
+        this.dineroPicadas = dineroPicadas;
+        this.topCombo = topCombo;
+        this.topPicada = topPicada;
+        this.topBebidaPersonal = topBebidaPersonal;
+        this.topBebidaFamiliar = topBebidaFamiliar;
+        this.topBebidaAlcoholica = topBebidaAlcoholica;
+        this.totalPedidosDia = totalPedidosDia;
     }
+
+    // Getters y Setters
 
     public Integer getIdDia() {
         return idDia;
@@ -82,6 +102,46 @@ public class ResumenPorDia {
 
     public void setIdDia(Integer idDia) {
         this.idDia = idDia;
+    }
+
+    public String getTopCombo() {
+        return topCombo;
+    }
+
+    public void setTopCombo(String topCombo) {
+        this.topCombo = topCombo;
+    }
+
+    public String getTopPicada() {
+        return topPicada;
+    }
+
+    public void setTopPicada(String topPicada) {
+        this.topPicada = topPicada;
+    }
+
+    public String getTopBebidaPersonal() {
+        return topBebidaPersonal;
+    }
+
+    public void setTopBebidaPersonal(String topBebidaPersonal) {
+        this.topBebidaPersonal = topBebidaPersonal;
+    }
+
+    public String getTopBebidaFamiliar() {
+        return topBebidaFamiliar;
+    }
+
+    public void setTopBebidaFamiliar(String topBebidaFamiliar) {
+        this.topBebidaFamiliar = topBebidaFamiliar;
+    }
+
+    public String getTopBebidaAlcoholica() {
+        return topBebidaAlcoholica;
+    }
+
+    public void setTopBebidaAlcoholica(String topBebidaAlcoholica) {
+        this.topBebidaAlcoholica = topBebidaAlcoholica;
     }
 
     @NonNull
@@ -93,12 +153,20 @@ public class ResumenPorDia {
         this.fecha = fecha;
     }
 
-    public float getCantidadChicharron() {
-        return cantidadChicharron;
+    public float getDineroEfectivo() {
+        return dineroEfectivo;
     }
 
-    public void setCantidadChicharron(float cantidadChicharron) {
-        this.cantidadChicharron = cantidadChicharron;
+    public void setDineroEfectivo(float dineroEfectivo) {
+        this.dineroEfectivo = dineroEfectivo;
+    }
+
+    public float getDineroTransferencia() {
+        return dineroTransferencia;
+    }
+
+    public void setDineroTransferencia(float dineroTransferencia) {
+        this.dineroTransferencia = dineroTransferencia;
     }
 
     public float getCantidadVendidaChicharron() {
@@ -109,28 +177,12 @@ public class ResumenPorDia {
         this.cantidadVendidaChicharron = cantidadVendidaChicharron;
     }
 
-    public Integer getCantidadChorizo() {
-        return cantidadChorizo;
-    }
-
-    public void setCantidadChorizo(Integer cantidadChorizo) {
-        this.cantidadChorizo = cantidadChorizo;
-    }
-
-    public Integer getCantidadVendidaChorizo() {
+    public int getCantidadVendidaChorizo() {
         return cantidadVendidaChorizo;
     }
 
-    public void setCantidadVendidaChorizo(Integer cantidadVendidaChorizo) {
+    public void setCantidadVendidaChorizo(int cantidadVendidaChorizo) {
         this.cantidadVendidaChorizo = cantidadVendidaChorizo;
-    }
-
-    public float getCantidadBollo() {
-        return cantidadBollo;
-    }
-
-    public void setCantidadBollo(float cantidadBollo) {
-        this.cantidadBollo = cantidadBollo;
     }
 
     public float getCantidadVendidaBollo() {
@@ -141,36 +193,28 @@ public class ResumenPorDia {
         this.cantidadVendidaBollo = cantidadVendidaBollo;
     }
 
-    public float getDineroBebidas() {
-        return dineroBebidas;
+    public float getDineroBebidaPersonal() {
+        return dineroBebidaPersonal;
     }
 
-    public void setDineroBebidas(float dineroBebidas) {
-        this.dineroBebidas = dineroBebidas;
+    public void setDineroBebidaPersonal(float dineroBebidaPersonal) {
+        this.dineroBebidaPersonal = dineroBebidaPersonal;
     }
 
-    public float getDineroChicharron() {
-        return dineroChicharron;
+    public float getDineroBebidaFamiliar() {
+        return dineroBebidaFamiliar;
     }
 
-    public void setDineroChicharron(float dineroChicharron) {
-        this.dineroChicharron = dineroChicharron;
+    public void setDineroBebidaFamiliar(float dineroBebidaFamiliar) {
+        this.dineroBebidaFamiliar = dineroBebidaFamiliar;
     }
 
-    public float getDineroChorizo() {
-        return dineroChorizo;
+    public float getDineroBebidaAlcoholica() {
+        return dineroBebidaAlcoholica;
     }
 
-    public void setDineroChorizo(float dineroChorizo) {
-        this.dineroChorizo = dineroChorizo;
-    }
-
-    public float getDineroBollo() {
-        return dineroBollo;
-    }
-
-    public void setDineroBollo(float dineroBollo) {
-        this.dineroBollo = dineroBollo;
+    public void setDineroBebidaAlcoholica(float dineroBebidaAlcoholica) {
+        this.dineroBebidaAlcoholica = dineroBebidaAlcoholica;
     }
 
     public float getDineroCombos() {
@@ -187,5 +231,13 @@ public class ResumenPorDia {
 
     public void setDineroPicadas(float dineroPicadas) {
         this.dineroPicadas = dineroPicadas;
+    }
+
+    public int getTotalPedidosDia() {
+        return totalPedidosDia;
+    }
+
+    public void setTotalPedidosDia(int totalPedidosDia) {
+        this.totalPedidosDia = totalPedidosDia;
     }
 }

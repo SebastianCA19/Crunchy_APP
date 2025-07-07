@@ -68,4 +68,8 @@ public interface PedidoDao {
 
     @Update
     int update(Pedido pedido);
+
+    @Query("SELECT * FROM pedidos WHERE fecha = :fecha")
+    List<Pedido> getPedidosPorFecha(String fecha);
+
 }
