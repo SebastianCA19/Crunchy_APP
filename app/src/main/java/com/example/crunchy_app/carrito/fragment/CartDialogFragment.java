@@ -199,14 +199,6 @@ public class CartDialogFragment extends DialogFragment {
                 txtNombre.setError("Campo obligatorio");
                 camposValidos = false;
             }
-            if (directionUser == null || directionUser.trim().isEmpty()) {
-                txtDireccion.setError("Campo obligatorio");
-                camposValidos = false;
-            }
-            if (domName == null || domName.trim().isEmpty()) {
-                txtDomName.setError("Campo obligatorio");
-                camposValidos = false;
-            }
             if (metodoPagoId == 0) {
                 Toast.makeText(requireContext(), "⚠ Seleccione un método de pago", Toast.LENGTH_SHORT).show();
                 camposValidos = false;

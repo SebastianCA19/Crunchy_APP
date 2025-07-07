@@ -234,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Insertar Locaciones
         if(locacionDao.count() == 0){
+            locacionDao.insert(new Locacion("No aplica", null, 0));
             // los de 4k
             locacionDao.insert(new Locacion("Juan 23", null, 4000));
             locacionDao.insert(new Locacion("Olivos", null, 4000));
