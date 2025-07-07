@@ -475,6 +475,11 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         builder.create().show();
     }
 
+    public void actualizarLista(List<PedidoConEstado> nuevaLista) {
+        this.pedidos.clear();
+        this.pedidos.addAll(nuevaLista);
+        notifyDataSetChanged();
+    }
 
 
     static class PedidoViewHolder extends RecyclerView.ViewHolder {
@@ -482,9 +487,6 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         TextView txtNombreCliente, txtFecha, txtHora,txtProductos, txtEstado, txtTotal,txtValorDomicilio, txtTotalFinal,
                 txtIdDomiciliario, txtIdZona, txtIdDireccion, horaEntrega;
         Button btnCambiarEstado, btnCancelar;
-
-
-
 
         public PedidoViewHolder(@NonNull View itemView) {
             super(itemView);

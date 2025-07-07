@@ -15,6 +15,87 @@
         android:titleTextColor="#FFFFFF"
         android:elevation="4dp" />
 
+    <!-- Buscar por cliente -->
+    <EditText
+        android:id="@+id/etBuscarCliente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="🔍 Buscar por cliente"
+        android:minHeight="48dp" />
+
+    <!-- Buscar por domiciliario -->
+    <EditText
+        android:id="@+id/etBuscarDomiciliario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="🚴 Buscar por domiciliario"
+        android:minHeight="48dp" />
+
+    <!-- Filtros por estado -->
+    <LinearLayout
+        android:id="@+id/layoutEstados"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:weightSum="3">
+
+        <CheckBox
+            android:id="@+id/checkEncargado"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Encargado" />
+
+        <CheckBox
+            android:id="@+id/checkEntregado"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Entregado" />
+
+        <CheckBox
+            android:id="@+id/checkEntregado_Pagado"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Entregado+Pagado" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp">
+
+        <Button
+            android:id="@+id/btnLimpiarFiltros"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Limpiar"
+            android:textSize="12sp"
+            android:backgroundTint="#D18168"
+            android:textColor="#FFFFFF"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/btnFiltrar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Filtrar"
+            android:textSize="12sp"
+            android:backgroundTint="#D18168"
+            android:textColor="#FFFFFF"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerHistorial"

@@ -2,6 +2,11 @@ package com.example.crunchy_app.pedidos.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +24,7 @@ import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
 import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -29,15 +35,25 @@ public class HistorialPedidosActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AppDataBase db;
 
+    // filtros
+    private EditText etBuscarCliente, etBuscarDomiciliario;
+    private CheckBox checkEncargado, checkEntregado, checkPagado;
+    private List<PedidoConEstado> listaOriginal = new ArrayList<>();
+    private PedidoHistorialAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historial_pedidos);
 
-
+        // Inicializar vistas
         recyclerView = findViewById(R.id.recyclerHistorial);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        etBuscarCliente = findViewById(R.id.etBuscarCliente);
+        etBuscarDomiciliario = findViewById(R.id.etBuscarDomiciliario);
+        checkEncargado = findViewById(R.id.checkEncargado);
+        checkEntregado = findViewById(R.id.checkEntregado);
+        checkPagado = findViewById(R.id.checkEntregado_Pagado);
 
         db = AppDataBase.getInstance(getApplicationContext());
 
@@ -66,11 +82,70 @@ public class HistorialPedidosActivity extends AppCompatActivity {
             int valorPorGramo = (int) prefs.getFloat("valor_por_gramo", 0);
 
             runOnUiThread(() -> {
-                PedidoHistorialAdapter adapter = new PedidoHistorialAdapter(
+                listaOriginal = new ArrayList<>(pedidos);
+                adapter = new PedidoHistorialAdapter(
                         pedidos, productosPedido, productos, estados, locaciones ,db, valorPorGramo, chicharronQuantities
                 );
                 recyclerView.setAdapter(adapter);
             });
         }).start();
+
+        Button btnLimpiarFiltros = findViewById(R.id.btnLimpiarFiltros);
+        btnLimpiarFiltros.setOnClickListener(v -> {
+            etBuscarCliente.setText("");
+            etBuscarDomiciliario.setText("");
+            checkEncargado.setChecked(false);
+            checkEntregado.setChecked(false);
+            checkPagado.setChecked(false);
+
+            adapter.actualizarLista(listaOriginal); // Mostrar todo otra vez
+        });
+
+
+        Button btnFiltrar = findViewById(R.id.btnFiltrar);
+        btnFiltrar.setOnClickListener(v -> aplicarFiltros());
+
     }
+
+    private void aplicarFiltros() {
+        String cliente = etBuscarCliente.getText().toString().trim().toLowerCase();
+        String domiciliario = etBuscarDomiciliario.getText().toString().trim().toLowerCase();
+
+        boolean checkEnc = checkEncargado.isChecked();
+        boolean checkEnt = checkEntregado.isChecked();
+        boolean checkPag = checkPagado.isChecked();
+
+        boolean hayFiltroEstado = checkEnc || checkEnt || checkPag;
+
+        List<PedidoConEstado> filtrados = new ArrayList<>();
+
+        for (PedidoConEstado p : listaOriginal) {
+            String estado = p.estado.getNombreEstadoPedido().toLowerCase();
+
+            // Paso 1: Filtrar por estado
+            if (hayFiltroEstado) {
+                boolean coincideEstado =
+                        (checkEnc && estado.equals("encargado")) ||
+                                (checkEnt && estado.equals("entregado")) ||
+                                (checkPag && estado.equals("entregado + pagado"));
+
+                if (!coincideEstado) continue; // si no coincide con ningún filtro de estado, saltar
+            }
+
+            // Paso 2: Filtrar por nombre de cliente si hay texto
+            if (!cliente.isEmpty() && !p.pedido.getNombreCliente().toLowerCase().contains(cliente)) {
+                continue;
+            }
+
+            // Paso 3: Filtrar por domiciliario si hay texto
+            if (!domiciliario.isEmpty() && !p.pedido.getNombreDomiciliario().toLowerCase().contains(domiciliario)) {
+                continue;
+            }
+
+            // Si pasó todos los filtros, se agrega a la lista
+            filtrados.add(p);
+        }
+        adapter.actualizarLista(filtrados);
+    }
+
 }
