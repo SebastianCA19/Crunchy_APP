@@ -1,5 +1,8 @@
 package com.example.crunchy_app.pedidos.activity;
 
+import static android.app.Activity.RESULT_OK;
+import static androidx.activity.result.ActivityResultCallerKt.registerForActivityResult;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -99,70 +102,79 @@ public class HistorialPedidosActivity extends AppCompatActivity {
                 SharedPreferences prefsStock = getSharedPreferences("stock_prefs", MODE_PRIVATE);
                 int valorPorGramo = (int) prefsStock.getFloat("valor_por_gramo", 0);
 
-            runOnUiThread(() -> {
-                listaOriginal = new ArrayList<>(pedidos);
-                adapter = new PedidoHistorialAdapter(
-                        pedidos, productosPedido, productos, estados, locaciones ,db, valorPorGramo, chicharronQuantities,this, agregarProductoLauncher
-                );
-                recyclerView.setAdapter(adapter);
+                runOnUiThread(() -> {
+                    listaOriginal = new ArrayList<>(pedidos);
+                    adapter = new PedidoHistorialAdapter(
+                            pedidos, productosPedido, productos, estados, locaciones, db, valorPorGramo, chicharronQuantities, this, agregarProductoLauncher
+                    );
+                    recyclerView.setAdapter(adapter);
+                });
+            }).start();
+
+            Button btnLimpiarFiltros = findViewById(R.id.btnLimpiarFiltros);
+            btnLimpiarFiltros.setOnClickListener(v -> {
+                etBuscarCliente.setText("");
+                etBuscarDomiciliario.setText("");
+                checkEncargado.setChecked(false);
+                checkEntregado.setChecked(false);
+                checkPagado.setChecked(false);
+
+                adapter.actualizarLista(listaOriginal); // Mostrar todo otra vez
             });
-        }).start();
-
-        Button btnLimpiarFiltros = findViewById(R.id.btnLimpiarFiltros);
-        btnLimpiarFiltros.setOnClickListener(v -> {
-            etBuscarCliente.setText("");
-            etBuscarDomiciliario.setText("");
-            checkEncargado.setChecked(false);
-            checkEntregado.setChecked(false);
-            checkPagado.setChecked(false);
-
-            adapter.actualizarLista(listaOriginal); // Mostrar todo otra vez
-        });
 
 
-        Button btnFiltrar = findViewById(R.id.btnFiltrar);
-        btnFiltrar.setOnClickListener(v -> aplicarFiltros());
-    }
-
-    private void aplicarFiltros() {
-        String cliente = etBuscarCliente.getText().toString().trim().toLowerCase();
-        String domiciliario = etBuscarDomiciliario.getText().toString().trim().toLowerCase();
-
-        boolean checkEnc = checkEncargado.isChecked();
-        boolean checkEnt = checkEntregado.isChecked();
-        boolean checkPag = checkPagado.isChecked();
-
-        boolean hayFiltroEstado = checkEnc || checkEnt || checkPag;
-
-        List<PedidoConEstado> filtrados = new ArrayList<>();
-
-        for (PedidoConEstado p : listaOriginal) {
-            String estado = p.estado.getNombreEstadoPedido().toLowerCase();
-
-            // Paso 1: Filtrar por estado
-            if (hayFiltroEstado) {
-                boolean coincideEstado =
-                        (checkEnc && estado.equals("encargado")) ||
-                                (checkEnt && estado.equals("entregado")) ||
-                                (checkPag && estado.equals("entregado + pagado"));
-
-                if (!coincideEstado) continue; // si no coincide con ningún filtro de estado, saltar
-            }
-
-            // Paso 2: Filtrar por nombre de cliente si hay texto
-            if (!cliente.isEmpty() && !p.pedido.getNombreCliente().toLowerCase().contains(cliente)) {
-                continue;
-            }
-
-            // Paso 3: Filtrar por domiciliario si hay texto
-            if (!domiciliario.isEmpty() && !p.pedido.getNombreDomiciliario().toLowerCase().contains(domiciliario)) {
-                continue;
-            }
-
-            // Si pasó todos los filtros, se agrega a la lista
-            filtrados.add(p);
+            Button btnFiltrar = findViewById(R.id.btnFiltrar);
+            btnFiltrar.setOnClickListener(v -> aplicarFiltros());
         }
-        adapter.actualizarLista(filtrados);
     }
 
+        private void aplicarFiltros() {
+            String cliente = etBuscarCliente.getText().toString().trim().toLowerCase();
+            String domiciliario = etBuscarDomiciliario.getText().toString().trim().toLowerCase();
+
+            boolean checkEnc = checkEncargado.isChecked();
+            boolean checkEnt = checkEntregado.isChecked();
+            boolean checkPag = checkPagado.isChecked();
+
+            boolean hayFiltroEstado = checkEnc || checkEnt || checkPag;
+
+            List<PedidoConEstado> filtrados = new ArrayList<>();
+
+            for (PedidoConEstado p : listaOriginal) {
+                String estado = p.estado.getNombreEstadoPedido().toLowerCase();
+
+                // Paso 1: Filtrar por estado
+                if (hayFiltroEstado) {
+                    boolean coincideEstado =
+                            (checkEnc && estado.equals("encargado")) ||
+                                    (checkEnt && estado.equals("entregado")) ||
+                                    (checkPag && estado.equals("entregado + pagado"));
+
+                    if (!coincideEstado)
+                        continue; // si no coincide con ningún filtro de estado, saltar
+                }
+
+                // Paso 2: Filtrar por nombre de cliente si hay texto
+                if (!cliente.isEmpty() && !p.pedido.getNombreCliente().toLowerCase().contains(cliente)) {
+                    continue;
+                }
+
+                // Paso 3: Filtrar por domiciliario si hay texto
+                if (!domiciliario.isEmpty() && !p.pedido.getNombreDomiciliario().toLowerCase().contains(domiciliario)) {
+                    continue;
+                }
+
+                // Si pasó todos los filtros, se agrega a la lista
+                filtrados.add(p);
+            }
+            adapter.actualizarLista(filtrados);
+        }
+
+    public final ActivityResultLauncher<Intent> agregarProductoLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    adapter.recargarDatosDesdeDB();
+                    adapter.cerrarDialog();
+                }
+            });
 }
