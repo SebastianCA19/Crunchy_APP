@@ -31,16 +31,17 @@ public interface PedidoDao {
     @Query("DELETE FROM pedidos WHERE id_pedido = :idPedido")
     public int deletePedidoById(Integer idPedido);
 
-    @Transaction
-    @Query("SELECT * FROM pedidos ORDER BY fecha DESC")
-    List<PedidoConEstado> getPedidosConEstado();
-
     @Query("SELECT * FROM pedidos WHERE id_estado_pedido = :estadoId")
     List<Pedido> getPedidosPorEstado(int estadoId);
+
+    @Query("SELECT * FROM pedidos WHERE id_estado_pedido = :estadoId AND fecha = :fecha")
+    List<Pedido> getPedidosPorEstadoByFecha(String fecha, int estadoId);
 
     @Query("SELECT * FROM pedidos WHERE id_estado_pedido IN (:estados)")
     List<Pedido> getListaPedidosPorEstados(List<Integer> estados);
 
+    @Query("SELECT * FROM pedidos WHERE id_estado_pedido IN (:estados) AND fecha = :fecha")
+    List<Pedido> getListaPedidosPorEstadosByFecha(String fecha, List<Integer> estados);
 
     @Query("SELECT SUM(pdp.cantidad * IFNULL(vap.valor_atributo_producto, 1)) " +
             "FROM productos_del_pedido pdp " +
@@ -71,5 +72,14 @@ public interface PedidoDao {
 
     @Query("SELECT * FROM pedidos WHERE fecha = :fecha")
     List<Pedido> getPedidosPorFecha(String fecha);
+
+    @Transaction
+    @Query("SELECT * FROM pedidos ORDER BY fecha DESC")
+    List<PedidoConEstado> getPedidosConEstado();
+
+    @Transaction
+    @Query("SELECT * FROM pedidos WHERE fecha = :fecha ORDER BY fecha DESC")
+    List<PedidoConEstado> getPedidosConEstadoByFecha(String fecha);
+
 
 }

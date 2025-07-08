@@ -54,6 +54,27 @@ public class ReportesActivity extends AppCompatActivity {
         btnSeleccionarFecha.setOnClickListener(v -> mostrarDatePicker());
         btnCargarResumen.setOnClickListener(v -> cargarResumenDesdeDB());
         btnGenerarResumen.setOnClickListener(v -> verificarYGenerarResumen());
+
+        // Verificar si viene desde AdminFragment con fecha y si debe forzar reemplazo
+        String fechaExtra = getIntent().getStringExtra("fechaResumen");
+        boolean forzarReemplazo = getIntent().getBooleanExtra("forzarReemplazo", false);
+
+        if (fechaExtra != null) {
+            fechaSeleccionada = LocalDate.parse(fechaExtra);
+            actualizarTextoFecha();
+
+            new Thread(() -> {
+                ResumenPorDia existente = db.resumenPorDiaDao().getResumenPorFecha(fechaSeleccionada.toString());
+
+                runOnUiThread(() -> {
+                    if (existente == null || forzarReemplazo) {
+                        generarResumen(forzarReemplazo);
+                    } else {
+                        txtResumen.setText("Ya existe un resumen para esta fecha. Presiona 'Cargar resumen' para verlo.");
+                    }
+                });
+            }).start();
+        }
     }
 
     private void actualizarTextoFecha() {
