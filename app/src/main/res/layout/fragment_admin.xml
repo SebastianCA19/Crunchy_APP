@@ -84,6 +84,7 @@
                 android:backgroundTint="#D84315"
                 android:hint="Añadir cantidad de chicharrón (gr)"
                 android:inputType="number"
+                android:minHeight="48dp"
                 android:padding="10dp"
                 android:textColor="#5D4037"
                 android:textColorHint="#D84315" />
@@ -155,6 +156,7 @@
                 android:backgroundTint="#D84315"
                 android:hint="Añadir cantidad de chorizos (unidades)"
                 android:inputType="number"
+                android:minHeight="48dp"
                 android:padding="10dp"
                 android:textColor="#5D4037"
                 android:textColorHint="#D84315" />
@@ -268,6 +270,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnValorGramo" />
 
+        <Button
+            android:id="@+id/btnCambiarDia"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#2E7D32"
+            android:padding="16dp"
+            android:text="Cambiar día"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnVerReportes" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -18,6 +18,9 @@ public interface ProductoDelPedidoDao {
     @Query("SELECT * FROM productos_del_pedido")
     public List<ProductoDelPedido> getAll();
 
+    @Query("SELECT * FROM productos_del_pedido WHERE id_pedido IN (SELECT id_pedido FROM pedidos WHERE fecha = :fecha)")
+    List<ProductoDelPedido> getAllByFecha(String fecha);
+
     @Query("SELECT * FROM productos_del_pedido WHERE id_pedido = :idPedido")
     public List<ProductoDelPedido> getProductosByPedido(Integer idPedido);
 

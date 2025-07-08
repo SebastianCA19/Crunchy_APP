@@ -1,5 +1,7 @@
 package com.example.crunchy_app.pedidos.activity;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -69,26 +71,40 @@ public class HistorialPedidosActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> finish());
 
 
-        new Thread(() -> {
-            List<PedidoConEstado> pedidos = db.pedidoDao().getPedidosConEstado();
-            List<EstadoPedido> estados = db.estadoPedidoDao().getAll();
-            List<ProductoDelPedido> productosPedido = db.productoDelPedidoDao().getAll();
-            List<Producto> productos = db.productoDao().getAll();
-            Map<Integer,Locacion> locaciones = db.locacionDao().getAll().stream()
-                    .collect(Collectors.toMap(locacion -> locacion.getIdLocacion(), locacion -> locacion));
-            List<ValorAtributoProducto> chicharronQuantities = db.valorAtributoProductoDao().getCantidadChicharron();
+        SharedPreferences prefsFecha = getSharedPreferences("fecha_actual", MODE_PRIVATE);
+        String fechaActual = prefsFecha.getString("fecha", null);
 
-            SharedPreferences prefs = getSharedPreferences("stock_prefs", MODE_PRIVATE);
-            int valorPorGramo = (int) prefs.getFloat("valor_por_gramo", 0);
-
+        if (fechaActual == null) {
             runOnUiThread(() -> {
-                listaOriginal = new ArrayList<>(pedidos);
-                adapter = new PedidoHistorialAdapter(
-                        pedidos, productosPedido, productos, estados, locaciones ,db, valorPorGramo, chicharronQuantities
-                );
-                recyclerView.setAdapter(adapter);
+                new AlertDialog.Builder(this)
+                        .setTitle("Fecha no seleccionada")
+                        .setMessage("Por favor, selecciona una fecha desde el panel de administrador antes de ver el historial.")
+                        .setPositiveButton("OK", (dialog, which) -> finish())
+                        .setCancelable(false)
+                        .show();
             });
-        }).start();
+        } else {
+            new Thread(() -> {
+                List<PedidoConEstado> pedidos = db.pedidoDao().getPedidosConEstadoByFecha(fechaActual);
+                List<EstadoPedido> estados = db.estadoPedidoDao().getAll();
+                List<ProductoDelPedido> productosPedido = db.productoDelPedidoDao().getAllByFecha(fechaActual);
+                List<Producto> productos = db.productoDao().getAll();
+                Map<Integer, Locacion> locaciones = db.locacionDao().getAll().stream()
+                        .collect(Collectors.toMap(locacion -> locacion.getIdLocacion(), locacion -> locacion));
+                List<ValorAtributoProducto> chicharronQuantities = db.valorAtributoProductoDao().getCantidadChicharron();
+
+                SharedPreferences prefsStock = getSharedPreferences("stock_prefs", MODE_PRIVATE);
+                int valorPorGramo = (int) prefsStock.getFloat("valor_por_gramo", 0);
+
+                runOnUiThread(() -> {
+                    listaOriginal = new ArrayList<>(pedidos);
+                    adapter = new PedidoHistorialAdapter(
+                            pedidos, productosPedido, productos, estados, locaciones , db, valorPorGramo, chicharronQuantities
+                    );
+                    recyclerView.setAdapter(adapter);
+                });
+            }).start();
+        }
 
         Button btnLimpiarFiltros = findViewById(R.id.btnLimpiarFiltros);
         btnLimpiarFiltros.setOnClickListener(v -> {
@@ -104,7 +120,6 @@ public class HistorialPedidosActivity extends AppCompatActivity {
 
         Button btnFiltrar = findViewById(R.id.btnFiltrar);
         btnFiltrar.setOnClickListener(v -> aplicarFiltros());
-
     }
 
     private void aplicarFiltros() {

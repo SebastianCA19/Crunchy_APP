@@ -2,6 +2,7 @@ package com.example.crunchy_app.secciones.fragment;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,9 +34,12 @@ import com.example.crunchy_app.productos.activity.GestionProductosActivity;
 import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.ValorAtributoProducto;
 import com.example.crunchy_app.reportes.activity.ReportesActivity;
+import com.example.crunchy_app.reportes.model.ResumenPorDia;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 
@@ -177,9 +181,102 @@ public class AdminFragment extends Fragment {
             startActivity(intent);
         });
 
+        Button btnCambiarDia = view.findViewById(R.id.btnCambiarDia);
+        btnCambiarDia.setOnClickListener(v -> confirmarCambioDeDia());
 
         return view;
     }
+
+    private void confirmarCambioDeDia() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Confirmar cambio de día")
+                .setMessage("¿Estás seguro de que quieres cambiar el día actual?")
+                .setPositiveButton("Sí", (dialog, which) -> mostrarSelectorDeFecha())
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void mostrarSelectorDeFecha() {
+        final Calendar calendar = Calendar.getInstance();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                requireContext(),
+                (view, year, month, dayOfMonth) -> {
+                    String nuevaFecha = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month + 1, dayOfMonth);
+                    SharedPreferences prefs = requireContext().getSharedPreferences("fecha_actual", Context.MODE_PRIVATE);
+                    String fechaAnterior = prefs.getString("fecha", null);
+
+                    // Guardar la fecha anterior como "fecha_anterior"
+                    SharedPreferences.Editor editor = prefs.edit();
+                    if (fechaAnterior != null) {
+                        editor.putString("fecha_anterior", fechaAnterior);
+                    }
+                    editor.putString("fecha", nuevaFecha);  // Actualizar nueva fecha actual
+                    editor.apply();
+
+                    if (fechaAnterior != null) {
+                        new Thread(() -> {
+                            ResumenPorDia existente = db.resumenPorDiaDao().getResumenPorFecha(fechaAnterior);
+                            requireActivity().runOnUiThread(() -> {
+                                if (existente != null) {
+                                    new AlertDialog.Builder(requireContext())
+                                            .setTitle("Resumen existente")
+                                            .setMessage("Ya existe un resumen para " + fechaAnterior + ". ¿Deseas reemplazarlo?")
+                                            .setPositiveButton("Sí", (dialog, which) -> {
+                                                generarResumenDesdeFecha(fechaAnterior, true);
+                                                continuarCambioDeDia(nuevaFecha);
+                                            })
+                                            .setNegativeButton("No", (dialog, which) -> continuarCambioDeDia(nuevaFecha))
+                                            .show();
+                                } else {
+                                    generarResumenDesdeFecha(fechaAnterior, false);
+                                    continuarCambioDeDia(nuevaFecha);
+                                }
+                            });
+                        }).start();
+                    } else {
+                        continuarCambioDeDia(nuevaFecha);
+                    }
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
+        datePickerDialog.show();
+    }
+
+    private void continuarCambioDeDia(String nuevaFecha) {
+        SharedPreferences prefs = requireContext().getSharedPreferences("fecha_actual", Context.MODE_PRIVATE);
+        prefs.edit().putString("fecha", nuevaFecha).apply();
+
+        SharedPreferences stockPrefs = requireContext().getSharedPreferences("stock_prefs", Context.MODE_PRIVATE);
+        stockPrefs.edit()
+                .putFloat("chicharron", 0)
+                .putInt("chorizos", 0)
+                .apply();
+
+        SharedPreferences vendidosPrefs = requireContext().getSharedPreferences("productos_vendidos", Context.MODE_PRIVATE);
+        vendidosPrefs.edit()
+                .putFloat("chicharron_vendido", 0)
+                .putInt("chorizo_vendido", 0)
+                .apply();
+
+        Toast.makeText(requireContext(), "Día cambiado a: " + nuevaFecha, Toast.LENGTH_SHORT).show();
+        // Actualiza cantidades y ganancias
+        onResume();
+        actualizarCantidadChicharron(getView());
+        actualizarCantidadChorizos(getView());
+    }
+
+    private void generarResumenDesdeFecha(String fecha, boolean reemplazar) {
+        requireActivity().runOnUiThread(() -> {
+            Intent intent = new Intent(getContext(), ReportesActivity.class);
+            intent.putExtra("fechaResumen", fecha);
+            intent.putExtra("forzarReemplazo", reemplazar);
+            startActivity(intent);
+        });
+    }
+
+
 
     private void actualizarCantidadChorizos(View view) {
         TextView txtChorizos = view.findViewById(R.id.chorizosLabel);
@@ -229,9 +326,11 @@ public class AdminFragment extends Fragment {
     }
 
     private void cargarGanancias() {
+        SharedPreferences prefs_fecha = requireContext().getSharedPreferences("fecha_actual", Context.MODE_PRIVATE);
+        String fechaActual = prefs_fecha.getString("fecha", null);
         new Thread(() -> {
-            List<Pedido> pedidosPagados = db.pedidoDao().getPedidosPorEstado(3);
-            List<ProductoDelPedido> todosProductos = db.productoDelPedidoDao().getAll();
+            List<Pedido> pedidosPagados = db.pedidoDao().getPedidosPorEstadoByFecha(fechaActual, 3);
+            List<ProductoDelPedido> todosProductos = db.productoDelPedidoDao().getProductosDelPedidoPorFecha(fechaActual);
             List<Producto> productos = db.productoDao().getAll();
 
             double totalGanancias = 0;
@@ -269,10 +368,12 @@ public class AdminFragment extends Fragment {
         cantidadChicharronVendidos = 0;
         cantidadChorizosVendidos = 0;
 
+        SharedPreferences prefs_fecha = requireContext().getSharedPreferences("fecha_actual", Context.MODE_PRIVATE);
+        String fechaActual = prefs_fecha.getString("fecha", null);
         new Thread(() -> {
             List<Integer> estadosValidos = Arrays.asList(1, 2, 3);
-            List<Pedido> pedidosFiltrados = db.pedidoDao().getListaPedidosPorEstados(estadosValidos);
-            List<ProductoDelPedido> todosProductos = db.productoDelPedidoDao().getAll();
+            List<Pedido> pedidosFiltrados = db.pedidoDao().getListaPedidosPorEstadosByFecha(fechaActual,estadosValidos);
+            List<ProductoDelPedido> todosProductos = db.productoDelPedidoDao().getAllByFecha(fechaActual);
             List<Producto> productos = db.productoDao().getAll();
             ValorAtributoProductoDao atributoProductoDao = db.valorAtributoProductoDao();
 
