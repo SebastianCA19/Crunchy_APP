@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey;
 
 import com.example.crunchy_app.pagos.model.MetodoPago;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -34,7 +35,7 @@ import java.time.LocalTime;
                 onUpdate = ForeignKey.CASCADE
         )
 })
-public class Pedido {
+public class Pedido implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_pedido")

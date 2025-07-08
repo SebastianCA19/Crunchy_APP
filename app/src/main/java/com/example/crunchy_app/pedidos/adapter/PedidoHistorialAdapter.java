@@ -1,8 +1,12 @@
 package com.example.crunchy_app.pedidos.adapter;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -21,16 +25,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.crunchy_app.DBconnection.AppDataBase;
 import com.example.crunchy_app.R;
+import com.example.crunchy_app.pedidos.activity.AgregarProductoPedidoActivity;
 import com.example.crunchy_app.pedidos.model.EstadoPedido;
 import com.example.crunchy_app.pedidos.model.Locacion;
 import com.example.crunchy_app.pedidos.model.Pedido;
 import com.example.crunchy_app.pedidos.model.PedidoConEstado;
 import com.example.crunchy_app.pedidos.model.ProductoDelPedido;
+import com.example.crunchy_app.productos.DAO.ValorAtributoProductoDao;
 import com.example.crunchy_app.productos.adapter.EditarProductosPedidoAdapter;
 import com.example.crunchy_app.productos.model.Producto;
 import com.example.crunchy_app.productos.model.ValorAtributoProducto;
@@ -58,13 +65,19 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
     private final int VALOR_POR_GRAMO;
     private  List<ValorAtributoProducto> chicharronQuantities;
 
+    private Activity activity; //Agregue esto
+
+    private final ActivityResultLauncher<Intent> agregarProductoLauncher;
+
+    private AlertDialog dialog;
+
 
     public PedidoHistorialAdapter(List<PedidoConEstado> pedidos,
                                   List<ProductoDelPedido> productosDelPedido,
                                   List<Producto> productos,
                                   List<EstadoPedido> estados,
                                   Map<Integer,Locacion> locaciones,
-                                  AppDataBase db, int valorPorGramo, List<ValorAtributoProducto> chicharronQuantities) {
+                                  AppDataBase db, int valorPorGramo, List<ValorAtributoProducto> chicharronQuantities, Activity activity, ActivityResultLauncher<Intent> agregarProductoLauncher) {
         this.pedidos = pedidos;
         this.productosDelPedido = productosDelPedido;
         this.productos = productos;
@@ -73,6 +86,9 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         this.db = db;
         VALOR_POR_GRAMO = valorPorGramo;
         this.chicharronQuantities = chicharronQuantities;
+        this.activity = activity; //Agregue esto
+        this.agregarProductoLauncher = agregarProductoLauncher; //Agregue esto
+        this.dialog = null;
 
     }
     public void recargarDatosDesdeDB() {
@@ -373,6 +389,12 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         RecyclerView recyclerProductosEditar = dialogView.findViewById(R.id.recyclerProductosEditar);
         Button btnAgregarProducto = dialogView.findViewById(R.id.btnAgregarProducto);
 
+        btnAgregarProducto.setOnClickListener(v -> {
+            Intent intent = new Intent(activity, AgregarProductoPedidoActivity.class);
+            intent.putExtra("pedido", pedido);
+            agregarProductoLauncher.launch(intent);
+        });
+
         // Llenar spinner con locaciones
         ArrayAdapter<String> adapterLocaciones = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
         adapterLocaciones.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -429,9 +451,46 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
             pedido.setIdLocacion(idLocacionSeleccionada);
 
             List<ProductoDelPedido> productosEditados = ((EditarProductosPedidoAdapter) recyclerProductosEditar.getAdapter()).getProductosActualizados();
+            SharedPreferences prefs = context.getSharedPreferences("stock_prefs", Context.MODE_PRIVATE);
+            SharedPreferences productosVendidos = context.getSharedPreferences("productos_vendidos", Context.MODE_PRIVATE);
 
+            float chicharron = prefs.getFloat("chicharron", 0);
+            int chorizos = prefs.getInt("chorizos", 0);
+
+            float chicharronVendidos = productosVendidos.getFloat("chicharron_vendido", 0);
+            int chorizosVendidos = productosVendidos.getInt("chorizo_vendido", 0);
 
             new Thread(() -> {
+                float chicharronPedido = 0;
+                int chorizosPedido = 0;
+                ValorAtributoProductoDao valorAtributoProductoDao = db.valorAtributoProductoDao();
+
+                for (ProductoDelPedido pdp : productosEditados){
+                    if(pdp.getIdProducto() == 41){
+                        for (ValorAtributoProducto chicharronQuantity : chicharronQuantities)
+                            if (chicharronQuantity.getIdProducto().equals(pdp.getIdProducto())) {
+                                chicharronPedido += chicharronQuantity.getValorAtributoProducto() * VALOR_POR_GRAMO;
+                            }
+                    } else if(pdp.getIdProducto() == 42){
+                        chorizosPedido += pdp.getCantidad();
+                    } else{
+                        chicharronPedido += valorAtributoProductoDao.getChicharronValue(pdp.getIdProducto()) * pdp.getCantidad();
+                        chorizosPedido += valorAtributoProductoDao.getChorizoValue(pdp.getIdProducto());
+                    }
+                }
+
+                float diferenciaChicharron = chicharronVendidos - chicharronPedido;
+                int diferenciaChorizos = chorizosVendidos - chorizosPedido;
+
+                Log.d("DEBUG", "diferenciaChicharron: " + diferenciaChicharron + " diferenciaChorizos: " + diferenciaChorizos);
+                Log.d("DEBUG", "chicharronVendidos: " + chicharronVendidos + " chorizosVendidos: " + chorizosVendidos);
+                Log.d("DEBUG", "chicharronPedido: " + chicharronPedido + " chorizosPedido: " + chorizosPedido);
+                Log.d("DEBUG", "chicharron: " + chicharron + " chorizos: " + chorizos);
+
+                if((diferenciaChicharron < 0) || (diferenciaChorizos < 0)){
+                    return;
+                }
+
                 AppDataBase db = AppDataBase.getInstance(context);
 
                 // 1️⃣ Eliminar productos anteriores del pedido
@@ -472,7 +531,14 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
         recyclerProductosEditar.setAdapter(adapterEditar);
 
         builder.setNegativeButton("Cancelar", null);
-        builder.create().show();
+        dialog = builder.create();
+        dialog.show();
+    }
+
+    public void cerrarDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
     }
 
     public void actualizarLista(List<PedidoConEstado> nuevaLista) {

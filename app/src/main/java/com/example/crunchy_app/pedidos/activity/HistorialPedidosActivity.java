@@ -1,5 +1,6 @@
 package com.example.crunchy_app.pedidos.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -9,6 +10,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -84,7 +87,7 @@ public class HistorialPedidosActivity extends AppCompatActivity {
             runOnUiThread(() -> {
                 listaOriginal = new ArrayList<>(pedidos);
                 adapter = new PedidoHistorialAdapter(
-                        pedidos, productosPedido, productos, estados, locaciones ,db, valorPorGramo, chicharronQuantities
+                        pedidos, productosPedido, productos, estados, locaciones ,db, valorPorGramo, chicharronQuantities,this, agregarProductoLauncher
                 );
                 recyclerView.setAdapter(adapter);
             });
@@ -147,5 +150,14 @@ public class HistorialPedidosActivity extends AppCompatActivity {
         }
         adapter.actualizarLista(filtrados);
     }
+
+    private final ActivityResultLauncher<Intent> agregarProductoLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    adapter.recargarDatosDesdeDB();
+                    adapter.cerrarDialog();
+                }
+            });
+
 
 }

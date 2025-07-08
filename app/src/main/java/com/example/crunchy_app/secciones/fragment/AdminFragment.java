@@ -116,20 +116,34 @@ public class AdminFragment extends Fragment {
         btnRestarChicharron.setOnClickListener(v -> {
             EditText inputMaxChicharron = view.findViewById(R.id.inputMaxChicharron);
             String valorInput = inputMaxChicharron.getText().toString().trim();
-            float cantidadInput = Float.parseFloat(valorInput);
-            if (!valorInput.isEmpty() && Float.parseFloat(valorInput) > 0) {
-                if(!(cantidadChicharron - cantidadInput < 0)){
-                    cantidadChicharron -= cantidadInput;
-                }else{
-                    inputMaxChicharron.setError("No se puede restar más de lo que hay en stock");
+
+            if (!valorInput.isEmpty()) {
+                try {
+                    float cantidadInput = Float.parseFloat(valorInput);
+                    if (cantidadInput > 0) {
+                        cantidadChicharron = prefs.getFloat("chicharron", 0);
+                        float chicharronVendido = productosVendidos.getFloat("chicharron_vendido", 0);
+                        float nuevoStock = cantidadChicharron - cantidadInput;
+
+                        if (nuevoStock >= 0 && nuevoStock >= chicharronVendido) {
+                            cantidadChicharron = nuevoStock;
+                            prefs.edit().putFloat("chicharron", cantidadChicharron).apply();
+                            actualizarCantidadChicharron(view);
+                            inputMaxChicharron.setText("");
+                        } else {
+                            inputMaxChicharron.setError("No se puede restar más de lo disponible o de lo ya vendido");
+                        }
+                    } else {
+                        inputMaxChicharron.setError("Ingresa un valor mayor que cero");
+                    }
+                } catch (NumberFormatException e) {
+                    inputMaxChicharron.setError("Valor inválido");
                 }
-                actualizarCantidadChicharron(view);
-                inputMaxChicharron.setText("");
-            }else{
+            } else {
                 inputMaxChicharron.setError("Este campo no puede estar vacío");
             }
-            prefs.edit().putFloat("chicharron", cantidadChicharron).apply();
         });
+
 
         Button btnGuardarChorizos = view.findViewById(R.id.btnGuardarChorizos);
 
@@ -151,20 +165,34 @@ public class AdminFragment extends Fragment {
         btnRestarChorizos.setOnClickListener(v -> {
             EditText inputMaxChorizos = view.findViewById(R.id.inputMaxChorizos);
             String valorInput = inputMaxChorizos.getText().toString().trim();
-            int cantidadInput = Integer.parseInt(valorInput);
-            if (!valorInput.isEmpty() && Integer.parseInt(valorInput) > 0) {
-                if(!(cantidadChorizos - cantidadInput < 0)){
-                    cantidadChorizos -= cantidadInput;
-                }else{
-                    inputMaxChorizos.setError("No se puede restar más de lo que hay en stock");
+
+            if (!valorInput.isEmpty()) {
+                try {
+                    int cantidadInput = Integer.parseInt(valorInput);
+                    if (cantidadInput > 0) {
+                        cantidadChorizos = prefs.getInt("chorizos", 0);
+                        int chorizoVendido = productosVendidos.getInt("chorizo_vendido", 0);
+                        int nuevoStock = cantidadChorizos - cantidadInput;
+
+                        if (nuevoStock >= 0 && nuevoStock >= chorizoVendido) {
+                            cantidadChorizos = nuevoStock;
+                            prefs.edit().putInt("chorizos", cantidadChorizos).apply();
+                            actualizarCantidadChorizos(view);
+                            inputMaxChorizos.setText("");
+                        } else {
+                            inputMaxChorizos.setError("No se puede restar más de lo disponible o de lo ya vendido");
+                        }
+                    } else {
+                        inputMaxChorizos.setError("Ingresa un valor mayor que cero");
+                    }
+                } catch (NumberFormatException e) {
+                    inputMaxChorizos.setError("Valor inválido");
                 }
-                actualizarCantidadChorizos(view);
-                inputMaxChorizos.setText("");
             } else {
                 inputMaxChorizos.setError("Este campo no puede estar vacío");
             }
-            prefs.edit().putInt("chorizos", cantidadChorizos).apply();
         });
+
 
         Button btnActualizarValorPorGramo = view.findViewById(R.id.btnValorGramo);
         btnActualizarValorPorGramo.setOnClickListener(v -> {

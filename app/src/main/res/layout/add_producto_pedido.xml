@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/titlePlaceHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="60dp"
+        android:text="Pedido a editar:"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtNombreCliente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="60dp"
+        android:text="Nombre del cliente"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titlePlaceHolder" />
+
+    <TextView
+        android:id="@+id/txtFecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="60dp"
+        android:text="Fecha"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/txtNombreCliente"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnComidasEditar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="8dp"
+        android:text="Comidas"
+        android:textSize="20sp"
+        android:backgroundTint="#D84315"
+        app:layout_constraintTop_toBottomOf="@+id/txtFecha"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+        android:id="@+id/btnBebidasEditar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:text="Bebidas"
+        android:textSize="20sp"
+        android:backgroundTint="#D84315"
+        app:layout_constraintTop_toBottomOf="@+id/txtFecha"
+        app:layout_constraintStart_toEndOf="@id/btnComidasEditar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/addProductView"
+        android:layout_width="780dp"
+        android:layout_height="560dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toBottomOf="@id/btnComidasEditar"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/titleProductosPlaceHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Productos del pedido:"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@id/addProductView"
+        app:layout_constraintTop_toBottomOf="@id/btnBebidasEditar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/productosPedidoView"
+        android:layout_width="422dp"
+        android:layout_height="420dp"
+        android:textSize="20sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@id/addProductView"
+        app:layout_constraintTop_toBottomOf="@id/titleProductosPlaceHolder"
+        />
+
+    <Button
+        android:id="@+id/btnAgregarProductos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginTop="10dp"
+        android:text="Agregar Productos"
+        android:textSize="20sp"
+        android:backgroundTint="#D84315"
+        app:layout_constraintTop_toBottomOf="@+id/productosPedidoView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/addProductView"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

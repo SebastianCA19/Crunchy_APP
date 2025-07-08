@@ -41,5 +41,8 @@ public interface ProductoDelPedidoDao {
             "JOIN pedidos p ON pdp.id_pedido = p.id_pedido " +
             "WHERE p.fecha = :fecha")
     List<ProductoDelPedido> getProductosDelPedidoPorFecha(String fecha);
-
+    @Query("UPDATE productos_del_pedido SET cantidad = :cantidad WHERE id_producto = :idProducto AND id_pedido = :idPedido")
+    void updateCantidad(Integer idProducto, int cantidad, Integer idPedido);
+    @Query("SELECT EXISTS (SELECT 1 FROM productos_del_pedido WHERE id_producto = :idProducto AND id_pedido = :idPedido)")
+    boolean productoExistente(Integer idProducto, Integer idPedido);
 }
