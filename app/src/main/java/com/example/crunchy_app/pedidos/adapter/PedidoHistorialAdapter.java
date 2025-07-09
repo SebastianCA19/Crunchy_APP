@@ -488,6 +488,9 @@ public class PedidoHistorialAdapter extends RecyclerView.Adapter<PedidoHistorial
                 Log.d("DEBUG", "chicharron: " + chicharron + " chorizos: " + chorizos);
 
                 if((diferenciaChicharron < 0) || (diferenciaChorizos < 0)){
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            Toast.makeText(context, "No hay suficiente stock para realizar este pedido", Toast.LENGTH_LONG).show()
+                    );
                     return;
                 }
 
