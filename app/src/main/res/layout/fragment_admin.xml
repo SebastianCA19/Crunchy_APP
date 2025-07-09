@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Fecha: 2025-07-08"
+            android:text="Bienvenido a la App :)"
             android:textColor="#5D4037"
             android:textSize="16sp"
             android:textStyle="bold"

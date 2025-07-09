@@ -87,6 +87,8 @@ public class AdminFragment extends Fragment {
 
         actualizarCantidadChicharron(view);
         actualizarCantidadChorizos(view);
+        cargarFecha(view);
+
         Button btnHistorial = view.findViewById(R.id.btnHistorial);
         btnHistorial.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), HistorialPedidosActivity.class);
@@ -215,12 +217,24 @@ public class AdminFragment extends Fragment {
         return view;
     }
 
-    private void cargarFecha() {
+    private void cargarFecha(View rootView) {
         SharedPreferences prefs = requireContext().getSharedPreferences("fecha_actual", Context.MODE_PRIVATE);
-        String fechaActual = prefs.getString("fecha", null);
-        TextView txtFecha = getView().findViewById(R.id.txtFecha);
+        String fechaActual;
+        if (!prefs.contains("fecha")) {
+            Calendar calendar = Calendar.getInstance();
+            fechaActual = String.format(Locale.getDefault(), "%04d-%02d-%02d",
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH) + 1,
+                    calendar.get(Calendar.DAY_OF_MONTH));
+            prefs.edit().putString("fecha", fechaActual).apply();
+        } else {
+            fechaActual = prefs.getString("fecha", null);
+        }
+
+        TextView txtFecha = rootView.findViewById(R.id.txtFecha);
         txtFecha.setText("Fecha: " + fechaActual);
     }
+
 
     private void confirmarCambioDeDia() {
         new AlertDialog.Builder(requireContext())
@@ -300,7 +314,7 @@ public class AdminFragment extends Fragment {
         onResume();
         actualizarCantidadChicharron(getView());
         actualizarCantidadChorizos(getView());
-        cargarFecha();
+        cargarFecha(getView());
     }
 
     private void generarResumenDesdeFecha(String fecha, boolean reemplazar) {
