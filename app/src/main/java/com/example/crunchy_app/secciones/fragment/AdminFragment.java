@@ -215,6 +215,13 @@ public class AdminFragment extends Fragment {
         return view;
     }
 
+    private void cargarFecha() {
+        SharedPreferences prefs = requireContext().getSharedPreferences("fecha_actual", Context.MODE_PRIVATE);
+        String fechaActual = prefs.getString("fecha", null);
+        TextView txtFecha = getView().findViewById(R.id.txtFecha);
+        txtFecha.setText("Fecha: " + fechaActual);
+    }
+
     private void confirmarCambioDeDia() {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Confirmar cambio de día")
@@ -277,10 +284,8 @@ public class AdminFragment extends Fragment {
         prefs.edit().putString("fecha", nuevaFecha).apply();
 
         SharedPreferences stockPrefs = requireContext().getSharedPreferences("stock_prefs", Context.MODE_PRIVATE);
-        stockPrefs.edit()
-                .putFloat("chicharron", 0)
-                .putInt("chorizos", 0)
-                .apply();
+        stockPrefs.edit().remove("chorizos").apply();
+        stockPrefs.edit().remove("chicharron").apply();
 
         SharedPreferences vendidosPrefs = requireContext().getSharedPreferences("productos_vendidos", Context.MODE_PRIVATE);
         vendidosPrefs.edit()
@@ -293,6 +298,7 @@ public class AdminFragment extends Fragment {
         onResume();
         actualizarCantidadChicharron(getView());
         actualizarCantidadChorizos(getView());
+        cargarFecha();
     }
 
     private void generarResumenDesdeFecha(String fecha, boolean reemplazar) {
