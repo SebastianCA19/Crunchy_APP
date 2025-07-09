@@ -3,115 +3,125 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFF9F0">
 
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50" />
 
     <TextView
         android:id="@+id/titlePlaceHolder"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
         android:text="Pedido a editar:"
         android:textSize="30sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtNombreCliente"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="60dp"
+        android:layout_marginTop="8dp"
         android:text="Nombre del cliente"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/titlePlaceHolder"
+        app:layout_constraintStart_toStartOf="@id/titlePlaceHolder"
         app:layout_constraintTop_toBottomOf="@+id/titlePlaceHolder" />
 
     <TextView
         android:id="@+id/txtFecha"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="60dp"
         android:text="Fecha"
         android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@+id/txtNombreCliente"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="@id/txtNombreCliente"
+        app:layout_constraintStart_toStartOf="@id/txtNombreCliente"
+        app:layout_constraintTop_toBottomOf="@+id/txtNombreCliente" />
 
     <Button
         android:id="@+id/btnComidasEditar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#D84315"
         android:text="Comidas"
         android:textSize="20sp"
-        android:backgroundTint="#D84315"
-        app:layout_constraintTop_toBottomOf="@+id/txtFecha"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="@id/txtFecha"
+        app:layout_constraintTop_toBottomOf="@+id/txtFecha" />
 
     <Button
         android:id="@+id/btnBebidasEditar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
+        android:backgroundTint="#D84315"
         android:text="Bebidas"
         android:textSize="20sp"
-        android:backgroundTint="#D84315"
-        app:layout_constraintTop_toBottomOf="@+id/txtFecha"
-        app:layout_constraintStart_toEndOf="@id/btnComidasEditar" />
+        app:layout_constraintBottom_toBottomOf="@id/btnComidasEditar"
+        app:layout_constraintStart_toEndOf="@id/btnComidasEditar"
+        app:layout_constraintTop_toTopOf="@id/btnComidasEditar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/addProductView"
-        android:layout_width="780dp"
-        android:layout_height="560dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toBottomOf="@id/btnComidasEditar"
-        app:layout_constraintStart_toStartOf="parent"/>
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/vertical_guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnComidasEditar" />
 
     <TextView
         android:id="@+id/titleProductosPlaceHolder"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
         android:text="Productos del pedido:"
         android:textSize="23sp"
         android:textStyle="bold"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toEndOf="@id/addProductView"
-        app:layout_constraintTop_toBottomOf="@id/btnBebidasEditar" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/vertical_guideline"
+        app:layout_constraintTop_toTopOf="@id/addProductView" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/productosPedidoView"
-        android:layout_width="422dp"
-        android:layout_height="420dp"
-        android:textSize="20sp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toEndOf="@id/addProductView"
-        app:layout_constraintTop_toBottomOf="@id/titleProductosPlaceHolder"
-        />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnAgregarProductos"
+        app:layout_constraintEnd_toEndOf="@id/titleProductosPlaceHolder"
+        app:layout_constraintStart_toStartOf="@id/titleProductosPlaceHolder"
+        app:layout_constraintTop_toBottomOf="@id/titleProductosPlaceHolder" />
 
     <Button
         android:id="@+id/btnAgregarProductos"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="50dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#D84315"
         android:text="Agregar Productos"
         android:textSize="20sp"
-        android:backgroundTint="#D84315"
-        app:layout_constraintTop_toBottomOf="@+id/productosPedidoView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/addProductView"/>
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/productosPedidoView"
+        app:layout_constraintStart_toStartOf="@id/productosPedidoView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
