@@ -294,6 +294,8 @@ public class AdminFragment extends Fragment {
                 .apply();
 
         Toast.makeText(requireContext(), "Día cambiado a: " + nuevaFecha, Toast.LENGTH_SHORT).show();
+        cantidadChicharron = 0;
+        cantidadChorizos = 0;
         // Actualiza cantidades y ganancias
         onResume();
         actualizarCantidadChicharron(getView());
