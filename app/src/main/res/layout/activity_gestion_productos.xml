@@ -3,18 +3,17 @@
     android:id="@+id/layoutGestionProductos"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     android:background="#FFF9F0"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/gestionToolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#D18168"
+        android:layout_height="wrap_content"
+        android:background="#D84315"
+        android:elevation="4dp"
         android:title="Gestion"
-        android:titleTextColor="#FFFFFF"
-        android:elevation="4dp" />
+        android:titleTextColor="#FFFFFF" />
 
     <!-- Fila con 3 botones -->
     <LinearLayout

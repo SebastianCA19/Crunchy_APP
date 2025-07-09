@@ -10,7 +10,7 @@
         android:id="@+id/historialToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#D18168"
+        android:background="#D84315"
         android:title="Historial de pedidos"
         android:titleTextColor="#FFFFFF"
         android:elevation="4dp" />
@@ -59,8 +59,8 @@
         <CheckBox
             android:id="@+id/checkEntregado_Pagado"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Entregado+Pagado" />
     </LinearLayout>
 
@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             android:text="Limpiar"
             android:textSize="12sp"
-            android:backgroundTint="#D18168"
+            android:backgroundTint="#D84315"
             android:textColor="#FFFFFF"
             android:paddingHorizontal="12dp"
             android:paddingVertical="4dp"
@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:text="Filtrar"
             android:textSize="12sp"
-            android:backgroundTint="#D18168"
+            android:backgroundTint="#D84315"
             android:textColor="#FFFFFF"
             android:paddingHorizontal="12dp"
             android:paddingVertical="4dp" />

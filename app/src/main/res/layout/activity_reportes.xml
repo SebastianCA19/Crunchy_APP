@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:text="Ver resumen del día"
                 android:layout_marginTop="8dp"
-                android:backgroundTint="#D84315"
+                android:backgroundTint="#FDB32F"
                 android:textColor="#FFFFFF"
                 android:padding="10dp" />
 
