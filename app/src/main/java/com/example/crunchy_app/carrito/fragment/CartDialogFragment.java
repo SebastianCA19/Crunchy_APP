@@ -191,6 +191,7 @@ public class CartDialogFragment extends DialogFragment {
                 Toast.makeText(getContext(), "⚠ El carrito está vacío.", Toast.LENGTH_SHORT).show();
                 return;
             }
+
             getFields();
 
             boolean camposValidos = true;
@@ -212,123 +213,129 @@ public class CartDialogFragment extends DialogFragment {
                 return; // No continúa si hay errores
             }
 
+            new Thread(() -> {
+                // ✅ Referencias seguras
+                Context context = getContext();
+                Activity activity = getActivity();
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        SharedPreferences prefs = requireContext().getSharedPreferences("stock_prefs", Context.MODE_PRIVATE);
-                        float cantidadChicharron = prefs.getFloat("chicharron", 0);
-                        int cantidadChorizos = prefs.getInt("chorizos", 0);
+                if (context == null || activity == null || !isAdded()) return;
 
-                        float chicharronVendido = 0;
-                        int chorizosVendido = 0;
-                        int pass = 0;
-                        SharedPreferences productosVendidos = requireContext().getSharedPreferences("productos_vendidos", Context.MODE_PRIVATE);
-                        if(productosVendidos.contains("chicharron_vendido") && productosVendidos.contains("chorizo_vendido")){
-                            chicharronVendido = productosVendidos.getFloat("chicharron_vendido", 0);
-                            chorizosVendido = productosVendidos.getInt("chorizo_vendido", 0);
-                            pass = 1;
-                        }
+                try {
+                    SharedPreferences prefs = context.getSharedPreferences("stock_prefs", Context.MODE_PRIVATE);
+                    float cantidadChicharron = prefs.getFloat("chicharron", 0);
+                    int cantidadChorizos = prefs.getInt("chorizos", 0);
 
-                        //Verificar si la cantidad de chorizos y chicharron del pedido es permitida
-                        if(pass == 1){
-                            ValorAtributoProductoDao valorAtributoProductoDao = db.valorAtributoProductoDao();
-                            float cantidadChicharronPedido = 0;
-                            int cantidadChorizoPedido = 0;
-                            for(Map.Entry<Producto, Integer> entry : carrito.entrySet()){
-                                Producto producto = entry.getKey();
-                                int cantidad = entry.getValue();
+                    float chicharronVendido = 0;
+                    int chorizosVendido = 0;
+                    int pass = 0;
+                    SharedPreferences productosVendidos = context.getSharedPreferences("productos_vendidos", Context.MODE_PRIVATE);
+                    if (productosVendidos.contains("chicharron_vendido") && productosVendidos.contains("chorizo_vendido")) {
+                        chicharronVendido = productosVendidos.getFloat("chicharron_vendido", 0);
+                        chorizosVendido = productosVendidos.getInt("chorizo_vendido", 0);
+                        pass = 1;
+                    }
 
-                                if(producto.getIdProducto() == 41){
-                                    cantidadChicharronPedido += producto.getCantidadChicharron() * cantidad;
-                                }else if(producto.getIdProducto() == 42){
-                                    cantidadChorizoPedido += cantidad;
-                                }else{
-                                    float chicharronProducto = valorAtributoProductoDao.getChicharronValue(producto.getIdProducto());
-                                    int chorizoProducto = valorAtributoProductoDao.getChorizoValue(producto.getIdProducto());
+                    if (pass == 1) {
+                        ValorAtributoProductoDao valorAtributoProductoDao = db.valorAtributoProductoDao();
+                        float cantidadChicharronPedido = 0;
+                        int cantidadChorizoPedido = 0;
 
-                                    cantidadChicharronPedido += chicharronProducto * cantidad;
-                                    cantidadChorizoPedido += chorizoProducto * cantidad;
-                                }
-                            }
-
-                            if((cantidadChorizoPedido + chorizosVendido) > cantidadChorizos || (cantidadChicharronPedido + chicharronVendido) > cantidadChicharron){
-                                requireActivity().runOnUiThread(() -> {
-                                    new AlertDialog.Builder(requireContext())
-                                            .setTitle("Stock insuficiente")
-                                            .setMessage("No hay suficientes chorizos o chicharrones para completar este pedido.")
-                                            .setPositiveButton("Entendido", null)
-                                            .show();
-                                });
-                                return;
-                            }
-                        }
-
-                        // Crear nuevo pedido
-                        Pedido pedido = null;
-                        LocalTime hora_entrega = null;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && (horaEntrega != null && !horaEntrega.trim().isEmpty())) {
-                            hora_entrega = LocalTime.parse(horaEntrega);
-                        }
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-                            pedido = new Pedido(
-                                    nameUser,
-                                    directionUser,
-                                    domName,
-                                    metodoPagoId,
-                                    locacionSeleccionada.getIdLocacion(),
-                                    1,         // idEstadoPedido (ej: 1 = Pendiente)
-                                    LocalDate.now(),
-                                    LocalTime.now(),
-                                    hora_entrega
-                            );
-                        }
-
-                        // Insertar pedido
-                        long pedidoId = db.pedidoDao().insert(pedido);
-
-                        // Insertar productos del pedido
                         for (Map.Entry<Producto, Integer> entry : carrito.entrySet()) {
                             Producto producto = entry.getKey();
                             int cantidad = entry.getValue();
 
-                            ProductoDelPedido productoDelPedido = new ProductoDelPedido(
-                                    (int) pedidoId,
-                                    producto.getIdProducto(),
-                                    cantidad
-                            );
+                            if (producto.getIdProducto() == 41) {
+                                cantidadChicharronPedido += producto.getCantidadChicharron() * cantidad;
+                            } else if (producto.getIdProducto() == 42) {
+                                cantidadChorizoPedido += cantidad;
+                            } else {
+                                float chicharronProducto = valorAtributoProductoDao.getChicharronValue(producto.getIdProducto());
+                                int chorizoProducto = valorAtributoProductoDao.getChorizoValue(producto.getIdProducto());
 
-                            if(producto.getIdProducto() == 41){
-                                ValorAtributoProductoDao valorAtributoProductoDao = db.valorAtributoProductoDao();
-                                String productoIdFormat = String.format("%d%d", producto.getIdProducto(), pedidoId);
-                                valorAtributoProductoDao.insert(new ValorAtributoProducto(41, 1, producto.getCantidadChicharron(), Integer.valueOf(productoIdFormat)));
+                                cantidadChicharronPedido += chicharronProducto * cantidad;
+                                cantidadChorizoPedido += chorizoProducto * cantidad;
                             }
-
-                            db.productoDelPedidoDao().insert(productoDelPedido);
                         }
 
-                        carrito.clear();
-                        Activity activity = getActivity();
-                        if (activity != null) {
-                            activity.runOnUiThread(() ->
-                                    Toast.makeText(activity, "✅ Pedido agregado correctamente.", Toast.LENGTH_LONG).show()
-                            );
+                        if ((cantidadChorizoPedido + chorizosVendido) > cantidadChorizos ||
+                                (cantidadChicharronPedido + chicharronVendido) > cantidadChicharron) {
+
+                            if (isAdded()) {
+                                activity.runOnUiThread(() -> new AlertDialog.Builder(context)
+                                        .setTitle("Stock insuficiente")
+                                        .setMessage("No hay suficientes chorizos o chicharrones para completar este pedido.")
+                                        .setPositiveButton("Entendido", null)
+                                        .show());
+                            }
+                            return;
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Activity activity = getActivity();
-                        if (activity != null) {
-                            activity.runOnUiThread(() ->
-                                    Toast.makeText(activity, "❌ Ocurrió un error al confirmar el pedido.", Toast.LENGTH_LONG).show()
-                            );
+                    }
+
+                    // Crear pedido
+                    Pedido pedido = null;
+                    LocalTime hora_entrega = null;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && (horaEntrega != null && !horaEntrega.trim().isEmpty())) {
+                        hora_entrega = LocalTime.parse(horaEntrega);
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        pedido = new Pedido(
+                                nameUser,
+                                directionUser,
+                                domName,
+                                metodoPagoId,
+                                locacionSeleccionada.getIdLocacion(),
+                                1, // Estado "Pendiente"
+                                LocalDate.now(),
+                                LocalTime.now(),
+                                hora_entrega
+                        );
+                    }
+
+                    long pedidoId = db.pedidoDao().insert(pedido);
+
+                    for (Map.Entry<Producto, Integer> entry : carrito.entrySet()) {
+                        Producto producto = entry.getKey();
+                        int cantidad = entry.getValue();
+
+                        ProductoDelPedido productoDelPedido = new ProductoDelPedido(
+                                (int) pedidoId,
+                                producto.getIdProducto(),
+                                cantidad
+                        );
+
+                        if (producto.getIdProducto() == 41) {
+                            ValorAtributoProductoDao valorAtributoProductoDao = db.valorAtributoProductoDao();
+                            String productoIdFormat = String.format("%d%d", producto.getIdProducto(), pedidoId);
+                            valorAtributoProductoDao.insert(new ValorAtributoProducto(
+                                    41, 1, producto.getCantidadChicharron(), Integer.valueOf(productoIdFormat)
+                            ));
                         }
+
+                        db.productoDelPedidoDao().insert(productoDelPedido);
+                    }
+
+                    carrito.clear();
+
+                    if (activity != null && isAdded()) {
+                        activity.runOnUiThread(() -> {
+                            Toast.makeText(activity, "✅ Pedido agregado correctamente.", Toast.LENGTH_LONG).show();
+                            dismiss(); // Cierra el diálogo
+                        });
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    if (activity != null && isAdded()) {
+                        activity.runOnUiThread(() -> {
+                            Toast.makeText(activity, "❌ Ocurrió un error al confirmar el pedido.", Toast.LENGTH_LONG).show();
+                            dismiss(); // Cierra el diálogo
+                        });
                     }
                 }
             }).start();
-            dismiss(); // Por ahora solo cerrar
+
         });
+
 
         txtLocacion.setOnClickListener(new View.OnClickListener() {
             @Override
