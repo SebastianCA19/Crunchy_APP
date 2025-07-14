@@ -501,7 +501,7 @@ public class AdminFragment extends Fragment {
                 final EditText inputValorBollo = new EditText(requireContext());
                 final EditText inputValorChorizo = new EditText(requireContext());
 
-                inputValorGramo.setHint("Valor del gramo de chicharrón");
+                inputValorGramo.setHint("Valor por kilo de chicharrón");
                 inputValorBollo.setHint("Valor del bollo");
                 inputValorChorizo.setHint("Valor del chorizo");
 
@@ -524,7 +524,7 @@ public class AdminFragment extends Fragment {
 
                 // Títulos
                 TextView tituloGramo = new TextView(requireContext());
-                tituloGramo.setText("💰 Valor por gramo de chicharrón");
+                tituloGramo.setText("💰 Valor por kilo de chicharrón");
                 tituloGramo.setPadding(margin, margin, margin, 8);
 
                 TextView tituloBollo = new TextView(requireContext());
@@ -557,7 +557,8 @@ public class AdminFragment extends Fragment {
 
                     if (!valorGramoStr.isEmpty() && !valorBolloStr.isEmpty() && !valorChorizoStr.isEmpty()) {
                         try {
-                            float valorGramo = Float.parseFloat(valorGramoStr);
+                            float valorKilo = Float.parseFloat(valorGramoStr);
+                            float valorGramo = valorKilo / 1000f;;
                             float valorBollo = Float.parseFloat(valorBolloStr);
                             float valorChorizo = Float.parseFloat(valorChorizoStr);
 

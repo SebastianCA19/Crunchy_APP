@@ -41,6 +41,11 @@ public class GestionProductosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gestion_productos);
 
+        // ✅ Primero la base de datos
+        db = AppDataBase.getInstance(getApplicationContext());
+
+        cargarComidas();
+
         Toolbar toolbar = findViewById(R.id.gestionToolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Gestión");
@@ -48,8 +53,6 @@ public class GestionProductosActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         toolbar.setNavigationOnClickListener(v -> finish());
-
-        cargarComidas();
 
         btnComidas = findViewById(R.id.btnProdComidas);
         btnBebidas = findViewById(R.id.btnProdBebidas);
@@ -59,7 +62,6 @@ public class GestionProductosActivity extends AppCompatActivity {
         btnAgregarComida = findViewById(R.id.btnAgregarComida);
         btnAgregarBebida = findViewById(R.id.btnAgregarBebida);
 
-        db = AppDataBase.getInstance(getApplicationContext());
         recyclerGestion.setLayoutManager(new LinearLayoutManager(this));
 
         btnComidas.setOnClickListener(v -> cargarComidas());
